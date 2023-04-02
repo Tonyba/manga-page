@@ -13,9 +13,9 @@ const HeaderSearch = () => {
       transition-[width]
       cursor-pointer 
       bg-slate-800 rounded-full hover:bg-slate-700 ${open ? "w-80" : "w-12"} `}
-      onClick={() => setOpen(!open)}
     >
       <button
+        onClick={() => setOpen(!open)}
         className="
         left-6
         z-10
@@ -23,7 +23,13 @@ const HeaderSearch = () => {
         left-30 top-1/2 -translate-x-2/4 
         -translate-y-2/4"
       >
-        <UseAnimations size={21} animation={second} strokeColor={"#fff"} />
+        <UseAnimations
+          autoplay={true}
+          loop={true}
+          size={21}
+          animation={second}
+          strokeColor={"#fff"}
+        />
       </button>
       <div
         className="relative  w-64

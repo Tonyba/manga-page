@@ -1,21 +1,74 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
-import React from "react";
+import React, { FC } from "react";
 
-const CarouselItem = () => {
+type Props = {
+  src: string;
+  position: number;
+  itemWidth: number;
+  itemHeight?: number;
+  itemSpace?: number;
+};
+
+const CarouselItem: FC<Props> = ({
+  src,
+  position,
+  itemWidth,
+  itemHeight = 333,
+  itemSpace = 10,
+}) => {
   return (
-    <motion.div
-      className="min-h-cardCarousel min-w-max cursor-pointer"
-      onClick={() => console.log("hola")}
+    <div
+      style={{
+        width: itemWidth,
+        marginRight: itemSpace,
+      }}
+      className={`relative inline-block 
+        cursor-pointer 
+        transition-all origin-bottom-left
+        shrink-0
+        rounded-full
+        `}
     >
-      <Image
-        alt="whatever"
-        src={"https://picsum.photos/300/400"}
-        width={300}
-        className="relative max-h-80 rounded-lg w-full h-full pointer-events-none"
-        height={400}
-      />
-    </motion.div>
+      <div className="overflow-hidden rounded-lg">
+        <div
+          className="
+        absolute text-white
+        text-[12px] font-semibold
+        left-3
+        top-3
+        rounded-[5px]
+        p-[3px]
+        bg-red-500
+        z-10
+        "
+        >
+          MANGA
+        </div>
+
+        <Image
+          src={src}
+          alt="whatever"
+          className="
+          object-cover 
+          rounded-lg
+          hover:scale-110
+          duration-300
+          hover:brightness-110
+          "
+          width={itemWidth}
+          height={itemHeight}
+        />
+      </div>
+      <div
+        className="text-white absolute 
+      bottom-0 h-10 flex items-center 
+      w-full justify-center font-medium
+      bg-[#00000080]"
+      >
+        <p className="text-xl">slide</p>
+      </div>
+    </div>
   );
 };
 

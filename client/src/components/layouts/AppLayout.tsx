@@ -10,7 +10,7 @@ type Props = {
 
 const AppLayout: FC<Props> = ({ children, className }) => {
   return (
-    <div className={`h-screen bg-slate-950 ${className}`}>
+    <div className={`h-screen bg-body ${className}`}>
       <div className="container h-full mx-auto xl:px-30 max-w-7xl">
         <div className="grid grid-cols-4 grid-rows-6 h-full">
           <Header />
