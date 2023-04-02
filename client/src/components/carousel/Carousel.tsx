@@ -5,6 +5,9 @@ import { motion } from "framer-motion";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 import CarouselButton from "./CarouselButton";
 
+import { useSwipeable } from "react-swipeable";
+import { CarouselDot } from "./CarouselDot";
+
 type CarouselOptions = {
   width?: number;
   position: number;
@@ -12,6 +15,7 @@ type CarouselOptions = {
   itemSpace: number;
   itemWidth: number;
   itemHeight: number;
+  dragging: boolean;
 };
 
 const slides = [
@@ -36,6 +40,7 @@ const Carousel = () => {
     itemHeight: 250,
     itemsPerPage: 5,
     itemSpace: 10,
+    dragging: false,
   });
   const [interval, setIntervalCarousel] = useState<NodeJS.Timer | null>();
   const autoDuration = 3500;
@@ -49,6 +54,25 @@ const Carousel = () => {
     }
   }, [ops.position]);
 
+  const handlers = useSwipeable({
+    onSwiped: ({ dir }) => handleSwipe(dir),
+    onSwipeStart: () => onDrag(),
+    trackMouse: true,
+    preventScrollOnSwipe: true,
+  });
+
+  const onDrag = useCallback(() => {
+    setAuto(false);
+    clearInterval(interval ? interval : setInterval(() => {}, 1000));
+    setIntervalCarousel(null);
+    setOpts({ ...ops, dragging: true });
+  }, [ops.position]);
+
+  const handleSwipe = (dir: string) => {
+    if (dir === "Left") onRight();
+    if (dir === "Right") onLeft();
+  };
+
   useEffect(() => {
     setOpts({
       ...ops,
@@ -56,6 +80,10 @@ const Carousel = () => {
       itemHeight: ops.itemWidth / (16 / ops.itemSpace),
     });
   }, []);
+
+  useEffect(() => {
+    setOpts({ ...ops, dragging: false });
+  }, [ops.position]);
 
   useEffect(() => {
     setIntervalCarousel(
@@ -66,7 +94,7 @@ const Carousel = () => {
 
     return () =>
       clearInterval(interval ? interval : setInterval(() => {}, 1000));
-  }, [ops.position, auto, setIntervalCarousel]);
+  }, [ops.position, auto]);
 
   const onLeft = () => {
     if (ops.position > 0) {
@@ -99,10 +127,13 @@ const Carousel = () => {
         <FaChevronRight />
       </CarouselButton>
 
-      <div className="overflow-hidden w-full mt-5">
+      <div className="overflow-hidden w-full mt-5" {...handlers}>
         <motion.div
           ref={carousel}
-          className={`flex pb-3]`}
+          className={`flex pb-3`}
+          whileDrag={{
+            cursor: "grab",
+          }}
           animate={{
             x: -(ops.position * (ops.itemWidth + ops.itemSpace)),
           }}
@@ -114,13 +145,27 @@ const Carousel = () => {
           {slides.map((s, index) => (
             <CarouselItem
               key={index}
-              position={index}
               src={s}
+              dragging={ops.dragging}
               itemWidth={ops.itemWidth}
               itemHeight={ops.itemHeight}
             />
           ))}
         </motion.div>
+      </div>
+      <div className="flex justify-center mt-5 gap-3">
+        {slides.map((_, index) => {
+          if (index < slides.length - ops.itemsPerPage + 1) {
+            return (
+              <CarouselDot
+                key={index}
+                position={index}
+                currentPosition={ops.position}
+                onClickDot={(i) => setOpts({ ...ops, position: i })}
+              />
+            );
+          }
+        })}
       </div>
     </div>
   );

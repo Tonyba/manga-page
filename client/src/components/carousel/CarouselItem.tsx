@@ -4,21 +4,21 @@ import React, { FC } from "react";
 
 type Props = {
   src: string;
-  position: number;
   itemWidth: number;
   itemHeight?: number;
   itemSpace?: number;
+  dragging: boolean;
 };
 
 const CarouselItem: FC<Props> = ({
   src,
-  position,
   itemWidth,
   itemHeight = 333,
   itemSpace = 10,
+  dragging = false,
 }) => {
   return (
-    <div
+    <motion.div
       style={{
         width: itemWidth,
         marginRight: itemSpace,
@@ -49,15 +49,17 @@ const CarouselItem: FC<Props> = ({
         <Image
           src={src}
           alt="whatever"
-          className="
+          className={`
           object-cover 
           rounded-lg
+          ${dragging ? "pointer-events-none" : ""}
           hover:scale-110
           duration-300
           hover:brightness-110
-          "
+          `}
           width={itemWidth}
           height={itemHeight}
+          draggable={false}
         />
       </div>
       <div
@@ -68,7 +70,7 @@ const CarouselItem: FC<Props> = ({
       >
         <p className="text-xl">slide</p>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
