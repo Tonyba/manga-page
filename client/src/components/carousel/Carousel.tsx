@@ -7,6 +7,7 @@ import CarouselButton from "./CarouselButton";
 
 import { useSwipeable } from "react-swipeable";
 import { CarouselDot } from "./CarouselDot";
+import { useDevideWidth } from "../hooks/useDevideWidth";
 
 type CarouselOptions = {
   width?: number;
@@ -42,35 +43,52 @@ const Carousel = () => {
     itemSpace: 10,
     dragging: false,
   });
-  const [interval, setIntervalCarousel] = useState<NodeJS.Timer | null>();
   const autoDuration = 3500;
-  const [auto, setAuto] = useState(true);
+  let slideInterval: NodeJS.Timer;
+  const [auto, setAuto] = useState(false);
   const carousel = useRef<any>();
+  const [_, space, Dwidth] = useDevideWidth(ops.itemSpace);
+
+  const handlers = useSwipeable({
+    onSwiped: ({ dir }) => handleSwipe(dir),
+    onTouchStartOrOnMouseDown: () => onDrag(),
+    trackMouse: true,
+    trackTouch: true,
+    preventScrollOnSwipe: true,
+    onTouchEndOrOnMouseUp: () => setAuto(true),
+  });
+
   const onRight = useCallback(() => {
     if (ops.position < slides.length - ops.itemsPerPage) {
       setOpts({ ...ops, position: ops.position + 1 });
     } else {
       setOpts({ ...ops, position: 0 });
     }
-  }, [ops.position]);
-
-  const handlers = useSwipeable({
-    onSwiped: ({ dir }) => handleSwipe(dir),
-    onSwipeStart: () => onDrag(),
-    trackMouse: true,
-    preventScrollOnSwipe: true,
-  });
+  }, [ops.position, auto, ops.dragging]);
 
   const onDrag = useCallback(() => {
     setAuto(false);
-    clearInterval(interval ? interval : setInterval(() => {}, 1000));
-    setIntervalCarousel(null);
     setOpts({ ...ops, dragging: true });
-  }, [ops.position]);
+  }, [ops.position, auto]);
 
-  const handleSwipe = (dir: string) => {
-    if (dir === "Left") onRight();
-    if (dir === "Right") onLeft();
+  const handleSwipe = useCallback(
+    (dir: string) => {
+      setOpts({ ...ops, dragging: false });
+
+      if (dir === "Left") onRight();
+      if (dir === "Right") onLeft();
+    },
+    [ops.position, auto, ops.dragging]
+  );
+
+  const startAuto = () => {
+    slideInterval = setInterval(onRight, autoDuration);
+  };
+
+  const onLeft = () => {
+    if (ops.position > 0) {
+      setOpts({ ...ops, position: ops.position - 1 });
+    }
   };
 
   useEffect(() => {
@@ -79,46 +97,19 @@ const Carousel = () => {
       width: carousel.current?.scrollWidth - carousel.current?.offsetWidth,
       itemHeight: ops.itemWidth / (16 / ops.itemSpace),
     });
+    setAuto(true);
   }, []);
 
   useEffect(() => {
-    setOpts({ ...ops, dragging: false });
-  }, [ops.position]);
-
-  useEffect(() => {
-    setIntervalCarousel(
-      setInterval(() => {
-        if (auto) onRight();
-      }, autoDuration)
-    );
-
-    return () =>
-      clearInterval(interval ? interval : setInterval(() => {}, 1000));
-  }, [ops.position, auto]);
-
-  const onLeft = () => {
-    if (ops.position > 0) {
-      setOpts({ ...ops, position: ops.position - 1 });
+    if (auto) {
+      startAuto();
     }
-  };
+
+    return () => clearInterval(slideInterval);
+  }, [auto, ops.position]);
 
   return (
-    <div
-      className="relative"
-      onMouseEnter={() => {
-        setAuto(false);
-        clearInterval(interval ? interval : setInterval(() => {}, 1000));
-        setIntervalCarousel(null);
-      }}
-      onMouseLeave={() => {
-        setAuto(true);
-        setIntervalCarousel(
-          setInterval(() => {
-            if (auto) onRight();
-          }, autoDuration)
-        );
-      }}
-    >
+    <div className="relative">
       <CarouselButton onClickE={onLeft} position="left">
         <FaChevronLeft />
       </CarouselButton>
@@ -135,7 +126,10 @@ const Carousel = () => {
             cursor: "grab",
           }}
           animate={{
-            x: -(ops.position * (ops.itemWidth + ops.itemSpace)),
+            x:
+              space == 0
+                ? ops.position * -carousel.current.offsetWidth
+                : -(ops.position * (ops.itemWidth + ops.itemSpace)),
           }}
           dragConstraints={{
             right: 0,

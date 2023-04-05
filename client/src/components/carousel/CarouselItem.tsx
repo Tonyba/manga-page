@@ -1,6 +1,14 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
-import React, { FC } from "react";
+import React, {
+  FC,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
+import ContentPill from "../content/contentPill/ContentPill";
+import { useDevideWidth } from "../hooks/useDevideWidth";
 
 type Props = {
   src: string;
@@ -17,34 +25,28 @@ const CarouselItem: FC<Props> = ({
   itemSpace = 10,
   dragging = false,
 }) => {
+  const [Dwidth, setDwidth] = useState({
+    width: "250px",
+    space: itemSpace,
+  });
+  const [width, space] = useDevideWidth(itemSpace);
+
   return (
     <motion.div
       style={{
-        width: itemWidth,
-        marginRight: itemSpace,
+        width: width,
+        marginRight: space,
       }}
       className={`relative inline-block 
         cursor-pointer 
         transition-all origin-bottom-left
         shrink-0
         rounded-full
+        w-[250px]
         `}
     >
       <div className="overflow-hidden rounded-lg">
-        <div
-          className="
-        absolute text-white
-        text-[12px] font-semibold
-        left-3
-        top-3
-        rounded-[5px]
-        p-[3px]
-        bg-red-500
-        z-10
-        "
-        >
-          MANGA
-        </div>
+        <ContentPill contentType="Manga" isAbsolute={true} />
 
         <Image
           src={src}
@@ -52,6 +54,8 @@ const CarouselItem: FC<Props> = ({
           className={`
           object-cover 
           rounded-lg
+          w-full
+          h-full
           ${dragging ? "pointer-events-none" : ""}
           hover:scale-110
           duration-300
