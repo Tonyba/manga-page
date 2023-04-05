@@ -24,8 +24,7 @@ const HeaderSearch = () => {
         -translate-y-2/4"
       >
         <UseAnimations
-          autoplay={true}
-          loop={true}
+          reverse={open}
           size={21}
           animation={second}
           strokeColor={"#fff"}
