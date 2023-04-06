@@ -32,7 +32,7 @@ const CardItem: FC<Props> = ({ content, showHover }) => {
           w-full
           cursor-pointer hover:scale-110
           duration-300
-          h-56
+          h-80
           hover:brightness-110"
           alt={title}
           width={250}

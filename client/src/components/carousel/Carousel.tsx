@@ -55,7 +55,7 @@ const Carousel = () => {
     trackMouse: true,
     trackTouch: true,
     preventScrollOnSwipe: true,
-    onTouchEndOrOnMouseUp: () => setAuto(true),
+    onTouchEndOrOnMouseUp: () => handleEnd(),
   });
 
   const onRight = useCallback(() => {
@@ -67,19 +67,22 @@ const Carousel = () => {
   }, [ops.position, auto, ops.dragging]);
 
   const onDrag = useCallback(() => {
-    setAuto(false);
     setOpts({ ...ops, dragging: true });
+    setAuto(false);
   }, [ops.position, auto]);
 
   const handleSwipe = useCallback(
     (dir: string) => {
-      setOpts({ ...ops, dragging: false });
-
+      console.log("swiped");
       if (dir === "Left") onRight();
       if (dir === "Right") onLeft();
     },
     [ops.position, auto, ops.dragging]
   );
+
+  const handleEnd = () => {
+    setAuto(true);
+  };
 
   const startAuto = () => {
     slideInterval = setInterval(onRight, autoDuration);
@@ -99,6 +102,10 @@ const Carousel = () => {
     });
     setAuto(true);
   }, []);
+
+  useEffect(() => {
+    setOpts({ ...ops, dragging: false });
+  }, [ops.position]);
 
   useEffect(() => {
     if (auto) {

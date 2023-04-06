@@ -67,12 +67,15 @@ const CarouselItem: FC<Props> = ({
         />
       </div>
       <div
-        className="text-white absolute 
+        className="text-white 
+        absolute
       bottom-0 h-10 flex items-center 
       w-full justify-center font-medium
-      bg-[#00000080]"
+      bg-[#00000080] px-2 "
       >
-        <p className="text-xl">slide</p>
+        <p className="text-lg w-full line-clamp-1">
+          slidefeofefef dwdwf fefeg f
+        </p>
       </div>
     </motion.div>
   );
