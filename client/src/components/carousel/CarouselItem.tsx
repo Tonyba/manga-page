@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import ContentPill from "../content/contentPill/ContentPill";
 import { useDevideWidth } from "../hooks/useDevideWidth";
+import Link from "next/link";
 
 type Props = {
   src: string;
@@ -16,6 +17,9 @@ type Props = {
   itemHeight?: number;
   itemSpace?: number;
   dragging: boolean;
+  id: number;
+  title: string;
+  type: string;
 };
 
 const CarouselItem: FC<Props> = ({
@@ -24,6 +28,9 @@ const CarouselItem: FC<Props> = ({
   itemHeight = 333,
   itemSpace = 10,
   dragging = false,
+  id,
+  title,
+  type = "Manga",
 }) => {
   const [Dwidth, setDwidth] = useState({
     width: "250px",
@@ -46,12 +53,12 @@ const CarouselItem: FC<Props> = ({
         `}
     >
       <div className="overflow-hidden rounded-lg">
-        <ContentPill contentType="Manga" isAbsolute={true} />
-
-        <Image
-          src={src}
-          alt="whatever"
-          className={`
+        <ContentPill contentType={type} isAbsolute={true} />
+        <Link href={`/content/${id}`} draggable={false}>
+          <Image
+            src={src}
+            alt="whatever"
+            className={`
           object-cover 
           rounded-lg
           w-full
@@ -61,10 +68,11 @@ const CarouselItem: FC<Props> = ({
           duration-300
           hover:brightness-110
           `}
-          width={itemWidth}
-          height={itemHeight}
-          draggable={false}
-        />
+            width={itemWidth}
+            height={itemHeight}
+            draggable={false}
+          />
+        </Link>
       </div>
       <div
         className="text-white 
@@ -73,9 +81,12 @@ const CarouselItem: FC<Props> = ({
       w-full justify-center font-medium
       bg-[#00000080] px-2 "
       >
-        <p className="text-lg w-full line-clamp-1">
-          slidefeofefef dwdwf fefeg f
-        </p>
+        <Link
+          href={`/content/${id}`}
+          className="text-lg w-full line-clamp-1 text-center"
+        >
+          title
+        </Link>
       </div>
     </motion.div>
   );

@@ -6,25 +6,23 @@ import { FaDiscord } from "react-icons/fa";
 
 const Header = () => {
   return (
-    <>
-      <div className="text-white col-span-4 flex py-5 justify-between align-middle  h-24">
-        <div className="text-white flex items-center gap-3">
+    <header className="max-w-7xl w-full mx-auto col-span-4 flex py-5 justify-between align-middle h-24 px-5 xl:px-0">
+      <div className="flex items-center gap-3">
+        <Link href={"/"}>
           <Logo />
+        </Link>
 
-          <Link className="text-white" href={"/mangas"}>
-            Mangas
-          </Link>
-        </div>
+        <Link href={"/mangas"}>Mangas</Link>
+      </div>
 
-        <div className="flex align-middle items-center gap-5">
-          <HeaderSearch />
+      <div className="flex align-middle items-center gap-5">
+        <HeaderSearch />
 
-          <div className="hover:bg-slate-700 p-3 rounded-full cursor-pointer">
-            <FaDiscord size={21} color="white" />
-          </div>
+        <div className="hover:bg-slate-700 p-3 rounded-full cursor-pointer">
+          <FaDiscord size={21} color="white" />
         </div>
       </div>
-    </>
+    </header>
   );
 };
 

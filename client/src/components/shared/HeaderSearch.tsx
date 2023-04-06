@@ -25,7 +25,7 @@ const HeaderSearch = () => {
       >
         <UseAnimations
           reverse={open}
-          size={21}
+          size={22}
           animation={second}
           strokeColor={"#fff"}
         />

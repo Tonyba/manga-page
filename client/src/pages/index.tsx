@@ -21,7 +21,7 @@ export default function Home() {
         title: faker.random.word(),
         description: faker.lorem.words(20),
         demography: faker.datatype.string(),
-        image: faker.image,
+        image: "https://picsum.photos/225/300",
       });
     }
 
@@ -29,8 +29,8 @@ export default function Home() {
   }, []);
 
   return (
-    <main>
-      <Carousel />
+    <main className="max-w-7xl mx-auto px-5 xl:px-0">
+      <Carousel content={content} />
       <section className="flex py-10 flex-col xl:flex-row flex-wrap">
         <div className="w-full xl:w-3/4">
           <div className="flex gap-2 mb-5">

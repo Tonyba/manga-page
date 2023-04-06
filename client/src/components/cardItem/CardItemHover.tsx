@@ -6,9 +6,10 @@ type Props = {
   title: string;
   type: string;
   desc: string;
+  id: number;
 };
 
-const CardItemHover: FC<Props> = ({ title, type, desc }) => {
+const CardItemHover: FC<Props> = ({ title, type, desc, id }) => {
   return (
     <div
       className="text-left bg-gray-700 rounded-lg p-5 
@@ -22,7 +23,10 @@ const CardItemHover: FC<Props> = ({ title, type, desc }) => {
     w-64
     "
     >
-      <strong className="block mb-2">{title}</strong>
+      <Link href={`/content/${id}`}>
+        <strong className="block mb-2">{title}</strong>
+      </Link>
+
       <ContentPill contentType={type} isAbsolute={false} full={true} />
       <p className="text-sm my-3 line-clamp-[10]">{desc}</p>
 
@@ -30,15 +34,17 @@ const CardItemHover: FC<Props> = ({ title, type, desc }) => {
         Capitulo 23
       </button>
 
-      <button
-        className={`uppercase tracking-wide 
-        ml-auto
-        block
+      <div className="text-right">
+        <Link
+          href={`/content/${id}`}
+          className={`uppercase tracking-wide 
+        inline-block
         rounded-md px-3 p-1 bg-red-500 ${type.toLowerCase()} font-semibold text-sm`}
-        type="button"
-      >
-        VER {type}
-      </button>
+          role="button"
+        >
+          VER {type}
+        </Link>
+      </div>
     </div>
   );
 };
