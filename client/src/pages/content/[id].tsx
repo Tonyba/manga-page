@@ -8,16 +8,32 @@ import Filter from "@/components/filter/Filter";
 import { FaChevronLeft } from "react-icons/fa";
 import { FaChevronRight } from "react-icons/fa";
 import Pagination from "@/components/pagination/Pagination";
+import Carousel from "@/components/carousel/Carousel";
+import { BiBookmarks } from "react-icons/bi";
 
 const Content = () => {
   const [content, setContent] = useState<ContentType>();
+  const [related, setRelated] = useState<ContentType[]>([]);
 
   useEffect(() => {
     const ch: ChapterItemType[] = [];
+    const rel: ContentType[] = [];
+
     for (let index = 0; index < 10; index++) {
       ch.push({
         image: "https://picsum.photos/200/150",
         text: "Capitulo " + index,
+      });
+      rel.push({
+        id: parseInt(faker.random.numeric()),
+        contentType: faker.random.word(),
+        title: faker.random.word(),
+        description: faker.lorem.words(20),
+        demography: faker.datatype.string(),
+        image: "https://picsum.photos/225/300",
+        genres: [],
+        status: faker.word.noun(),
+        chapters: [],
       });
     }
     setContent({
@@ -31,6 +47,7 @@ const Content = () => {
       status: faker.random.word(),
       chapters: ch,
     });
+    setRelated(rel);
   }, []);
 
   return (
@@ -99,6 +116,17 @@ const Content = () => {
 
           <Pagination />
         </div>
+      </section>
+
+      <section className="max-w-7xl mx-auto py-10">
+        <div className="flex gap-2 mb-5">
+          <BiBookmarks className="text-3xl md:text-4xl" />
+          <h2 className="text-2xl md:text-4xl font-semibold">
+            Recomendaciones
+          </h2>
+        </div>
+
+        <Carousel content={related} />
       </section>
     </>
   );
