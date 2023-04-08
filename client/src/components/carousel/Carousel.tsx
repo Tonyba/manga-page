@@ -21,20 +21,6 @@ type CarouselOptions = {
   content: ContentType[];
 };
 
-const slides = [
-  "https://picsum.photos/250/333",
-  "https://picsum.photos/250/333",
-  "https://picsum.photos/250/333",
-  "https://picsum.photos/250/333",
-  "https://picsum.photos/250/333",
-  "https://picsum.photos/250/333",
-  "https://picsum.photos/250/333",
-  "https://picsum.photos/250/333",
-  "https://picsum.photos/250/333",
-  "https://picsum.photos/250/333",
-  "https://picsum.photos/250/333",
-];
-
 const Carousel: FC<CarouselOptions> = ({ content }) => {
   const [ops, setOpts] = useState<CarouselOptions>({
     width: 0,
@@ -62,7 +48,7 @@ const Carousel: FC<CarouselOptions> = ({ content }) => {
   });
 
   const onRight = useCallback(() => {
-    if (ops.position! < slides.length - ops.itemsPerPage!) {
+    if (ops.position! < content.length - ops.itemsPerPage!) {
       setOpts({ ...ops, position: ops.position! + 1 });
     } else {
       setOpts({ ...ops, position: 0 });
@@ -161,8 +147,8 @@ const Carousel: FC<CarouselOptions> = ({ content }) => {
         </motion.div>
       </div>
       <div className="flex justify-center mt-5 gap-3">
-        {slides.map((_, index) => {
-          if (index < slides.length - ops.itemsPerPage! + 1) {
+        {content.map((_, index) => {
+          if (index < content.length - ops.itemsPerPage! + 1) {
             return (
               <CarouselDot
                 key={index}

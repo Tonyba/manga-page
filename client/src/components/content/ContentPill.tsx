@@ -4,12 +4,14 @@ type Props = {
   contentType: string;
   isAbsolute?: boolean;
   full?: boolean;
+  className?: string;
 };
 
 const ContentPill: FC<Props> = ({
   contentType,
   isAbsolute = true,
   full = false,
+  className,
 }) => {
   const absolute = `${isAbsolute ? "left-3 top-3 absolute z-10" : "block"}`;
   const isFull = full && "w-full";
@@ -22,6 +24,7 @@ const ContentPill: FC<Props> = ({
         left-3
         top-3
         text-center
+        ${className}
         uppercase
         rounded-[5px]
         bg-${contentType.toLocaleLowerCase()}

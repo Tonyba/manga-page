@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import UseAnimations from "react-useanimations";
 import second from "react-useanimations/lib/searchToX";
 
-const HeaderSearch = () => {
+type Props = {
+  placeholder?: string;
+};
+
+const HeaderSearch: FC<Props> = ({ placeholder = "Busca un manga..." }) => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
 
@@ -48,7 +52,7 @@ const HeaderSearch = () => {
           outline-none
           bg-transparent
         "
-          placeholder="Busca un manga..."
+          placeholder={placeholder}
         />
       </div>
     </div>

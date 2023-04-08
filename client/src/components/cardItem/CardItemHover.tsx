@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React, { FC } from "react";
-import ContentPill from "../content/contentPill/ContentPill";
+import ContentPill from "../content/ContentPill";
 
 type Props = {
   title: string;

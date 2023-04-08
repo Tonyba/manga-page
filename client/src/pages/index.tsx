@@ -22,6 +22,9 @@ export default function Home() {
         description: faker.lorem.words(20),
         demography: faker.datatype.string(),
         image: "https://picsum.photos/225/300",
+        genres: [],
+        status: faker.word.noun(),
+        chapters: [],
       });
     }
 

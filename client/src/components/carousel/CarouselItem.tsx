@@ -7,7 +7,7 @@ import React, {
   useState,
   useSyncExternalStore,
 } from "react";
-import ContentPill from "../content/contentPill/ContentPill";
+import ContentPill from "../content/ContentPill";
 import { useDevideWidth } from "../hooks/useDevideWidth";
 import Link from "next/link";
 
@@ -85,7 +85,7 @@ const CarouselItem: FC<Props> = ({
           href={`/content/${id}`}
           className="text-lg w-full line-clamp-1 text-center"
         >
-          title
+          {title}
         </Link>
       </div>
     </motion.div>

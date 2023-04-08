@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ContentType } from "@/utils/types";
 import { motion } from "framer-motion";
-import ContentPill from "../content/contentPill/ContentPill";
+import ContentPill from "../content/ContentPill";
 import CardItemHover from "./CardItemHover";
 
 type Props = {

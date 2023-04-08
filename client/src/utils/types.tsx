@@ -7,9 +7,17 @@ export type ContentType = {
   description: string;
   contentType: string;
   demography: string;
+  genres: string[];
+  status: string;
+  chapters: ChapterItemType[];
 };
 
 export type TabItemType = {
   label: string;
   content?: React.ReactNode;
+};
+
+export type ChapterItemType = {
+  image: string;
+  text: string;
 };
