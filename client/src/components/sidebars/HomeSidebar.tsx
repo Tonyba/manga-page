@@ -23,6 +23,9 @@ export const HomeSidebar = () => {
           description: faker.lorem.words(20),
           demography: faker.datatype.string(),
           image: faker.image,
+          chapters: [],
+          genres: [],
+          status: faker.random.word(),
         });
       }
 
