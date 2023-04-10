@@ -5,11 +5,10 @@ import React, { useEffect, useState } from "react";
 import ContentSidebar from "@/components/content/ContentSidebar";
 import ContentChapters from "@/components/content/ContentChapters";
 import Filter from "@/components/filter/Filter";
-import { FaChevronLeft } from "react-icons/fa";
-import { FaChevronRight } from "react-icons/fa";
 import Pagination from "@/components/pagination/Pagination";
 import Carousel from "@/components/carousel/Carousel";
 import { BiBookmarks } from "react-icons/bi";
+import { ChapterContext } from "@/utils/context/ChapterContext";
 
 const Content = () => {
   const [content, setContent] = useState<ContentType>();
@@ -23,6 +22,8 @@ const Content = () => {
       ch.push({
         image: "https://picsum.photos/200/150",
         text: "Capitulo " + index,
+        chapter: index.toString(),
+        contentId: index,
       });
       rel.push({
         id: parseInt(faker.random.numeric()),
@@ -108,6 +109,7 @@ const Content = () => {
           </div>
 
           <h2 className="text-2xl font-medium">Capitulos</h2>
+
           <div className="grid grid-cols-4 gap-5 mt-4">
             {content?.chapters.map((ch, index) => (
               <ContentChapters key={index} {...ch} />

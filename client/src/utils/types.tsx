@@ -20,4 +20,16 @@ export type TabItemType = {
 export type ChapterItemType = {
   image: string;
   text: string;
+  chapter: string;
+  contentId: number;
+};
+
+export enum readStyleEnum {
+  cascade = "Cascada",
+  page = "Paginado",
+}
+
+export type OptionType = {
+  value: string;
+  label: string;
 };
