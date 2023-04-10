@@ -8,7 +8,6 @@ import Filter from "@/components/filter/Filter";
 import Pagination from "@/components/pagination/Pagination";
 import Carousel from "@/components/carousel/Carousel";
 import { BiBookmarks } from "react-icons/bi";
-import { ChapterContext } from "@/utils/context/ChapterContext";
 
 const Content = () => {
   const [content, setContent] = useState<ContentType>();
@@ -65,12 +64,13 @@ const Content = () => {
           width={530}
           height={530}
           className="rounded-lg 
-        h-[380px]  
-        mx-auto
-        -mb-10
-        z-10
-        relative
+          h-[380px]  
+          mx-auto
+          -mb-10
+          z-10
+          relative
         "
+          priority={true}
           src={content?.image as string}
           alt={content?.title || ""}
         />
@@ -83,7 +83,6 @@ const Content = () => {
       px-7
       pt-14
       pb-7
-      
       rounded-md
       "
         >
