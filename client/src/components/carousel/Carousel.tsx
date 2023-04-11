@@ -7,7 +7,7 @@ import CarouselButton from "./CarouselButton";
 
 import { useSwipeable } from "react-swipeable";
 import { CarouselDot } from "./CarouselDot";
-import { useDevideWidth } from "../hooks/useDevideWidth";
+import { useDevideWidth } from "../../hooks/useDevideWidth";
 import { ContentType } from "@/utils/types";
 
 type CarouselOptions = {

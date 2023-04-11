@@ -1,55 +1,77 @@
 import { ChapterContext } from "@/utils/context/ChapterContext";
 import { readStyleEnum } from "@/utils/types";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
-import { BsFile, BsFiles } from "react-icons/bs";
-
-const Option = [{}];
+import { BsFile, BsFiles, BsSearch } from "react-icons/bs";
+import { GiHamburgerMenu } from "react-icons/gi";
+import ChapterSearch from "./ChapterSearch";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
 
 const ChapterOptions = () => {
   const { setReadingStyle, readingStyle } = useContext(ChapterContext);
-  const [isScrollUp, setScroll] = useState<boolean>(false);
+  const [modalOpen, setOpen] = useState(false);
+  const router = useRouter();
+  const { id } = router.query;
+  const scrollDirection = useScrollDirection();
 
-  useEffect(() => {
-    const scrollElem = document.body;
-    scrollElem.addEventListener("wheel", (e: WheelEvent) => {
-      if (e.deltaY > 0) {
-        setScroll(false);
-      } else {
-        setScroll(true);
-      }
-    });
-
-    return () => scrollElem.removeEventListener("wheel", () => {});
-  }, []);
+  const handleSearchClose = () => setOpen(false);
 
   return (
-    <motion.div
-      animate={{
-        opacity: isScrollUp ? 1 : 0,
-        y: isScrollUp ? 0 : 100,
-      }}
-      className="fixed bottom-5 px-5 left-1/2 -translate-x-1/2 bg-slate-600 rounded-xl"
-    >
-      <button
-        className="flex items-center flex-col hover:bg-slate-400 p-2"
-        onClick={() =>
-          setReadingStyle(
-            readingStyle === readStyleEnum.cascade
-              ? readStyleEnum.page
-              : readStyleEnum.cascade
-          )
-        }
-      >
-        {readingStyle === readStyleEnum.cascade ? (
-          <BsFiles size={22} className="mb-1" />
-        ) : (
-          <BsFile size={22} className="mb-1" />
-        )}
+    <>
+      <div className="flex justify-center">
+        <motion.div
+          animate={{
+            opacity: scrollDirection === "up" ? 1 : 0,
+            y: scrollDirection === "up" ? 0 : 100,
+          }}
+          className="fixed flex divide-x divide-slate-600 bottom-0 sm:bottom-5 px-5  bg-slate-700 rounded-xl"
+        >
+          <Link
+            href={`/content/${id}`}
+            className="flex items-center flex-col hover:bg-slate-400 p-2 px-5"
+            onClick={() =>
+              setReadingStyle(
+                readingStyle === readStyleEnum.cascade
+                  ? readStyleEnum.page
+                  : readStyleEnum.cascade
+              )
+            }
+          >
+            <GiHamburgerMenu size={22} className="mb-1" />
+            <p>Contenido</p>
+          </Link>
+          <button
+            className="flex items-center flex-col hover:bg-slate-400 p-2 px-5"
+            onClick={() =>
+              setReadingStyle(
+                readingStyle === readStyleEnum.cascade
+                  ? readStyleEnum.page
+                  : readStyleEnum.cascade
+              )
+            }
+          >
+            {readingStyle === readStyleEnum.cascade ? (
+              <BsFiles size={22} className="mb-1" />
+            ) : (
+              <BsFile size={22} className="mb-1" />
+            )}
 
-        <p>{readingStyle}</p>
-      </button>
-    </motion.div>
+            <p>{readingStyle}</p>
+          </button>
+
+          <button
+            className="flex items-center flex-col hover:bg-slate-400 p-2 px-5"
+            onClick={() => setOpen(true)}
+          >
+            <BsSearch size={22} className="mb-1" />
+            <p>Capitulos</p>
+          </button>
+        </motion.div>
+      </div>
+      <ChapterSearch onModalClose={handleSearchClose} isOpen={modalOpen} />
+    </>
   );
 };
 

@@ -8,5 +8,5 @@ module.exports = {
     "./src/utils/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {},
-  plugins: [],
+  plugins: [require("tailwind-scrollbar")({ nocompatible: true })],
 };

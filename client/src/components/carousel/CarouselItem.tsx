@@ -1,14 +1,8 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
-import React, {
-  FC,
-  useEffect,
-  useRef,
-  useState,
-  useSyncExternalStore,
-} from "react";
+import React, { FC, useState } from "react";
 import ContentPill from "../content/ContentPill";
-import { useDevideWidth } from "../hooks/useDevideWidth";
+import { useDevideWidth } from "../../hooks/useDevideWidth";
 import Link from "next/link";
 
 type Props = {
@@ -32,10 +26,6 @@ const CarouselItem: FC<Props> = ({
   title,
   type = "Manga",
 }) => {
-  const [Dwidth, setDwidth] = useState({
-    width: "250px",
-    space: itemSpace,
-  });
   const [width, space] = useDevideWidth(itemSpace);
 
   return (
