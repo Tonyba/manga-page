@@ -17,3 +17,7 @@ html {
 .bg-body {
   @apply bg-slate-900;
 }
+
+html, body {
+  @apply scroll-smooth;
+}

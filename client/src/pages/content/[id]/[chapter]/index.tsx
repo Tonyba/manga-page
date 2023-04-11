@@ -2,6 +2,7 @@ import ChapterComments from "@/components/chapter/ChapterComments";
 import ChapterNavigation from "@/components/chapter/ChapterNavigation";
 import ChapterOptions from "@/components/chapter/ChapterOptions";
 import ChapterSpinner from "@/components/chapter/ChapterSpinner";
+import ChapterUpButton from "@/components/chapter/ChapterUpButton";
 import { ChapterContext } from "@/utils/context/ChapterContext";
 import { readStyleEnum } from "@/utils/types";
 import { motion, useScroll } from "framer-motion";
@@ -83,6 +84,8 @@ const ChapterContent = () => {
         />
       )}
 
+      {readingStyle === readStyleEnum.cascade && <ChapterUpButton />}
+
       <ChapterOptions />
 
       <main className="text-center">
@@ -144,7 +147,6 @@ const ImagesReader: FC<Props> = ({ onImageClick }) => {
           src={images[currentImage]}
           className="mx-auto cursor-pointer"
           alt={currentImage.toString()}
-          loading="lazy"
         />
       )}
     </div>
