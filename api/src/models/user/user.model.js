@@ -10,6 +10,10 @@ export const Users = sequelize.define("Users", {
   userName: {
     type: DataTypes.STRING,
   },
+  avatar: {
+    type: DataTypes.TEXT,
+    defaultValue: "https",
+  },
   password: {
     type: DataTypes.TEXT,
   },
@@ -18,5 +22,9 @@ export const Users = sequelize.define("Users", {
   },
   paypal: {
     type: DataTypes.STRING,
+  },
+  role: {
+    type: DataTypes.STRING,
+    defaultValue: "Usuario",
   },
 });

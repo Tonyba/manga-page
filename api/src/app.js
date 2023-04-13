@@ -7,7 +7,7 @@ import users from "./routes/user/user.routes.js";
 // ----------------------------------------------------------------
 import { Mangas } from "./models/manga/manga.model.js";
 import { Episodes } from "./models/episodes/episodes.model.js";
-import { Users } from "./models/user/user.model.js";
+import { Users } from "./models/User/user.model.js";
 import { MangaFav } from "./models/manga_fav/manga_fav.js";
 // ----------------------------------------------------------------
 import dotenv from "dotenv";
