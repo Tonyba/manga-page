@@ -1,5 +1,6 @@
 import AppLayout from "@/components/layouts/AppLayout";
 import "@/styles/globals.css";
+import "@splidejs/react-splide/css";
 import type { AppProps } from "next/app";
 import { Poppins } from "next/font/google";
 

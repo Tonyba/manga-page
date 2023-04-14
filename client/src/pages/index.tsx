@@ -8,6 +8,7 @@ import { ContentType } from "@/utils/types";
 import { useEffect, useState } from "react";
 import CardLoop from "@/components/cardLoop/cardLoop";
 import { HomeSidebar } from "@/components/sidebars/HomeSidebar";
+import CarouselSwiper from "@/components/carousel/CarouselSwiper";
 
 export default function Home() {
   const [content, setContent] = useState<ContentType[]>([]);
@@ -33,7 +34,8 @@ export default function Home() {
 
   return (
     <main className="max-w-7xl mx-auto px-5 xl:px-0">
-      <Carousel content={content} />
+      <CarouselSwiper content={content} />
+      {/* <Carousel content={content} /> */}
       <section className="flex py-10 flex-col xl:flex-row flex-wrap">
         <div className="w-full xl:w-3/4">
           <div className="flex gap-2 mb-5">
