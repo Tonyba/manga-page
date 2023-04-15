@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { faker } from "@faker-js/faker";
 import CardLoop from "@/components/cardLoop/cardLoop";
 import Pagination from "@/components/pagination/Pagination";
+import ExploradorSearch from "@/components/Explorador/ExploradorSearch";
 
 const Explorador = () => {
   const [content, setContent] = useState<ContentType[]>([]);
@@ -30,7 +31,10 @@ const Explorador = () => {
 
   return (
     <ExploradorContext.Provider value={{ content, setContent }}>
-      <main className="max-w-7xl mx-auto px-5 xl:px-0">
+      <main className="max-w-7xl mx-auto px-5 xl:px-0 mt-5">
+        <section className="w-full">
+          <ExploradorSearch />
+        </section>
         <section className="flex py-10 flex-col xl:flex-row flex-wrap">
           <aside className="w-full mb-10 xl:mb-0 xl:w-1/4">
             <ExploradorSidebar />
