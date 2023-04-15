@@ -16,7 +16,9 @@ const HeaderSearch: FC<Props> = ({ placeholder = "Busca un manga..." }) => {
       overflow-hidden
       transition-[width]
       cursor-pointer 
-      bg-slate-800 rounded-full hover:bg-slate-700 ${open ? "w-80" : "w-12"} `}
+      bg-primary-dark rounded-full bg-primary-dark-hover ${
+        open ? "w-80" : "w-12"
+      } `}
     >
       <button
         onClick={() => setOpen(!open)}

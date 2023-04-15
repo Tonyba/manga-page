@@ -19,7 +19,7 @@ const Select: FC<Props> = ({ options, defaultValue, onChange }) => {
   return (
     <select
       value={defaultVal ? defaultVal : options[0].value}
-      className="w-full sm:w-20  rounded-lg bg-slate-600 p-1 outline-none"
+      className="w-full sm:w-20  rounded-lg bg-primary p-1 outline-none"
       onChange={(val) => onChange(val.target.value)}
     >
       {options.map((opt, index) => (

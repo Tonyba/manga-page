@@ -8,13 +8,28 @@ type Props = {
 };
 
 const ContentPill: FC<Props> = ({
-  contentType,
+  contentType = "manga",
   isAbsolute = true,
   full = false,
   className,
 }) => {
   const absolute = `${isAbsolute ? "left-3 top-3 absolute z-10" : "block"}`;
   const isFull = full && "w-full";
+  let contentTypeColor;
+
+  switch (contentType.toLowerCase()) {
+    case "manhua":
+      contentTypeColor = "bg-manhua";
+      break;
+
+    case "manwha":
+      contentTypeColor = "bg-manwha";
+      break;
+
+    default:
+      contentTypeColor = "bg-manga";
+      break;
+  }
 
   return (
     <span
@@ -27,7 +42,7 @@ const ContentPill: FC<Props> = ({
         ${className}
         uppercase
         rounded-[5px]
-        bg-${contentType.toLocaleLowerCase()}
+       ${contentTypeColor}
         p-[3px]
         ${isFull}
         bg-red-500

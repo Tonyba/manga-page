@@ -4,7 +4,11 @@
 
 
 :root {
- @apply h-full bg-slate-900;
+ @apply h-full bg-slate-900 text-white;
+}
+
+html, body {
+  @apply scroll-smooth;
 }
 
 body {
@@ -15,10 +19,38 @@ html {
   @apply h-full bg-slate-900
 }
 
-.bg-body {
-  @apply bg-slate-900;
+.text-important,
+.text-important-hover:hover {
+  @apply text-blue-400
 }
 
-html, body {
-  @apply scroll-smooth;
+.accent-important {
+  @apply accent-blue-400 ;
+}
+
+.border-important-hover:hover {
+  @apply border-sky-500
+}
+
+.bg-primary,
+.bg-accent-hover:hover  {
+  @apply bg-slate-600
+}
+
+
+
+.bg-primary-dark {
+  @apply bg-slate-800;
+}
+
+.bg-accent,
+.bg-primary-dark-hover:hover {
+  @apply bg-slate-700;
+}
+
+
+
+.bg-hover:hover,
+.bg-tab-active {
+  @apply bg-slate-500
 }

@@ -22,7 +22,7 @@ const ListItem: FC<ContentType> = ({ title, image, id }) => {
           <h4 className="line-clamp-1 max-h-6 mb-3">{title}</h4>
         </Link>
 
-        <button className="bg-slate-600 hover:bg-slate-500 p-1 px-2 rounded-lg text-sm">
+        <button className="bg-primary bg-hover p-1 px-2 rounded-lg text-sm">
           Capitulo 23
         </button>
       </div>

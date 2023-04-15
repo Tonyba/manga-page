@@ -17,16 +17,16 @@ const Tabs: FC<Props> = ({ tabs, loading }) => {
 
   return (
     <>
-      <nav className="rounded-xl bg-slate-600">
+      <nav className="rounded-xl bg-primary">
         <ul className="flex">
           {tabs?.map((tab, index) => (
             <li
               key={index}
               className={`w-full text-center font-medium 
               py-3 rounded-xl
-              ${selectedTab?.content === tab.content && "bg-slate-500"}
+              ${selectedTab?.content === tab.content && "bg-tab-active"}
               transition-colors 
-              cursor-pointer hover:bg-slate-500`}
+              cursor-pointer bg-hover`}
               onClick={() => setSelectedTab(tab)}
             >
               {tab.label}

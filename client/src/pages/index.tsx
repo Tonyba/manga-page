@@ -35,7 +35,6 @@ export default function Home() {
   return (
     <main className="max-w-7xl mx-auto px-5 xl:px-0">
       <CarouselSwiper content={content} />
-      {/* <Carousel content={content} /> */}
       <section className="flex py-10 flex-col xl:flex-row flex-wrap">
         <div className="w-full xl:w-3/4">
           <div className="flex gap-2 mb-5">
@@ -47,9 +46,9 @@ export default function Home() {
 
           <CardLoop items={content} fourCols={true} />
         </div>
-        <div className="w-full xl:w-1/4 pl-0 xl:pl-5">
+        <aside className="w-full xl:w-1/4 pl-0 xl:pl-5">
           <HomeSidebar />
-        </div>
+        </aside>
       </section>
       <section className="w-full mt-5">
         <div className="w-full">

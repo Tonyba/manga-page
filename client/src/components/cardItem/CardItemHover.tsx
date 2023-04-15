@@ -30,7 +30,7 @@ const CardItemHover: FC<Props> = ({ title, type, desc, id }) => {
       <ContentPill contentType={type} isAbsolute={false} full={true} />
       <p className="text-sm my-3 line-clamp-[10]">{desc}</p>
 
-      <button className="mb-5 font-medium w-full text-sm py-1 bg-slate-600 hover:bg-slate-500 text-center rounded-md">
+      <button className="mb-5 font-medium w-full text-sm py-1 bg-primary bg-hover text-center rounded-md">
         Capitulo 23
       </button>
 

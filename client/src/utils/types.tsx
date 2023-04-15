@@ -12,6 +12,13 @@ export type ContentType = {
   chapters: ChapterItemType[];
 };
 
+export type FiltersType = {
+  type: string;
+  demography: string;
+  status: string;
+  genres: string[];
+};
+
 export type TabItemType = {
   label: string;
   content?: React.ReactNode;

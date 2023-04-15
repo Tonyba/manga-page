@@ -18,7 +18,7 @@ const ChapterNavigation = () => {
         {currentChapter - 1 > 0 ? (
           <>
             <Link
-              className="flex gap-2 bg-slate-600 hover:bg-slate-500 p-3 px-5 items-center rounded-full justify-center"
+              className="flex gap-2 bg-primary bg-hover p-3 px-5 items-center rounded-full justify-center"
               href={`/content/${id}/${currentChapter - 1}`}
             >
               <FaChevronLeft size={18} />
@@ -37,7 +37,7 @@ const ChapterNavigation = () => {
       <div className="w-1/2 sm:w-36 pl-1 sm:pl-0">
         {currentChapter + 1 <= totalChapters ? (
           <Link
-            className="flex gap-2 bg-slate-600 hover:bg-slate-500 p-3 px-5 items-center rounded-full justify-center"
+            className="flex gap-2 bg-primary bg-hover p-3 px-5 items-center rounded-full justify-center"
             href={`/content/${id}/${currentChapter + 1}`}
           >
             Siguiente
