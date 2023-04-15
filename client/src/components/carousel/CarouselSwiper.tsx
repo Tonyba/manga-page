@@ -37,7 +37,7 @@ const CarouselSwiper: FC<Props> = ({ content }) => {
     >
       <SplideTrack>
         {content.map((c, index) => (
-          <SplideSlide>
+          <SplideSlide key={index}>
             <CardItem content={c} index={index} showHover={false} />
           </SplideSlide>
         ))}
