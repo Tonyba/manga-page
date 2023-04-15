@@ -12,11 +12,11 @@ const CarouselSwiper: FC<Props> = ({ content }) => {
   return (
     <Splide
       options={{
-        type: "loop",
         perPage: 5,
         perMove: 1,
         autoplay: true,
         gap: "1rem",
+        rewind: true,
         interval: 3000,
         pauseOnHover: true,
         breakpoints: {
