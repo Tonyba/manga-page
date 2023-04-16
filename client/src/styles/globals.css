@@ -24,20 +24,27 @@ html {
   @apply text-blue-400
 }
 
+.text-dark {
+  @apply text-slate-400
+}
+
 .accent-important {
   @apply accent-blue-400 ;
 }
 
-.border-important-hover:hover {
+.border-important-hover:hover,
+.border-button {
   @apply border-sky-500
+}
+
+.button-primary-outline:hover {
+  @apply bg-sky-500 text-white;
 }
 
 .bg-primary,
 .bg-accent-hover:hover  {
   @apply bg-slate-600
 }
-
-
 
 .bg-primary-dark {
   @apply bg-slate-800;
@@ -48,6 +55,13 @@ html {
   @apply bg-slate-700;
 }
 
+.divider-primary {
+  @apply divide-slate-600
+}
+
+.border-primary {
+  @apply border-slate-600
+}
 
 
 .bg-hover:hover,

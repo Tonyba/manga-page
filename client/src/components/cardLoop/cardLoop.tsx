@@ -26,7 +26,7 @@ const CardLoop: FC<Props> = ({
   cols += " grid-cols-2 sm:grid-cols-3 md:grid-cols-4";
 
   if (oneCol) {
-    cols = "grid-cols-1 divide-y divide-slate-600";
+    cols = "grid-cols-1 divide-y divider-primary";
   }
 
   return (

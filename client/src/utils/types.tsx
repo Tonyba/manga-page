@@ -1,4 +1,7 @@
 import { ImageModule } from "@faker-js/faker";
+import { NextPage } from "next";
+import { ReactElement, ReactNode } from "react";
+import type { AppProps } from "next/app";
 
 export type ContentType = {
   id: number;
@@ -10,6 +13,14 @@ export type ContentType = {
   genres: string[];
   status: string;
   chapters: ChapterItemType[];
+};
+
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+export type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
 };
 
 export type FiltersType = {

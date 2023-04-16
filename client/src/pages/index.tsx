@@ -1,4 +1,3 @@
-import Carousel from "@/components/carousel/Carousel";
 import Head from "next/head";
 import Image from "next/image";
 
@@ -9,12 +8,23 @@ import { useEffect, useState } from "react";
 import CardLoop from "@/components/cardLoop/cardLoop";
 import { HomeSidebar } from "@/components/sidebars/HomeSidebar";
 import CarouselSwiper from "@/components/carousel/CarouselSwiper";
+import { getMangas } from "@/utils/axios/contentType";
 
 export default function Home() {
   const [content, setContent] = useState<ContentType[]>([]);
 
   useEffect(() => {
     const items: ContentType[] = [];
+
+    const test = async () => {
+      const resp = await getMangas();
+      const content = resp.data;
+
+      console.log(content);
+    };
+
+    test();
+
     for (let index = 0; index < 12; index++) {
       items.push({
         id: parseInt(faker.random.numeric()),

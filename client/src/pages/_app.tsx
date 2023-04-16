@@ -1,5 +1,6 @@
 import AppLayout from "@/components/layouts/AppLayout";
 import "@/styles/globals.css";
+import { AppPropsWithLayout } from "@/utils/types";
 import "@splidejs/react-splide/css";
 import type { AppProps } from "next/app";
 import { Poppins } from "next/font/google";
@@ -9,10 +10,12 @@ const poppins = Poppins({
   subsets: ["latin"],
 });
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }: AppPropsWithLayout) {
+  const getLayout = Component.getLayout ?? ((page) => page);
+
   return (
     <AppLayout className={poppins.className}>
-      <Component {...pageProps} />
+      {getLayout(<Component {...pageProps} />)}
     </AppLayout>
   );
 }
