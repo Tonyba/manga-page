@@ -32,6 +32,22 @@ app.use(
   })
 );
 
+// Cors
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3001");
+  // Se agrega el x-auth-token para que se pueda enviar el token en el header
+  res.header(
+    "Access-Control-Allow-Headers",
+    "x-auth-token, Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, DELETE, PATCH"
+  );
+  next();
+});
+
 // Relacionamientos
 /* 
   ! Relacionamiento Manga y Episodes

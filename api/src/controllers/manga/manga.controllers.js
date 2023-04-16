@@ -1,7 +1,6 @@
 import { Mangas } from "../../models/manga/manga.model.js";
 import fs from "fs";
 import { Episodes } from "../../models/episodes/episodes.model.js";
-import { v4 as uuidv4 } from "uuid";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
@@ -11,13 +10,11 @@ export const createManga = async (req, res) => {
   const { title, description, type, genres, demography } = req.body;
   const { image, banner } = req.files;
   try {
-    let nameImage = uuidv4().toString();
     let path = __dirname + "/../../public/mangas/" + image?.name;
     image?.mv(path, function (err, data) {
       if (err) throw err;
       console.log(data);
     });
-    let nameBanner = uuidv4().toString();
     path = __dirname + "/../../public/mangas/" + banner?.name;
     banner?.mv(path, function (err, data) {
       if (err) throw err;
