@@ -35,9 +35,11 @@ const AddContentForm = () => {
     setData({ ...data, genres: opt });
   };
 
+  const handleBannerChange = () => {};
+
   return (
     <form className="flex flex-col gap-3">
-      <DragAndDrop />
+      <DragAndDrop name="banner" onChange={handleBannerChange} />
       <Input
         label="Titulo"
         placeholder="Escriba un titulo"
