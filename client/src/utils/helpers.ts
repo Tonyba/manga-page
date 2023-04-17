@@ -13,6 +13,12 @@ export const selectStyles: StylesConfig = {
       borderColor: "#60A5FA",
     },
   }),
+  placeholder: (styles) => {
+    return {
+      ...styles,
+      color: 'rgba(255,255,255, .5)'
+    }
+  },
   dropdownIndicator: (styles, { isFocused }) => {
     return {
       ...styles,
