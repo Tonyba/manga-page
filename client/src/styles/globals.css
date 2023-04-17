@@ -37,7 +37,8 @@ html {
   @apply border-sky-500
 }
 
-.button-primary-outline:hover {
+.button-primary-outline:hover,
+.button-primary {
   @apply bg-sky-500 text-white;
 }
 

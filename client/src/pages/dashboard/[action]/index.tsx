@@ -1,6 +1,6 @@
 import ContentList from "@/components/dashboardContent/ContentList";
 import Dashboard from "@/components/dashboardContent/Dashboard";
-import DashboardContentAdd from "@/components/dashboardContent/DashboardContentAdd";
+import DashboardAddContent from "@/components/dashboardContent/DashboardAddContent";
 import Settings from "@/components/dashboardContent/Settings";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import { NextPageWithLayout } from "@/utils/types";
@@ -23,7 +23,7 @@ const DashboardAction: NextPageWithLayout = () => {
         break;
 
       case "add":
-        setContent(<DashboardContentAdd />);
+        setContent(<DashboardAddContent />);
         break;
     }
   }, [action]);
