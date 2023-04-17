@@ -42,7 +42,8 @@ html {
 }
 
 .bg-primary,
-.bg-accent-hover:hover  {
+.bg-accent-hover:hover,
+.tooltip-bg-primary::before  {
   @apply bg-slate-600
 }
 
