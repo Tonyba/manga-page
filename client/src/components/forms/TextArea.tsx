@@ -1,23 +1,38 @@
-import React, { FC } from 'react'
+import React, { FC } from "react";
+import ValidationError from "./ValidationError";
 
+type Props = {
+  onChange: (val: string) => void;
+  label: string;
+  defaulValue?: string;
+  value?: string;
+  placeholder?: string;
+  name?: string;
+  errMsg?: string;
+};
 
-type Props =  {
-    onChange: (val: string) => void;
-    label: string;
-    defaulValue?: string;
-    value?: string;
-    placeholder?: string;
-    name?: string;
-}
-
-const TextArea:FC<Props> = ({label, value, placeholder, name, defaulValue, onChange}) => {
+const TextArea: FC<Props> = ({
+  label,
+  value,
+  placeholder,
+  name,
+  defaulValue,
+  onChange,
+  errMsg,
+}) => {
   return (
     <div>
-     <label htmlFor={name}>{label}</label>
-     <textarea placeholder={placeholder} value={value} rows={5} className='bg-primary w-full rounded-md text-sm outline-none p-3' onChange={(e) => onChange(e.target.value)}></textarea>
-
+      <label htmlFor={name}>{label}</label>
+      <textarea
+        placeholder={placeholder}
+        value={value}
+        rows={5}
+        className="bg-primary w-full rounded-md text-sm outline-none p-3"
+        onChange={(e) => onChange(e.target.value)}
+      ></textarea>
+      {errMsg && <ValidationError errorMessage={errMsg} />}
     </div>
-  )
-}
+  );
+};
 
-export default TextArea
+export default TextArea;

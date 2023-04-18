@@ -15,7 +15,7 @@ export const DashboardSidebar = () => {
   console.log(action);
 
   return (
-    <div className="">
+    <>
       <div className="text-center">
         <Image
           src="/img/user.png"
@@ -69,6 +69,6 @@ export const DashboardSidebar = () => {
           </Link>
         </li>
       </ul>
-    </div>
+    </>
   );
 };

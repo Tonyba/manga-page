@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import AddContentForm from "../forms/AddContentForm";
-import { DataState } from "@/utils/types";
+import { ContentValidationType, DataState } from "@/utils/types";
 import { demography, status, types } from "@/utils/valoresParaSelect";
 import { FaTimes } from "react-icons/fa";
 import Link from "next/link";
+import { ValidateContent } from "@/utils/validations/ContentAddValidation";
 
 const initState: DataState = {
   banner: "",
@@ -18,12 +19,30 @@ const initState: DataState = {
 
 const DashboardAddContent = () => {
   const [data, setData] = useState<DataState>(initState);
+  const [errors, setErrors] = useState<ContentValidationType>();
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(data);
+    setSubmitting(true);
+    setErrors(ValidateContent(data));
   };
 
+  const saveContent = () => {
+    console.log(data);
+    console.log("save");
+  };
+
+  useEffect(() => {
+    if (errors && submitting) {
+      if (Object.keys(errors).length !== 0) {
+        console.log("errors");
+      } else {
+        saveContent();
+      }
+      setSubmitting(false);
+    }
+  }, [JSON.stringify(errors), submitting]);
   return (
     <>
       <div className="flex items-center gap-3">
@@ -37,8 +56,13 @@ const DashboardAddContent = () => {
         <h1 className="font-semibold text-3xl">Agregar Contenido</h1>
       </div>
 
-      <div className="flex py-5 w-full">
-        <AddContentForm data={data} setData={setData} onSubmit={handleSubmit} />
+      <div className="py-5 w-full">
+        <AddContentForm
+          data={data}
+          setData={setData}
+          onSubmit={handleSubmit}
+          errors={errors}
+        />
       </div>
     </>
   );

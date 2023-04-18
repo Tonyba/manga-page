@@ -46,6 +46,17 @@ export type DataState = {
   image: File | string;
 };
 
+export type ContentValidationType = Partial<{
+  title: string;
+  description: string;
+  type: string;
+  demography: string;
+  genres: string[] | string;
+  status: string;
+  banner: File | string;
+  image: File | string;
+}>;
+
 export type ChapterItemType = {
   image: string;
   text: string;

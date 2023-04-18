@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import ValidationError from "./ValidationError";
 
 type Props = {
   type?: string;
@@ -8,6 +9,7 @@ type Props = {
   value?: string;
   placeholder?: string;
   name?: string;
+  errMsg?: string;
 };
 
 const Input: FC<Props> = ({
@@ -17,10 +19,13 @@ const Input: FC<Props> = ({
   name,
   label,
   value,
+  errMsg,
 }) => {
   return (
     <div>
-      <label htmlFor={name}>{label}</label>
+      <label className="mb-2 block" htmlFor={name}>
+        {label}
+      </label>
       <input
         className="w-full bg-primary p-3 rounded-md text-sm outline-none"
         type={type}
@@ -30,6 +35,7 @@ const Input: FC<Props> = ({
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
       />
+      {errMsg && <ValidationError errorMessage={errMsg} />}
     </div>
   );
 };

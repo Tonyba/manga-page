@@ -2,12 +2,14 @@ import { fileTypes } from "@/utils/helpers";
 import React, { FC, useEffect, useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import { RiImageAddFill } from "react-icons/ri";
+import ValidationError from "./ValidationError";
 
 type Props = {
   onChange: (file: File) => void;
   name: string;
   required?: boolean;
   label: string;
+  errMsg?: string;
 };
 
 const DragAndDrop: FC<Props> = ({
@@ -15,6 +17,7 @@ const DragAndDrop: FC<Props> = ({
   name,
   required = false,
   label,
+  errMsg,
 }) => {
   const [preview, setPreview] = useState<string>();
   const handlePreview = (f: File) => {
@@ -28,8 +31,10 @@ const DragAndDrop: FC<Props> = ({
   };
 
   return (
-    <div>
-      <label htmlFor="">{label}</label>
+    <div className="mb-4">
+      <label className="mb-2 block" htmlFor="">
+        {label}
+      </label>
       <FileUploader
         name={name}
         types={fileTypes}
@@ -56,6 +61,7 @@ const DragAndDrop: FC<Props> = ({
           </div>
         }
       />
+      {errMsg && <ValidationError errorMessage={errMsg} />}
     </div>
   );
 };
