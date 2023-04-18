@@ -35,6 +35,17 @@ export type TabItemType = {
   content?: React.ReactNode;
 };
 
+export type DataState = {
+  title: string;
+  description: string;
+  type: string;
+  demography: string;
+  genres: any[];
+  status: string;
+  banner: File | string;
+  image: File | string;
+};
+
 export type ChapterItemType = {
   image: string;
   text: string;
