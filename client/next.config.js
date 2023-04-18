@@ -4,7 +4,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  distDir: "build",
   images: {
     domains: ["picsum.photos"],
     remotePatterns: [
