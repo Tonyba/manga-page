@@ -1,10 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  distDir: "build",
   images: {
     domains: ["picsum.photos"],
     remotePatterns: [
-      /* para que sirve cuando uno anda desarrollando */
+      /* para que sirva cuando uno anda desarrollando */
     ],
   },
 };

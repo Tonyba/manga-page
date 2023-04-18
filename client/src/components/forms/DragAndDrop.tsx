@@ -41,20 +41,21 @@ const DragAndDrop: FC<Props> = ({
         required={required}
         multiple={false}
         label={label}
-      >
-        <div className="border  py-4 h-full border-dashed border-2 border-important flex flex-col items-center justify-center">
-          {preview ? (
-            <img src={preview} />
-          ) : (
-            <>
-              <RiImageAddFill className="mb-3" size={50} />
-              <span className="font-semibold text-2xl">
-                Arrasta una imagen aca!
-              </span>
-            </>
-          )}
-        </div>
-      </FileUploader>
+        children={
+          <div className="border  py-4 h-full border-dashed border-2 border-important flex flex-col items-center justify-center">
+            {preview ? (
+              <img src={preview} />
+            ) : (
+              <>
+                <RiImageAddFill className="mb-3" size={50} />
+                <span className="font-semibold text-2xl">
+                  Arrasta una imagen aca!
+                </span>
+              </>
+            )}
+          </div>
+        }
+      />
     </div>
   );
 };
