@@ -23,10 +23,10 @@ const CardLoop: FC<Props> = ({
   itemType = "card",
 }) => {
   let cols = fourCols ? "xl:grid-cols-4" : "xl:grid-cols-6";
-  cols += " grid-cols-2 md:grid-cols-3";
+  cols += " grid-cols-2 sm:grid-cols-3 md:grid-cols-4";
 
   if (oneCol) {
-    cols = "grid-cols-1 divide-y divide-slate-600";
+    cols = "grid-cols-1 divide-y divider-primary";
   }
 
   return (

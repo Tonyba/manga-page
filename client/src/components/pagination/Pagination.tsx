@@ -6,8 +6,8 @@ import { FaChevronRight } from "react-icons/fa";
 const Pagination = () => {
   return (
     <Paginate
-      className="flex gap-5 mt-10 items-center"
-      pageClassName="hover:bg-slate-700 rounded-full bg-slate-800 "
+      className="flex gap-5 items-center"
+      pageClassName="hover:bg-slate-700 rounded-full bg-slate-800"
       pageLinkClassName="flex 
             items-center justify-center w-10 h-10  text-center 
             hover:bg-slate-700  rounded-full block"

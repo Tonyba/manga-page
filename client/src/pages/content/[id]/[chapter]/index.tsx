@@ -79,7 +79,7 @@ const ChapterContent = () => {
     >
       {readingStyle == readStyleEnum.cascade && scrollYProgress.get() != 0 && (
         <motion.div
-          className="fixed top-0 left-0 right-0 bg-sky-500 h-1"
+          className="fixed top-0 left-0 right-0 hover:text-primary  h-1"
           style={{ scaleX: scrollYProgress, originX: 0 }}
         />
       )}
@@ -89,9 +89,9 @@ const ChapterContent = () => {
       <ChapterOptions />
 
       <main className="text-center">
-        <h1 className=" mx-5 text-xl  mb-5 font-medium text-center inline-block border px-10 py-2 rounded-lg hover:border-sky-500">
+        <h1 className=" mx-5 text-xl  mb-5 font-medium text-center inline-block border px-10 py-2 rounded-lg border-important-hover">
           <Link
-            className="hover:text-sky-500 uppercase"
+            className="text-important-hover uppercase"
             href={`/content/${id}`}
           >
             EL GUARDIÁN DEL TIRANO ES UNA BRUJA MALVADA
@@ -100,9 +100,12 @@ const ChapterContent = () => {
         </h1>
 
         <ChapterNavigation />
-        <div className="bg-slate-600 mt-10 text-sm px-5 py-3  md:hidden">
-          Puedes Cambiar de Pagina deslizando tus dedos en la imagen
-        </div>
+        {readingStyle === readStyleEnum.page && (
+          <div className="bg-primary mt-10 text-sm px-5 py-3  md:hidden">
+            Puedes Cambiar de Pagina deslizando tus dedos en la imagen
+          </div>
+        )}
+
         <section className="my-10" {...handlers}>
           {loading ? (
             <ChapterSpinner />

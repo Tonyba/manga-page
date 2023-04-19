@@ -8,6 +8,7 @@ import Filter from "@/components/filter/Filter";
 import Pagination from "@/components/pagination/Pagination";
 import Carousel from "@/components/carousel/Carousel";
 import { BiBookmarks } from "react-icons/bi";
+import { Router, useRouter } from "next/router";
 
 const Content = () => {
   const [content, setContent] = useState<ContentType>();
@@ -69,32 +70,35 @@ const Content = () => {
           -mb-10
           z-10
           relative
+          object-cover
         "
           priority={true}
           src={content?.image as string}
           alt={content?.title || ""}
         />
-        <div
-          className="
+        <div className="mx-7 2xl:mx-0">
+          <div
+            className="
       max-w-7xl 
       w-full mx-auto
-      bg-slate-600
+      bg-primary
       relative
       px-7
       pt-14
       pb-7
       rounded-md
       "
-        >
-          <h1 className="text-center font-medium mb-3 text-4xl">
-            {content?.title}
-          </h1>
-          <p>{content?.description}</p>
+          >
+            <h1 className="text-center font-medium mb-3 text-4xl">
+              {content?.title}
+            </h1>
+            <p>{content?.description}</p>
+          </div>
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto flex py-10">
-        <aside className="w-1/4 bg-slate-800 p-5 rounded-md">
+      <section className="max-w-7xl flex flex-col xl:flex-row py-10 sm:px-7 2xl:px-0 mx-7 sm:mx-auto">
+        <aside className="w-full xl:w-1/4 bg-primary-dark p-5 rounded-md">
           <ContentSidebar
             status={(content && content?.status) || ""}
             contentType={(content && content?.contentType) || ""}
@@ -102,24 +106,25 @@ const Content = () => {
           />
         </aside>
 
-        <div className="w-3/4 pl-10">
+        <div className="w-full xl:w-3/4  xl:pl-10 mt-10 xl:mt-0">
           <div className="mb-3">
             <Filter />
           </div>
 
           <h2 className="text-2xl font-medium">Capitulos</h2>
 
-          <div className="grid grid-cols-4 gap-5 mt-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-4">
             {content?.chapters.map((ch, index) => (
               <ContentChapters key={index} {...ch} />
             ))}
           </div>
-
-          <Pagination />
+          <div className="mt-10">
+            <Pagination />
+          </div>
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto py-10">
+      <section className="max-w-7xl mx-7 sm:mx-auto py-10 sm:px-7 2xl:px-0">
         <div className="flex gap-2 mb-5">
           <BiBookmarks className="text-3xl md:text-4xl" />
           <h2 className="text-2xl md:text-4xl font-semibold">

@@ -9,11 +9,11 @@ import CardItemHover from "./CardItemHover";
 type Props = {
   content: ContentType;
   index: number;
-  action: "add" | "remove";
-  showHover: boolean;
+  action?: "add" | "remove";
+  showHover?: boolean;
 };
 
-const CardItem: FC<Props> = ({ content, showHover }) => {
+const CardItem: FC<Props> = ({ content, showHover = true, action = "add" }) => {
   const { contentType, id, title, demography, description, image } = content;
 
   return (

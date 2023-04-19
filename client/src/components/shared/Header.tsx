@@ -13,12 +13,13 @@ const Header = () => {
         </Link>
 
         <Link href={"/mangas"}>Mangas</Link>
+        <Link href={"/explorador"}>Explorador</Link>
       </div>
 
       <div className="flex align-middle items-center gap-5">
         <HeaderSearch />
 
-        <div className="hover:bg-slate-700 p-3 rounded-full cursor-pointer">
+        <div className="bg-primary-dark-hover p-3 rounded-full cursor-pointer">
           <FaDiscord size={21} color="white" />
         </div>
       </div>

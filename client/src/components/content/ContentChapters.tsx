@@ -1,18 +1,17 @@
 import { ChapterItemType } from "@/utils/types";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { FC } from "react";
 
-const ContentChapters: FC<ChapterItemType> = ({
-  text,
-  image,
-  chapter,
-  contentId,
-}) => {
+const ContentChapters: FC<ChapterItemType> = ({ text, image, chapter }) => {
+  const router = useRouter();
+  const { id } = router.query;
+
   return (
     <div className="flex items-center gap-3">
       <div className="w-24">
-        <Link href={`${contentId}/${chapter}`}>
+        <Link href={`${id}/${chapter}`}>
           <Image
             alt={text}
             className="object-cover rounded-lg"
@@ -24,7 +23,7 @@ const ContentChapters: FC<ChapterItemType> = ({
       </div>
 
       <p className="font-semibold">
-        <Link href={`${contentId}/${chapter}`}>{text}</Link>
+        <Link href={`${id}/${chapter}`}>{text}</Link>
       </p>
     </div>
   );

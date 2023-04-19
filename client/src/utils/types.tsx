@@ -1,4 +1,7 @@
 import { ImageModule } from "@faker-js/faker";
+import { NextPage } from "next";
+import { ReactElement, ReactNode } from "react";
+import type { AppProps } from "next/app";
 
 export type ContentType = {
   id: number;
@@ -12,10 +15,47 @@ export type ContentType = {
   chapters: ChapterItemType[];
 };
 
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+export type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+export type FiltersType = {
+  type: string;
+  demography: string;
+  status: string;
+  genres: string[];
+};
+
 export type TabItemType = {
   label: string;
   content?: React.ReactNode;
 };
+
+export type DataState = {
+  title: string;
+  description: string;
+  type: string;
+  demography: string;
+  genres: any[];
+  status: string;
+  banner: File | string;
+  image: File | string;
+};
+
+export type ContentValidationType = Partial<{
+  title: string;
+  description: string;
+  type: string;
+  demography: string;
+  genres: string[] | string;
+  status: string;
+  banner: File | string;
+  image: File | string;
+}>;
 
 export type ChapterItemType = {
   image: string;
