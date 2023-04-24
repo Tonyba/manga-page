@@ -6,6 +6,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { default as ReactSelect } from "react-select";
 import makeAnimated from "react-select/animated";
 import Accordion from "../accordion/Accordion";
+import { filterExp } from "@/utils/axios/filters";
 
 const animatedComponents = makeAnimated();
 
@@ -20,13 +21,32 @@ const ExploradorSidebar = () => {
   });
 
   const handlePushGenres = (e: string) => {
-    console.log(e);
-    //se usa set para que nose repitan los generos
-    setFilters({ ...filters, genres: [...new Set([...filters?.genres!, e])] });
-    setFilters(filters);
+    if (filters?.genres.find((element) => element === e)) {
+      setFilters({
+        ...filters,
+        genres: filters?.genres?.filter((item) => item !== e),
+      });
+    } else {
+      setFilters({
+        ...filters,
+        genres: [...filters.genres, e],
+      });
+    }
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const fetchItems = async () => {
+      //if (!loading) setLoading(true);
+      // setLoading(true);
+      const items = await filterExp(filters);
+
+      console.log(items?.data?.result);
+    };
+
+    fetchItems();
+  }, [filters.type, filters.demography, filters.status, filters.genres]);
+
+  console.log(filters);
 
   return (
     <div className="bg-primary-dark rounded-md p-5 flex flex-col gap-5">
@@ -75,7 +95,7 @@ const ExploradorSidebar = () => {
           defaultValue={status[0]}
           styles={selectStyles}
           onChange={(value: any) =>
-            setFilters({ ...filters, demography: value.label })
+            setFilters({ ...filters, status: value.label })
           }
         />
       </div>
@@ -92,15 +112,9 @@ const ExploradorSidebar = () => {
                 name="genre"
                 // cuando se marca se agrega el genero al array de generos si se desmarca se elimina
                 onChange={(e) => {
-                  if (e.target.checked) {
+                  console.log(e.target, "Este es el target");
+                  if (e.target.value) {
                     handlePushGenres(e.target.value);
-                  } else {
-                    setFilters({
-                      ...filters,
-                      genres: filters?.genres?.filter(
-                        (item) => item !== e.target.value
-                      ),
-                    });
                   }
                 }}
               />
