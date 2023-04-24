@@ -27,26 +27,26 @@ const Content = () => {
       });
       rel.push({
         id: parseInt(faker.random.numeric()),
-        contentType: faker.random.word(),
+        type: faker.random.word(),
         title: faker.random.word(),
         description: faker.lorem.words(20),
         demography: faker.datatype.string(),
         image: "https://picsum.photos/225/300",
         genres: [],
         status: faker.word.noun(),
-        chapters: [],
+        Episodes: [],
       });
     }
     setContent({
       id: parseInt(faker.random.numeric()),
-      contentType: faker.random.word(),
+      type: faker.random.word(),
       title: faker.random.words(2),
       description: faker.lorem.words(80),
       demography: faker.datatype.string(),
       image: "https://picsum.photos/1024/450",
       genres: faker.datatype.array() as string[],
       status: faker.random.word(),
-      chapters: ch,
+      Episodes: ch,
     });
     setRelated(rel);
   }, []);
@@ -101,7 +101,7 @@ const Content = () => {
         <aside className="w-full xl:w-1/4 bg-primary-dark p-5 rounded-md">
           <ContentSidebar
             status={(content && content?.status) || ""}
-            contentType={(content && content?.contentType) || ""}
+            contentType={(content && content?.type) || ""}
             genres={content?.genres || []}
           />
         </aside>
@@ -114,7 +114,7 @@ const Content = () => {
           <h2 className="text-2xl font-medium">Capitulos</h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-4">
-            {content?.chapters.map((ch, index) => (
+            {content?.Episodes.map((ch, index) => (
               <ContentChapters key={index} {...ch} />
             ))}
           </div>

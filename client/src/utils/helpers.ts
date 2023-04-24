@@ -16,8 +16,8 @@ export const selectStyles: StylesConfig = {
   placeholder: (styles) => {
     return {
       ...styles,
-      color: 'rgba(255,255,255, .5)'
-    }
+      color: "rgba(255,255,255, .5)",
+    };
   },
   dropdownIndicator: (styles, { isFocused }) => {
     return {
@@ -58,7 +58,7 @@ export const findFavorite = (
   favorites: ContentType[]
 ) => {
   const favorite = favorites.find(
-    (favorite) => favorite.id === id && favorite.contentType === contentType
+    (favorite) => favorite.id === id && favorite.type === contentType
   );
 
   if (favorite) return true;

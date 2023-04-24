@@ -141,7 +141,7 @@ const Carousel: FC<CarouselOptions> = ({ content }) => {
               itemHeight={ops.itemHeight}
               title={s.title}
               id={s.id}
-              type={s.contentType}
+              type={s.type}
             />
           ))}
         </motion.div>

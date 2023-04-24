@@ -1,15 +1,21 @@
 import { fileTypes } from "@/utils/helpers";
 import React, { FC, useEffect, useState } from "react";
-import { FileUploader } from "react-drag-drop-files";
 import { RiImageAddFill } from "react-icons/ri";
 import ValidationError from "./ValidationError";
+import ChapterImagesPreviews from "../dashboardContent/ChapterImagesPreviews";
+import { AddChapterContext } from "@/utils/context/AddChapterContext";
+import { useDropzone } from "react-dropzone";
+import Dropzone from "react-dropzone";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd";
 
 type Props = {
-  onChange: (file: File) => void;
+  onChange: (file: File[]) => void;
   name: string;
   required?: boolean;
-  label: string;
+  label?: string;
   errMsg?: string;
+  isMulti?: boolean;
 };
 
 const DragAndDrop: FC<Props> = ({
@@ -18,49 +24,105 @@ const DragAndDrop: FC<Props> = ({
   required = false,
   label,
   errMsg,
+  isMulti = false,
 }) => {
-  const [preview, setPreview] = useState<string>();
-  const handlePreview = (f: File) => {
-    const reader = new FileReader();
+  const [previews, setPreviews] = useState<string[]>([]);
+  const [filesToUpload, setFiles] = useState<File[]>([]);
+  const { isDragActive } = useDropzone();
 
-    reader.onloadend = () => {
-      setPreview(reader.result?.toString());
-    };
+  const handlePreview = (files: File[] | File) => {
+    if (!Array.isArray(files) && files instanceof Blob) files = [files];
 
-    reader.readAsDataURL(f);
+    let selectedFilesArray = Array.from(files);
+
+    const imagesArray = selectedFilesArray.map((f) => {
+      return URL.createObjectURL(f);
+    });
+
+    let comb: string[] = [imagesArray[0]];
+
+    if (isMulti) {
+      comb = [...previews].concat(imagesArray);
+      selectedFilesArray = [...filesToUpload].concat(files);
+    }
+
+    setFiles(selectedFilesArray);
+    setPreviews(comb);
   };
+
+  const addFiles = () => {};
+
+  const onRemoveImage = (index: number) => {
+    const newImages = filesToUpload.filter((prev, i) => i !== index ?? prev);
+
+    const imagesPreview = newImages.map((f) => {
+      return URL.createObjectURL(f);
+    });
+
+    console.log(newImages, "files");
+    console.log(imagesPreview, "previews");
+
+    setFiles(newImages);
+    setPreviews(imagesPreview);
+  };
+
+  const onImageReOrder = (index: number, toIndex: number) => {
+    const newImages = [...filesToUpload].splice(
+      toIndex,
+      0,
+      [...filesToUpload].splice(index, 1)[0]
+    );
+  };
+
+  const handleDrop = (acceptedFiles: File[]) => {
+    handlePreview(acceptedFiles);
+  };
+
+  useEffect(() => {
+    onChange(filesToUpload);
+  }, [filesToUpload]);
 
   return (
     <div className="mb-4">
-      <label className="mb-2 block" htmlFor="">
-        {label}
-      </label>
-      <FileUploader
-        name={name}
-        types={fileTypes}
-        handleChange={(f: File) => {
-          onChange(f);
-          handlePreview(f);
-        }}
-        classes="cursor-pointer"
-        required={required}
-        multiple={false}
-        label={label}
-        children={
-          <div className="border  py-4 h-full border-dashed border-2 border-important flex flex-col items-center justify-center">
-            {preview ? (
-              <img src={preview} />
+      {label && <label htmlFor="">{label}</label>}
+
+      <Dropzone onDrop={handleDrop} multiple={isMulti}>
+        {({ getRootProps, getInputProps }) => (
+          <div
+            className="py-4 flex items-center justify-center gap-3 border-dashed border-2 border-important cursor-pointer mt-3"
+            {...getRootProps()}
+          >
+            <input {...getInputProps()} />
+            {previews.length > 0 && !isMulti ? (
+              !isMulti && previews.map((prev, i) => <img key={i} src={prev} />)
             ) : (
-              <>
+              <div className="flex items-center flex-col    py-4 h-full w-full">
                 <RiImageAddFill className="mb-3" size={50} />
                 <span className="font-semibold text-2xl">
                   Arrasta una imagen aca!
                 </span>
-              </>
+              </div>
             )}
           </div>
-        }
-      />
+        )}
+      </Dropzone>
+
+      {isMulti && previews.length > 0 && (
+        <DndProvider backend={HTML5Backend}>
+          <AddChapterContext.Provider
+            value={{
+              onRemoveImage,
+              onImageReOrder,
+              previews,
+              setImages: setPreviews,
+              setFiles,
+              files: filesToUpload,
+            }}
+          >
+            <ChapterImagesPreviews />
+          </AddChapterContext.Provider>
+        </DndProvider>
+      )}
       {errMsg && <ValidationError errorMessage={errMsg} />}
     </div>
   );

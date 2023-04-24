@@ -14,7 +14,7 @@ type Props = {
 };
 
 const CardItem: FC<Props> = ({ content, showHover = true, action = "add" }) => {
-  const { contentType, id, title, demography, description, image } = content;
+  const { type, id, title, demography, description, image } = content;
 
   return (
     <motion.div
@@ -63,12 +63,7 @@ const CardItem: FC<Props> = ({ content, showHover = true, action = "add" }) => {
       </Link>
 
       {showHover && (
-        <CardItemHover
-          id={id}
-          title={title}
-          desc={description}
-          type={contentType}
-        />
+        <CardItemHover id={id} title={title} desc={description} type={type} />
       )}
     </motion.div>
   );

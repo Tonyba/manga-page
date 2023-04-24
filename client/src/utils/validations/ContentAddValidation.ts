@@ -1,6 +1,6 @@
-import { ContentValidationType, DataState } from "../types";
+import { ContentValidationType, AddContentParams } from "../types";
 
-export const ValidateContent = (values: DataState) => {
+export const ValidateContent = (values: AddContentParams) => {
   const requerido = "Este campo es requerido";
   let errors: ContentValidationType = {};
 
