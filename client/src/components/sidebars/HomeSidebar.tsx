@@ -18,12 +18,12 @@ export const HomeSidebar = () => {
       for (let j = 0; j < 5; j++) {
         items.push({
           id: parseInt(faker.random.numeric()),
-          contentType: faker.random.word(),
+          type: faker.random.word(),
           title: faker.random.words(20),
           description: faker.lorem.words(20),
           demography: faker.datatype.string(),
           image: faker.image,
-          chapters: [],
+          Episodes: [],
           genres: [],
           status: faker.random.word(),
         });
