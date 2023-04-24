@@ -1,6 +1,7 @@
 import { ContentType } from "@/utils/types";
 import React, { FC } from "react";
 import ContentPill from "./ContentPill";
+import GenreItem from "./GenreItem";
 
 type Props = {
   contentType: string;
@@ -23,12 +24,7 @@ const ContentSidebar: FC<Props> = ({ contentType, genres, status }) => {
         </span>
         <div className="flex flex-wrap gap-3">
           {genres.map((g, index) => (
-            <span
-              key={index}
-              className="bg-accent bg-accent-hover cursor-pointer p-1 px-2 rounded-lg"
-            >
-              {g}
-            </span>
+            <GenreItem key={index} genre={g} />
           ))}
         </div>
       </div>

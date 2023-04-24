@@ -8,11 +8,11 @@ export type ContentType = {
   title: string;
   image: string | ImageModule;
   description: string;
-  contentType: string;
+  type: string;
   demography: string;
   genres: string[];
   status: string;
-  chapters: ChapterItemType[];
+  Episodes: ChapterItemType[];
 };
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -35,7 +35,7 @@ export type TabItemType = {
   content?: React.ReactNode;
 };
 
-export type DataState = {
+export type AddContentParams = {
   title: string;
   description: string;
   type: string;
@@ -56,6 +56,11 @@ export type ContentValidationType = Partial<{
   banner: File | string;
   image: File | string;
 }>;
+
+export type ContentResponseType = {
+  manga: ContentType;
+  numEpisodes: number;
+};
 
 export type ChapterItemType = {
   image: string;

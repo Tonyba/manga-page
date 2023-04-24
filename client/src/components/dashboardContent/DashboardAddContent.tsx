@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import AddContentForm from "../forms/AddContentForm";
-import { ContentValidationType, DataState } from "@/utils/types";
+import { ContentValidationType, AddContentParams } from "@/utils/types";
 import { demography, status, types } from "@/utils/valoresParaSelect";
-import { FaTimes } from "react-icons/fa";
-import Link from "next/link";
-import { ValidateContent } from "@/utils/validations/ContentAddValidation";
 
-const initState: DataState = {
+import { ValidateContent } from "@/utils/validations/ContentAddValidation";
+import Swal from "sweetalert2";
+import { addContent } from "@/utils/axios/contentType";
+import DashboardTitle from "./DashboardTitle";
+
+const initState: AddContentParams = {
   banner: "",
   demography: demography[0].label,
   description: "",
@@ -18,7 +20,7 @@ const initState: DataState = {
 };
 
 const DashboardAddContent = () => {
-  const [data, setData] = useState<DataState>(initState);
+  const [data, setData] = useState<AddContentParams>(initState);
   const [errors, setErrors] = useState<ContentValidationType>();
   const [submitting, setSubmitting] = useState(false);
 
@@ -29,14 +31,17 @@ const DashboardAddContent = () => {
   };
 
   const saveContent = () => {
-    console.log(data);
-    console.log("save");
+    addContent(data).then((res) => {
+      console.log(res);
+      Swal.fire(`${data.type} creado`, "", "success");
+    });
   };
 
   useEffect(() => {
     if (errors && submitting) {
       if (Object.keys(errors).length !== 0) {
         console.log("errors");
+        Swal.fire("Hay errores en el formulario", "", "error");
       } else {
         saveContent();
       }
@@ -45,16 +50,7 @@ const DashboardAddContent = () => {
   }, [JSON.stringify(errors), submitting]);
   return (
     <>
-      <div className="flex items-center gap-3">
-        <Link
-          href={"/dashboard/content"}
-          role="button"
-          className="bg-primary bg-primary-dark-hover rounded-full p-3"
-        >
-          <FaTimes size={25} />
-        </Link>
-        <h1 className="font-semibold text-3xl">Agregar Contenido</h1>
-      </div>
+      <DashboardTitle text="Agregar Contenido" />
 
       <div className="py-5 w-full">
         <AddContentForm
@@ -62,6 +58,7 @@ const DashboardAddContent = () => {
           setData={setData}
           onSubmit={handleSubmit}
           errors={errors}
+          loading={submitting}
         />
       </div>
     </>

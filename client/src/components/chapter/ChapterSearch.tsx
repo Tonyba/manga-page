@@ -2,6 +2,7 @@ import { ChapterContext } from "@/utils/context/ChapterContext";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { FC, useContext, useEffect, useState } from "react";
+import Popup from "../shared/Popup";
 
 type Props = {
   isOpen: boolean;
@@ -35,21 +36,11 @@ const ChapterSearch: FC<Props> = ({ isOpen = false, onModalClose }) => {
     }
   }, [search, chapters]);
 
-  const handleOnModalClose = (e: React.MouseEvent<HTMLDivElement>) => {
-    const target = e.target as HTMLDivElement;
-
-    if (target.id === "modal") onModalClose();
-  };
-
-  if (!isOpen) return null;
-
   return (
-    <div
-      id="modal"
-      onClick={handleOnModalClose}
-      role="dialog"
-      className={`fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center
-    `}
+    <Popup
+      isOpen={isOpen}
+      onModalClose={onModalClose}
+      className="bg-black bg-opacity-30 backdrop-blur-sm justify-center items-center"
     >
       <div className="bg-slate-600 p-5 rounded-lg ">
         <div className="px-2">
@@ -90,7 +81,7 @@ const ChapterSearch: FC<Props> = ({ isOpen = false, onModalClose }) => {
           })}
         </ul>
       </div>
-    </div>
+    </Popup>
   );
 };
 

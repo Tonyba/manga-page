@@ -15,14 +15,14 @@ const Explorador = () => {
     for (let index = 0; index < 12; index++) {
       items.push({
         id: parseInt(faker.random.numeric()),
-        contentType: faker.random.word(),
+        type: faker.random.word(),
         title: faker.random.word(),
         description: faker.lorem.words(20),
         demography: faker.datatype.string(),
         image: "https://picsum.photos/225/300",
         genres: [],
         status: faker.word.noun(),
-        chapters: [],
+        Episodes: [],
       });
     }
 

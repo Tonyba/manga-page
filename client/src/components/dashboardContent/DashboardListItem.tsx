@@ -2,10 +2,14 @@ import Image from "next/image";
 import React from "react";
 import ContentPill from "../content/ContentPill";
 import DashboardHoverItem from "./DashboardHoverItem";
-
-import { FaTrash, FaPencilAlt } from "react-icons/fa";
+import { FaTrash, FaPencilAlt, FaPlus } from "react-icons/fa";
+import { useRouter } from "next/router";
 
 export const DashboardListItem = () => {
+  const router = useRouter();
+
+  const handleDelete = () => {};
+
   return (
     <tr className="[&>*]:py-3 align-top bg-primary-dark-hover group">
       <td className="pl-2 pr-4 w-[32px]">
@@ -34,11 +38,20 @@ export const DashboardListItem = () => {
               tempore officiis vero!
             </p>
             <div className="gap-3 hidden group-hover:flex mt-3">
-              <DashboardHoverItem onClick={() => {}} textHover="Editar">
+              <DashboardHoverItem
+                link={`/dashboard/edit?contentId=${22}`}
+                textHover="Editar"
+              >
                 <FaPencilAlt size={18} />
               </DashboardHoverItem>
-              <DashboardHoverItem onClick={() => {}} textHover="Borrar">
+              <DashboardHoverItem onClick={handleDelete} textHover="Borrar">
                 <FaTrash size={18} />
+              </DashboardHoverItem>
+              <DashboardHoverItem
+                textHover="Agregar Capitulo"
+                link={`/dashboard/add-chapter?contentId=${22}`}
+              >
+                <FaPlus size={18} />
               </DashboardHoverItem>
             </div>
           </div>

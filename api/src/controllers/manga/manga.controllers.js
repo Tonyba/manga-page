@@ -7,8 +7,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export const createManga = async (req, res) => {
-  const { title, description, type, genres, demography } = req.body;
+  const { title, description, type, demography } = req.body;
+  const genres = req.body["genres[]"];
   const { image, banner } = req.files;
+
   try {
     let path = __dirname + "/../../public/mangas/" + image?.name;
     image?.mv(path, function (err, data) {
@@ -39,7 +41,7 @@ export const createManga = async (req, res) => {
       description,
       image: `${url}${image?.name}`,
       banner: `${url}${banner?.name}`,
-      genres: genres.split(" "),
+      genres,
       type,
       demography,
       path: dir,

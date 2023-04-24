@@ -12,8 +12,6 @@ export const DashboardSidebar = () => {
   const router = useRouter();
   const { action } = router.query;
 
-  console.log(action);
-
   return (
     <>
       <div className="text-center">

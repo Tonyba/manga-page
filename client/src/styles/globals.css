@@ -38,9 +38,20 @@ html {
   @apply border-sky-500
 }
 
+.color-important {
+  @apply text-sky-500
+}
+
+
+.button-primary-outline:hover,
+.button-primary,
+.bg-important {
+  @apply bg-sky-500;
+}
+
 .button-primary-outline:hover,
 .button-primary {
-  @apply bg-sky-500 text-white;
+  @apply  text-white;
 }
 
 .bg-primary,
@@ -60,6 +71,10 @@ html {
 
 .divider-primary {
   @apply divide-slate-600
+}
+
+.divider-dark {
+  @apply divide-slate-700
 }
 
 .border-primary {

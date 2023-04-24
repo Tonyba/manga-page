@@ -1,29 +1,33 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 import Input from "./Input";
 import TextArea from "./TextArea";
+import MoonLoader from "react-spinners/MoonLoader";
 
 import { demography, status, types } from "@/utils/valoresParaSelect";
 import FormSelect from "./FormSelect";
-import { ContentValidationType, DataState, OptionType } from "@/utils/types";
+import {
+  ContentValidationType,
+  AddContentParams,
+  OptionType,
+} from "@/utils/types";
 import { genres } from "@/utils/valoresParaSelect";
 import DragAndDrop from "./DragAndDrop";
 
 type Props = {
-  data: DataState;
-  setData: (data: DataState) => void;
+  data: AddContentParams;
+  setData: (data: AddContentParams) => void;
   onSubmit: (e: React.FormEvent) => void;
   errors?: ContentValidationType;
+  loading: boolean;
 };
 
-const AddContentForm: FC<Props> = ({ data, setData, onSubmit, errors }) => {
-  useEffect(() => {
-    console.log(data);
-  }, [data.genres.length]);
-
-  const handleChange = (opt: OptionType[]) => {
-    setData({ ...data, genres: opt });
-  };
-
+const AddContentForm: FC<Props> = ({
+  data,
+  setData,
+  onSubmit,
+  errors,
+  loading,
+}) => {
   const handleBannerChange = (file: File, imageType: "banner" | "image") => {
     setData({ ...data, [imageType]: file });
   };
@@ -42,7 +46,7 @@ const AddContentForm: FC<Props> = ({ data, setData, onSubmit, errors }) => {
       <div className="w-3/4 flex-col flex gap-3">
         <DragAndDrop
           name="banner"
-          onChange={(f) => handleBannerChange(f, "banner")}
+          onChange={(f) => handleBannerChange(f[0], "banner")}
           label="Banner"
           errMsg={errors?.banner as string}
         />
@@ -65,7 +69,7 @@ const AddContentForm: FC<Props> = ({ data, setData, onSubmit, errors }) => {
           <div className="w-1/3">
             <FormSelect
               placeholder="Seleccione un Tipo"
-              label="Tipos"
+              label="Tipo"
               onChange={(opt) => setData({ ...data, type: opt.label })}
               options={types}
               defaultValue={types[0]}
@@ -104,17 +108,20 @@ const AddContentForm: FC<Props> = ({ data, setData, onSubmit, errors }) => {
         </div>
 
         <button
-          className="w-20 p-2 button-primary rounded-xl font-semibold mt-3"
+          className="w-max p-2 button-primary rounded-xl 
+          font-semibold mt-3 flex gap-3 items-center disabled:cursor-not-allowed"
           type="submit"
+          disabled={loading}
         >
           Crear
+          {loading && <MoonLoader color="white" size={18} />}
         </button>
       </div>
 
       <div className="w-1/4 px-7">
         <DragAndDrop
           name="Image"
-          onChange={(f) => handleBannerChange(f, "image")}
+          onChange={(f) => handleBannerChange(f[0], "image")}
           label="Imagen"
           errMsg={errors?.image as string}
         />
