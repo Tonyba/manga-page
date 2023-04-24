@@ -4,15 +4,17 @@ import DashboardChapterImageItem, {
 } from "./DashboardChapterImageItem";
 import { AddChapterContext } from "@/utils/context/AddChapterContext";
 import ChapterImagePreviewWrapper from "./ChapterImagePreviewWrapper";
+import { DragImageItemType } from "@/utils/types";
 
 const ChapterImagesPreviews = () => {
-  const { previews, setFiles, files, setPreviews } =
+  const { previews, setFiles, files, setPreviews, fileItems } =
     useContext(AddChapterContext);
   const [targetId, setartgetId] = useState<number>();
-  const [source, setSource] = useState<number>();
+  const [source, setSource] = useState<DragDropItemType>();
 
-  const getContainerId = (id: number) => {
-    setSource(id);
+  const getContainerId = (id: string) => {
+    const container = [...fileItems].find(item => item.id === id);
+    setSource(container);
   };
 
   useEffect(() => {
@@ -25,9 +27,9 @@ const ChapterImagesPreviews = () => {
     setartgetId(item.index);
   };
 
-  const swapItems = (from: number, to: number) => {
+  const swapItems = (sourcefile: DragImageItemType, targetFile: DragImageItemType) => {
     let newOrder = [...files];
-
+  
     [newOrder[from], newOrder[to]] = [newOrder[to], newOrder[from]];
 
     // let temp = newOrder[from];

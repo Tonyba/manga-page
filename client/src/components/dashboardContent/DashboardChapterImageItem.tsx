@@ -1,28 +1,28 @@
 import { AddChapterContext } from "@/utils/context/AddChapterContext";
+import { DragImageItemType } from "@/utils/types";
 import React, { FC, useContext, useEffect } from "react";
 import { useDrag } from "react-dnd";
 import { FaTimes } from "react-icons/fa";
 
 type Props = {
-  dragItem: DragDropItemType;
-  onItemDrag: (item: DragDropItemType) => void;
-};
-
-export type DragDropItemType = {
-  imgSrc: string;
+  dragItem: DragImageItemType;
+  onItemDrag: (item: DragImageItemType) => void;
   index: number;
+  imgSrc: string;
 };
 
-const DashboardChapterImageItem: FC<Props> = ({ dragItem, onItemDrag }) => {
+
+
+const DashboardChapterImageItem: FC<Props> = ({ dragItem, onItemDrag, index, imgSrc }) => {
   const { onRemoveImage } = useContext(AddChapterContext);
 
-  const { index, imgSrc } = dragItem;
+  const { id } = dragItem;
 
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "image",
     item: () => ({ ...dragItem }),
     end: (item, monitor) => {
-      onItemDrag({ ...item, index });
+      onItemDrag({ ...item });
     },
 
     collect: (monitor) => ({
@@ -37,7 +37,7 @@ const DashboardChapterImageItem: FC<Props> = ({ dragItem, onItemDrag }) => {
     >
       <button
         type="button"
-        onClick={() => onRemoveImage(index)}
+        onClick={() => onRemoveImage(dragItem)}
         className={"bg-primary bg-hover p-1 absolute top-0 right-0"}
       >
         <FaTimes size={18} />

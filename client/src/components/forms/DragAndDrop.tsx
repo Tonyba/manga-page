@@ -4,10 +4,10 @@ import { RiImageAddFill } from "react-icons/ri";
 import ValidationError from "./ValidationError";
 import ChapterImagesPreviews from "../dashboardContent/ChapterImagesPreviews";
 import { AddChapterContext } from "@/utils/context/AddChapterContext";
-import { useDropzone } from "react-dropzone";
 import Dropzone from "react-dropzone";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
+import { DragImageItemType } from "@/utils/types";
 
 type Props = {
   onChange: (file: File[]) => void;
@@ -27,15 +27,21 @@ const DragAndDrop: FC<Props> = ({
   isMulti = false,
 }) => {
   const [previews, setPreviews] = useState<string[]>([]);
+  const [filesItem, setFilesItems] = useState<DragImageItemType[]>([]);
   const [filesToUpload, setFiles] = useState<File[]>([]);
-
+ 
   const handlePreview = (files: File[] | File) => {
     if (!Array.isArray(files) && files instanceof Blob) files = [files];
 
     let selectedFilesArray = Array.from(files);
+    let fileItemArr:DragImageItemType[] = selectedFilesArray.map((selected, i) => ({
+      id: 'img-'+i,
+      file: selected
+    }));
 
-    const imagesArray = selectedFilesArray.map((f) => {
-      return URL.createObjectURL(f);
+
+    const imagesArray = fileItemArr.map((f) => {
+      return URL.createObjectURL(f.file);
     });
 
     let comb: string[] = [imagesArray[0]];
@@ -45,6 +51,7 @@ const DragAndDrop: FC<Props> = ({
       selectedFilesArray = [...filesToUpload].concat(files);
     }
 
+    setFilesItems(fileItemArr);
     setFiles(selectedFilesArray);
     setPreviews(comb);
   };
@@ -121,6 +128,8 @@ const DragAndDrop: FC<Props> = ({
               setPreviews,
               setFiles,
               files: filesToUpload,
+              fileItems: filesItem,
+              setFileItems: setFilesItems
             }}
           >
             <ChapterImagesPreviews />

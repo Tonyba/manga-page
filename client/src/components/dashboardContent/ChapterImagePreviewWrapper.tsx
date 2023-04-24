@@ -3,8 +3,9 @@ import { useDrop } from "react-dnd";
 import { DragDropItemType } from "./DashboardChapterImageItem";
 
 type Props = {
-  id: number;
-  getContainerId: (id: number) => void;
+  id: string;
+  getContainerId: (id: string) => void;
+  
 };
 
 const ChapterImagePreviewWrapper: FC<PropsWithChildren & Props> = ({

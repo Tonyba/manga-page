@@ -30,6 +30,12 @@ export type FiltersType = {
   genres: string[];
 };
 
+
+export type DragImageItemType = {
+  id: string;
+  file: File;
+}
+
 export type TabItemType = {
   label: string;
   content?: React.ReactNode;
