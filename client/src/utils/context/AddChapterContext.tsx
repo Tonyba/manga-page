@@ -3,7 +3,7 @@ import React, { createContext } from "react";
 type AddChapterContextType = {
   onRemoveImage: (index: number) => void;
   onImageReOrder: (index: number, toIndex: number) => void;
-  setImages: (imgs: string[]) => void;
+  setPreviews: (imgs: string[]) => void;
   previews: string[];
   files: File[];
   setFiles: (files: File[]) => void;
@@ -12,7 +12,7 @@ type AddChapterContextType = {
 export const AddChapterContext = createContext<AddChapterContextType>({
   onRemoveImage: () => {},
   onImageReOrder: () => {},
-  setImages: () => {},
+  setPreviews: () => {},
   setFiles: () => {},
   previews: [],
   files: [],

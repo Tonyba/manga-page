@@ -6,7 +6,7 @@ import { AddChapterContext } from "@/utils/context/AddChapterContext";
 import ChapterImagePreviewWrapper from "./ChapterImagePreviewWrapper";
 
 const ChapterImagesPreviews = () => {
-  const { previews, setFiles, files, setImages } =
+  const { previews, setFiles, files, setPreviews } =
     useContext(AddChapterContext);
   const [targetId, setartgetId] = useState<number>();
   const [source, setSource] = useState<number>();
@@ -40,7 +40,7 @@ const ChapterImagesPreviews = () => {
     console.log(newOrder);
 
     setFiles(files);
-    setImages(imagesArray);
+    setPreviews(imagesArray);
   };
 
   return (

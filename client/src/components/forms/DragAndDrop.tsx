@@ -89,9 +89,7 @@ const DragAndDrop: FC<Props> = ({
       <Dropzone
         onDrop={handleDrop}
         multiple={isMulti}
-        accept={{
-          "image/png": fileTypes,
-        }}
+        accept={fileTypes}
       >
         {({ getRootProps, getInputProps }) => (
           <div
@@ -120,7 +118,7 @@ const DragAndDrop: FC<Props> = ({
               onRemoveImage,
               onImageReOrder,
               previews,
-              setImages: setPreviews,
+              setPreviews,
               setFiles,
               files: filesToUpload,
             }}

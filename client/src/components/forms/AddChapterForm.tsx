@@ -1,6 +1,5 @@
-import React, { FC } from "react";
+import React from "react";
 import DragAndDrop from "./DragAndDrop";
-import { FaTimes } from "react-icons/fa";
 
 const AddChapterForm = () => {
   const uploadImages = (e: React.FormEvent) => {
