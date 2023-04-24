@@ -1,7 +1,7 @@
 import { StylesConfig } from "react-select/dist/declarations/src/styles";
 import { ContentType } from "./types";
 
-export const fileTypes = ["JPG", "PNG", "GIF", "WEBP", "AVIF", "JPEG"];
+export const fileTypes = [".jpg", ".pnh", ".gif", ".webp", ".avif", ".jpeg"];
 
 export const selectStyles: StylesConfig = {
   control: (styles, { isFocused }) => ({

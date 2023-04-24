@@ -28,7 +28,6 @@ const DragAndDrop: FC<Props> = ({
 }) => {
   const [previews, setPreviews] = useState<string[]>([]);
   const [filesToUpload, setFiles] = useState<File[]>([]);
-  const { isDragActive } = useDropzone();
 
   const handlePreview = (files: File[] | File) => {
     if (!Array.isArray(files) && files instanceof Blob) files = [files];
@@ -49,8 +48,6 @@ const DragAndDrop: FC<Props> = ({
     setFiles(selectedFilesArray);
     setPreviews(comb);
   };
-
-  const addFiles = () => {};
 
   const onRemoveImage = (index: number) => {
     const newImages = filesToUpload.filter((prev, i) => i !== index ?? prev);
@@ -79,14 +76,23 @@ const DragAndDrop: FC<Props> = ({
   };
 
   useEffect(() => {
+    console.log(filesToUpload, "after");
     onChange(filesToUpload);
+
+    return () => previews.forEach((preview) => URL.revokeObjectURL(preview));
   }, [filesToUpload]);
 
   return (
     <div className="mb-4">
       {label && <label htmlFor="">{label}</label>}
 
-      <Dropzone onDrop={handleDrop} multiple={isMulti}>
+      <Dropzone
+        onDrop={handleDrop}
+        multiple={isMulti}
+        accept={{
+          "image/png": fileTypes,
+        }}
+      >
         {({ getRootProps, getInputProps }) => (
           <div
             className="py-4 flex items-center justify-center gap-3 border-dashed border-2 border-important cursor-pointer mt-3"
