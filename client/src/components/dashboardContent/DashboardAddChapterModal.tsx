@@ -32,7 +32,7 @@ const DashboardAddChapterModal: FC<Props> = ({
         </button>
       </div>
 
-      <div className="">
+      <div className="h-full">
         <h2 className="text-xl font-semibold">
           Agrega las imagenes del capitulo
         </h2>

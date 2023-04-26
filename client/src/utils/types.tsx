@@ -30,11 +30,12 @@ export type FiltersType = {
   genres: string[];
 };
 
-
 export type DragImageItemType = {
   id: string;
   file: File;
-}
+  imgSrc: string;
+  pag: number;
+};
 
 export type TabItemType = {
   label: string;

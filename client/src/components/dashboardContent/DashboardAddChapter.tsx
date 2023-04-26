@@ -64,7 +64,7 @@ const DashboardAddChapter = () => {
             onModalClose={() => setModalOpen(false)}
           />
         </div>
-        <aside className="w-1/4	 px-5">
+        <aside className="w-1/4	 px-5 sticky top-3">
           {content && <DashboardAddChapterSide content={content} />}
         </aside>
       </div>
