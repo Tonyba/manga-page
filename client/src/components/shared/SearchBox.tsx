@@ -12,7 +12,7 @@ const SearchBox: FC<Props> = ({ data, type }) => {
       <div className="grid grid-cols-1 divider-dark divide-y">
         {type === "chapters" ? (
           data.map((d) => (
-            <div className="px-5 py-3">
+            <div key={d.id} className="px-5 py-3">
               <ContentChapters {...d} />
             </div>
           ))
