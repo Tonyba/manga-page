@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import DashboardChapterImageItem from "./DashboardChapterImageItem";
 import { AddChapterContext } from "@/utils/context/AddChapterContext";
 import { motion } from "framer-motion";
@@ -24,14 +24,10 @@ const ChapterImagesPreviews = () => {
     targetItemParam: DragImageItemType
   ) => {
     if (sourceItemParam.id == targetItemParam.id) return;
-    console.log("pasa comprobacion");
     let newOrder = [...fileItems];
 
     const sourceIndex = newOrder.findIndex((i) => i.id === sourceItemParam.id);
     const targetIndex = newOrder.findIndex((i) => i.id === targetItemParam.id);
-
-    console.log(sourceIndex, "to");
-    console.log(targetIndex, "from");
 
     [newOrder[targetIndex], newOrder[sourceIndex]] = [
       newOrder[sourceIndex],

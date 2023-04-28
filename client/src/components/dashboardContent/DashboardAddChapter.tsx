@@ -19,6 +19,7 @@ const DashboardAddChapter = () => {
     const fetchData = async () => {
       const resp = await getManga(contentId as string);
       const contentResp = resp.data;
+      console.log(contentResp);
       setContent(contentResp);
     };
 
@@ -39,24 +40,9 @@ const DashboardAddChapter = () => {
           </button>
 
           <div className="grid grid-cols-4">
-            <ContentChapters
-              text="Capitulo 1"
-              image="https://picsum.photos/225/300"
-              chapter="1"
-              contentId={parseInt(contentId as string | "22")}
-            />
-            <ContentChapters
-              text="Capitulo 1"
-              image="https://picsum.photos/225/300"
-              chapter="1"
-              contentId={parseInt(contentId as string | "22")}
-            />
-            <ContentChapters
-              text="Capitulo 1"
-              image="https://picsum.photos/225/300"
-              chapter="1"
-              contentId={parseInt(contentId as string | "22")}
-            />
+            {content?.manga.Episodes.map((episode, i) => (
+              <ContentChapters key={i} {...episode} />
+            ))}
           </div>
 
           <DashboardAddChapterModal
@@ -64,7 +50,7 @@ const DashboardAddChapter = () => {
             onModalClose={() => setModalOpen(false)}
           />
         </div>
-        <aside className="w-1/4	 px-5 sticky top-3">
+        <aside className="w-1/4	 px-5 sticky top-5">
           {content && <DashboardAddChapterSide content={content} />}
         </aside>
       </div>

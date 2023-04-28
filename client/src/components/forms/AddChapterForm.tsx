@@ -1,41 +1,53 @@
-import React, { useState } from "react";
+import React, { FC } from "react";
 import DragAndDrop from "./DragAndDrop";
+import { CreateChapterParams } from "@/utils/types";
+import Input from "./Input";
+import { ChapterValidationType } from "@/utils/types";
+import SubmitButton from "./SubmitButton";
 
-const AddChapterForm = () => {
-  const [file, setFiles] = useState<File[]>([]);
+type Props = {
+  data: CreateChapterParams;
+  setData: (data: CreateChapterParams) => void;
+  onSubmit: (e: React.FormEvent) => void;
+  errors?: ChapterValidationType;
+  loading: boolean;
+  clearForm?: boolean;
+};
 
-  const uploadImages = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log(file);
-  };
-
+const AddChapterForm: FC<Props> = ({
+  onSubmit,
+  errors,
+  setData,
+  data,
+  loading,
+  clearForm = false,
+}) => {
   const handleFileChange = (files: File[]) => {
-    console.log(files, "form");
-    setFiles(files);
+    setData({ ...data, images: files });
   };
 
   return (
-    <form onSubmit={(e) => uploadImages(e)}>
+    <form onSubmit={(e) => onSubmit(e)}>
+      <Input
+        type="number"
+        label="Numero del Capitulo"
+        onChange={(e) => setData({ ...data, capNumber: parseInt(e) })}
+        placeholder="Escriba el numero del capitulo"
+        value={data.capNumber}
+        errMsg={errors?.capNumber}
+      />
       <DragAndDrop
         name="imagenes-capitulo"
         onChange={handleFileChange}
         isMulti={true}
+        errMsg={errors?.images}
+        clearForm={clearForm}
       />
       <div className="mb-10">
-        <button
-          className="w-max p-2 button-primary rounded-xl 
-          font-semibold mt-3 flex gap-3 items-center disabled:cursor-not-allowed "
-          type="submit"
-        >
-          Subir Imagenes
-        </button>
+        <SubmitButton loading={loading} text="Subir Capitulo" />
       </div>
     </form>
   );
-};
-
-type Props = {
-  preview: string;
 };
 
 export default AddChapterForm;

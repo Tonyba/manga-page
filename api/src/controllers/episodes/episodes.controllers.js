@@ -8,6 +8,7 @@ const __dirname = dirname(__filename);
 
 export const createEpisode = async (req, res) => {
   let { episode, mangaId, capNumber } = req.body;
+  const imagesArr = req.files["images[]"];
 
   try {
     let manga = await Mangas.findOne({
@@ -26,7 +27,7 @@ export const createEpisode = async (req, res) => {
       fs.mkdirSync(dir);
     }
 
-    const images = Object.values(req.files);
+    const images = Object.values(imagesArr);
     const urls = [];
     for (let i = 0; i < images.length; i++) {
       const image = images[i];
@@ -41,7 +42,6 @@ export const createEpisode = async (req, res) => {
       path: dir,
       mangaId,
     });
-
     res.status(200).json("Capitulo creado con exito");
   } catch (err) {
     console.log(err);
@@ -58,11 +58,13 @@ export const getImages = async (req, res) => {
     let pathTitle = title
       .toLowerCase()
       .replace(/ /g, "_")
+      .replace(/\-/g, "_")
       .replace(/[^\w-]+/g, "");
 
     let pathEpisode = episode
       .toLowerCase()
       .replace(/ /g, "_")
+      .replace(/\-/g, "_")
       .replace(/[^\w-]+/g, "");
 
     const directoryPath = `./src/public/episodes/${pathTitle}/${pathEpisode}`;

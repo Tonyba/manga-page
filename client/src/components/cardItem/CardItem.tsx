@@ -24,7 +24,15 @@ const CardItem: FC<Props> = ({ content, showHover = true, action = "add" }) => {
       layout
       className="mb-5 text-center relative group"
     >
-      <Link className="text-center mb-3" href={`/content/${id}`}>
+      <Link
+        className="text-center mb-3"
+        href={`/content/${22}`}
+        // href={{
+        //   pathname: "/content/[id]",
+        //   query: { mangaId: 22 },
+        // }}
+        // as={`/content/${22}`}
+      >
         <div className="relative overflow-hidden  rounded-lg ">
           <ContentPill contentType={"MANGA"} />
           <Image
@@ -54,16 +62,16 @@ const CardItem: FC<Props> = ({ content, showHover = true, action = "add" }) => {
         w-full justify-center font-medium
         bg-[#00000080]"
           >
-            <p className="text-lg">slide</p>
+            <p className="text-lg">{demography}</p>
           </div>
         </div>
       </Link>
-      <Link href={`/content/${id}`}>
+      <Link href={`/content/${22}`}>
         <h3 className="text-xl font-medium line-clamp-2 mt-1">{title}</h3>
       </Link>
 
       {showHover && (
-        <CardItemHover id={id} title={title} desc={description} type={type} />
+        <CardItemHover id={22} title={title} desc={description} type={type} />
       )}
     </motion.div>
   );

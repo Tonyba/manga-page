@@ -1,12 +1,12 @@
 import React, { createContext } from "react";
-import { readStyleEnum } from "../types";
+import { ChapterItemType, readStyleEnum } from "../types";
 
 type ChapterContextType = {
   images: string[];
-  currentChapter: number;
+  currentChapter?: ChapterItemType;
   contentTitle: string;
-  totalChapters: number;
-  setCurrentChapter: (chapter: number) => void;
+  chapters: ChapterItemType[];
+  setCurrentChapter: (chapter: string) => void;
   setCurrentImage: (img: number) => void;
   setReadingStyle: (style: readStyleEnum) => void;
   currentImage: number;
@@ -15,9 +15,9 @@ type ChapterContextType = {
 
 export const ChapterContext = createContext<ChapterContextType>({
   images: [],
-  currentChapter: 0,
+  currentChapter: undefined,
   contentTitle: "",
-  totalChapters: 0,
+  chapters: [],
   setCurrentChapter: () => {},
   setCurrentImage: () => {},
   setReadingStyle: () => {},

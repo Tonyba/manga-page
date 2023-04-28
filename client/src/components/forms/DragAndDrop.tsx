@@ -16,6 +16,7 @@ type Props = {
   label?: string;
   errMsg?: string;
   isMulti?: boolean;
+  clearForm?: boolean;
 };
 
 const DragAndDrop: FC<Props> = ({
@@ -25,6 +26,7 @@ const DragAndDrop: FC<Props> = ({
   label,
   errMsg,
   isMulti = false,
+  clearForm = false,
 }) => {
   const [filesItem, setFilesItems] = useState<DragImageItemType[]>([]);
 
@@ -71,6 +73,10 @@ const DragAndDrop: FC<Props> = ({
     return () =>
       filesItem.forEach((preview) => URL.revokeObjectURL(preview.imgSrc));
   }, [filesItem]);
+
+  useEffect(() => {
+    if (clearForm) setFilesItems([]);
+  }, [clearForm]);
 
   return (
     <div className="mb-4">

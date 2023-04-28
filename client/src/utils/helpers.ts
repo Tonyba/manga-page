@@ -1,12 +1,11 @@
 import { StylesConfig } from "react-select/dist/declarations/src/styles";
 import { ContentType } from "./types";
-//[".jpg", ".png", ".gif", ".webp", ".avif", ".jpeg"]
 export const fileTypes = {
-  'image/png' : ['.png'],
-  'image/jpge': ['.jpeg', '.jpg'],
-  'image/webp': ['.wepb'],
-  'image/gif': ['.gif'],
-  'image/avif': ['.avif']
+  "image/png": [".png"],
+  "image/jpge": [".jpeg", ".jpg"],
+  "image/webp": [".wepb"],
+  "image/gif": [".gif"],
+  "image/avif": [".avif"],
 };
 
 export const selectStyles: StylesConfig = {
@@ -70,4 +69,18 @@ export const findFavorite = (
   if (favorite) return true;
 
   return false;
+};
+
+export const toSlug = (str: string) => {
+  return str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[\W_]+/g, "-")
+    .toLowerCase()
+    .replace(/^-+|-+$/g, "");
+};
+
+export const getChapterNumber = (txt: string) => {
+  const newTxt = txt.split("-")[1];
+  return newTxt;
 };

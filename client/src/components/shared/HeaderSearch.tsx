@@ -1,51 +1,76 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import UseAnimations from "react-useanimations";
 import second from "react-useanimations/lib/searchToX";
+import SearchBox from "./SearchBox";
 
 type Props = {
   placeholder?: string;
+  data?: any[];
+  type?: "chapters" | "mangas";
+  onChange: (src: any[]) => void;
 };
 
-const HeaderSearch: FC<Props> = ({ placeholder = "Busca un manga..." }) => {
+const HeaderSearch: FC<Props> = ({
+  placeholder = "Busca un manga...",
+  data = [],
+  type = "mangas",
+  onChange,
+}) => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [original, setOriginal] = useState(data);
+
+  useEffect(() => {
+    if (type === "chapters") {
+      const searchArr: any[] = original.filter((d) => d.capNumber === search);
+
+      if (!search) {
+        onChange([]);
+      } else {
+        onChange(searchArr);
+      }
+    }
+  }, [search]);
 
   return (
-    <div
-      className={`relative h-12 
+    <div className="relative">
+      <div
+        className={`relative h-12 
       overflow-hidden
       transition-[width]
       cursor-pointer 
       bg-primary-dark rounded-full bg-primary-dark-hover ${
         open ? "w-80" : "w-12"
       } `}
-    >
-      <button
-        onClick={() => setOpen(!open)}
-        className="
+      >
+        <button
+          onClick={() => setOpen(!open)}
+          className="
         left-6
         z-10
         absolute 
         left-30 top-1/2 -translate-x-2/4 
         -translate-y-2/4"
-      >
-        <UseAnimations
-          reverse={open}
-          size={22}
-          animation={second}
-          strokeColor={"#fff"}
-        />
-      </button>
-      <div
-        className="relative  w-64
+        >
+          <UseAnimations
+            reverse={open}
+            size={22}
+            animation={second}
+            strokeColor={"#fff"}
+          />
+        </button>
+        <div
+          className="relative  w-64
           h-12
           flex
           align-middle
           justify-center"
-      >
-        <input
-          type="text"
-          className="
+        >
+          <input
+            type={type === "chapters" ? "number" : "text"}
+            onChange={(e) => setSearch(e.target.value)}
+            value={search}
+            className="
           absolute
           w-full
           h-full
@@ -54,9 +79,11 @@ const HeaderSearch: FC<Props> = ({ placeholder = "Busca un manga..." }) => {
           outline-none
           bg-transparent
         "
-          placeholder={placeholder}
-        />
+            placeholder={placeholder}
+          />
+        </div>
       </div>
+      <SearchBox data={data} type={type} />
     </div>
   );
 };

@@ -36,6 +36,7 @@ export default function Home() {
         genres: [],
         status: faker.word.noun(),
         Episodes: [],
+        banner: 'https://picsum.photos/225/300"',
       });
     }
 

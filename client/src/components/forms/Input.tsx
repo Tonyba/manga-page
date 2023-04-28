@@ -6,7 +6,7 @@ type Props = {
   onChange: (val: string) => void;
   label: string;
   defaulValue?: string;
-  value?: string;
+  value?: string | number;
   placeholder?: string;
   name?: string;
   errMsg?: string;
@@ -32,6 +32,7 @@ const Input: FC<Props> = ({
         id={name}
         name={name}
         value={value}
+        min={type === "number" ? 1 : ""}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
       />

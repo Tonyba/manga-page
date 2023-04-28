@@ -17,7 +17,7 @@ const Header = () => {
       </div>
 
       <div className="flex align-middle items-center gap-5">
-        <HeaderSearch />
+        <HeaderSearch onChange={() => {}} />
 
         <div className="bg-primary-dark-hover p-3 rounded-full cursor-pointer">
           <FaDiscord size={21} color="white" />

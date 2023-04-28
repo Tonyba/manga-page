@@ -3,6 +3,7 @@ import Image from "next/image";
 import React, { FC } from "react";
 import ContentPill from "../content/ContentPill";
 import GenreItem from "../content/GenreItem";
+import Link from "next/link";
 
 type Props = {
   content?: ContentResponseType;
@@ -11,17 +12,19 @@ type Props = {
 const DashboardAddChapterSide: FC<Props> = ({ content }) => {
   return (
     <div className="bg-primary rounded-md p-5 flex flex-col gap-2">
-      <Image
-        alt={content?.manga.title!}
-        className="w-full max-h-80 object-cover"
-        width={300}
-        height={300}
-        src={content?.manga.image as string}
-      />
-
-      <h2 className="text-center font-semibold text-xl">
-        {content?.manga.title}
-      </h2>
+      <Link href={`/content/${content?.manga.id}`}>
+        <Image
+          alt={content?.manga.title!}
+          className="w-full max-h-80 object-cover mb-2"
+          width={300}
+          height={300}
+          priority={true}
+          src={content?.manga.image as string}
+        />
+        <h2 className="text-center font-semibold text-xl">
+          {content?.manga.title}
+        </h2>
+      </Link>
 
       <div className="divide-y divider-dark">
         <div className="flex items-center justify-between py-3">

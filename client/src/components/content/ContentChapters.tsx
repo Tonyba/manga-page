@@ -1,30 +1,38 @@
+import { toSlug } from "@/utils/helpers";
 import { ChapterItemType } from "@/utils/types";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import React, { FC } from "react";
 
-const ContentChapters: FC<ChapterItemType> = ({ text, image, chapter }) => {
-  const router = useRouter();
-  const { id } = router.query;
+const ContentChapters: FC<ChapterItemType> = ({
+  title,
+  image,
+  id,
+  mangaId,
+  capNumber,
+}) => {
+  const url = toSlug(title);
 
   return (
     <div className="flex items-center gap-3">
       <div className="w-24">
-        <Link href={`${id}/${chapter}`}>
+        <Link href={`/content/${mangaId}/capitulo-${capNumber}`}>
           <Image
-            alt={text}
+            alt={title}
             className="object-cover rounded-lg"
-            src={image}
+            src={"https://picsum.photos/200/150"}
             width={200}
             height={150}
           />
         </Link>
       </div>
 
-      <p className="font-semibold">
-        <Link href={`${id}/${chapter}`}>{text}</Link>
-      </p>
+      <Link
+        href={`/content/${mangaId}/capitulo-${capNumber}`}
+        className="capitalize cursor-pointer"
+      >
+        {title}
+      </Link>
     </div>
   );
 };

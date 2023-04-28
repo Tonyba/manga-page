@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { FC, useContext, useEffect, useState } from "react";
 import Popup from "../shared/Popup";
+import { ChapterItemType } from "@/utils/types";
 
 type Props = {
   isOpen: boolean;
@@ -10,26 +11,16 @@ type Props = {
 };
 
 const ChapterSearch: FC<Props> = ({ isOpen = false, onModalClose }) => {
-  const { totalChapters, currentChapter } = useContext(ChapterContext);
-  const [filteredChaps, setFilteredChaps] = useState<number[]>([]);
-  const [chapters, setChapters] = useState<number[]>([]);
+  const { chapters, currentChapter } = useContext(ChapterContext);
+  const [filteredChaps, setFilteredChaps] = useState<ChapterItemType[]>([]);
   const [search, setSearch] = useState("");
 
   const router = useRouter();
   const { id } = router.query;
 
   useEffect(() => {
-    const ch = [];
-    for (let index = 0; index < totalChapters; index++) {
-      ch.push(index);
-    }
-
-    setChapters(ch);
-  }, []);
-
-  useEffect(() => {
     if (search) {
-      const newFilter = chapters.filter((ch) => ch.toString() === search);
+      const newFilter = chapters.filter((ch) => ch.capNumber === search);
       setFilteredChaps(newFilter);
     } else {
       setFilteredChaps(chapters);
@@ -65,12 +56,14 @@ const ChapterSearch: FC<Props> = ({ isOpen = false, onModalClose }) => {
               <li key={index} className="w-full">
                 <Link
                   className={`${
-                    ch === currentChapter ? "bg-slate-500" : "bg-slate-700"
+                    ch.id === currentChapter?.id
+                      ? "bg-slate-500"
+                      : "bg-slate-700"
                   } flex w-full px-2 py-1 hover:bg-slate-500 items-center justify-between`}
-                  href={`/content/${id}/${ch}`}
+                  href={`/content/${id}/capitulo-${ch.capNumber}`}
                 >
-                  Capitulo {ch}
-                  {ch === currentChapter && (
+                  {ch.title}
+                  {ch.id === currentChapter?.id && (
                     <span className="bg-black p-1 rounded-md text-sm">
                       Leyendo
                     </span>
