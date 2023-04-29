@@ -1,4 +1,4 @@
-import { Mangas } from "../../models/manga/manga.model.js";
+import { Mangas } from "../../models/Manga/manga.model.js";
 import { Episodes } from "../../models/episodes/episodes.model.js";
 import fs from "fs";
 import { fileURLToPath } from "url";

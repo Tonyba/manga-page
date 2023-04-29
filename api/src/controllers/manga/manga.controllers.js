@@ -46,7 +46,7 @@ export const createManga = async (req, res) => {
       demography,
       path: dir,
     });
-    res.status(201).json(manga);
+    res.status(200).json(manga);
   } catch (err) {
     console.log(err);
     res.status(500).json({

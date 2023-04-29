@@ -4,8 +4,9 @@ import morgan from "morgan";
 import mangas from "./routes/manga/manga.routes.js";
 import episodes from "./routes/episodes/episodes.routes.js";
 import users from "./routes/user/user.routes.js";
+import filters from "./routes/filter/filter.routes.js";
 // ----------------------------------------------------------------
-import { Mangas } from "./models/manga/manga.model.js";
+import { Mangas } from "./models/Manga/manga.model.js";
 import { Episodes } from "./models/episodes/episodes.model.js";
 import { Users } from "./models/User/user.model.js";
 import { MangaFav } from "./models/manga_fav/manga_fav.js";
@@ -35,7 +36,6 @@ app.use(
 // Cors
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:3001");
-  // Se agrega el x-auth-token para que se pueda enviar el token en el header
   res.header(
     "Access-Control-Allow-Headers",
     "x-auth-token, Origin, X-Requested-With, Content-Type, Accept"
@@ -69,5 +69,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(mangas);
 app.use(episodes);
 app.use(users);
+app.use(filters);
 
 export default app;
