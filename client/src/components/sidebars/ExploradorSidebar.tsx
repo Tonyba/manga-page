@@ -2,7 +2,7 @@ import { ExploradorContext } from "@/utils/context/ExploradorContext";
 import { selectStyles } from "@/utils/helpers";
 import { FiltersType } from "@/utils/types";
 import { demography, genres, status, types } from "@/utils/valoresParaSelect";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { default as ReactSelect } from "react-select";
 import makeAnimated from "react-select/animated";
 import Accordion from "../accordion/Accordion";
@@ -11,7 +11,7 @@ import { filterExp } from "@/utils/axios/filters";
 const animatedComponents = makeAnimated();
 
 const ExploradorSidebar = () => {
-  const { setContent } = useContext(ExploradorContext);
+  const { setContent, loading, setLoading } = useContext(ExploradorContext);
 
   const [filters, setFilters] = useState<FiltersType>({
     type: "Manga",
@@ -19,6 +19,8 @@ const ExploradorSidebar = () => {
     status: "",
     genres: [],
   });
+
+  const filtersRef = useRef(filters);
 
   const handlePushGenres = (e: string) => {
     if (filters?.genres.find((element) => element === e)) {
@@ -36,15 +38,16 @@ const ExploradorSidebar = () => {
 
   useEffect(() => {
     const fetchItems = async () => {
-      //if (!loading) setLoading(true);
-      // setLoading(true);
+      // if (!loading) setLoading(true);
+      setLoading(true);
       const items = await filterExp(filters);
+      setLoading(false);
 
       console.log(items?.data?.result);
     };
 
     fetchItems();
-  }, [filters.type, filters.demography, filters.status, filters.genres]);
+  }, [filters]);
 
   console.log(filters);
 
