@@ -30,7 +30,6 @@ const Pagination: FC<Props> = ({
             items-center justify-center"
       previousLinkClassName="hover:bg-slate-700 w-10 h-10 rounded-full flex 
             items-center justify-center"
-      initialPage={initialPage}
       previousLabel={<FaChevronLeft />}
       nextLabel={<FaChevronRight />}
       breakLabel="..."

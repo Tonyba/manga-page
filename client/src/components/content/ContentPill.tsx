@@ -22,7 +22,7 @@ const ContentPill: FC<Props> = ({
       contentTypeColor = "bg-manhua";
       break;
 
-    case "manwha":
+    case "manhwa":
       contentTypeColor = "bg-manwha";
       break;
 
@@ -45,11 +45,10 @@ const ContentPill: FC<Props> = ({
        ${contentTypeColor}
         p-[3px]
         ${isFull}
-        bg-red-500
         ${absolute}
     `}
     >
-      MANGA
+      {contentType}
     </span>
   );
 };

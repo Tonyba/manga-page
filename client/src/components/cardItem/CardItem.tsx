@@ -34,7 +34,7 @@ const CardItem: FC<Props> = ({ content, showHover = true, action = "add" }) => {
         // as={`/content/${22}`}
       >
         <div className="relative overflow-hidden  rounded-lg ">
-          <ContentPill contentType={"MANGA"} />
+          <ContentPill contentType={type} />
           <Image
             src={"https://picsum.photos/250/300"}
             className="object-cover rounded-lg  

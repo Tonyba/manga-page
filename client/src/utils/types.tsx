@@ -29,6 +29,8 @@ export type FiltersType = {
   demography: string;
   status: string;
   genres: string[];
+  limit: number;
+  page: number;
 };
 
 export type DragImageItemType = {
@@ -78,6 +80,11 @@ export type ChapterValidationType = Partial<{
   capNumber: string;
   images: string;
 }>;
+
+export type FiltersResponseType = {
+  result: ContentType[];
+  count: number;
+};
 
 export type ContentResponseType = {
   manga: ContentType;

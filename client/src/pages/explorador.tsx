@@ -1,17 +1,20 @@
 import ExploradorSidebar from "@/components/sidebars/ExploradorSidebar";
 import { ExploradorContext } from "@/utils/context/ExploradorContext";
 import { ContentType, FiltersType } from "@/utils/types";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { faker } from "@faker-js/faker";
 import CardLoop from "@/components/cardLoop/cardLoop";
 import Pagination from "@/components/pagination/Pagination";
 import ExploradorSearch from "@/components/Explorador/ExploradorSearch";
+import { filterExp } from "@/utils/axios/filters";
 
-const initFilters = {
+const initFilters: FiltersType = {
   type: "Manga",
   demography: "",
   status: "",
   genres: [],
+  limit: 12,
+  page: 1,
 };
 
 const Explorador = () => {
@@ -20,34 +23,22 @@ const Explorador = () => {
   const [count, setCount] = useState(0);
   const [filters, setFilters] = useState<FiltersType>(initFilters);
 
-  const itemPerPage = 18;
+  const handlePageChange = (selected: number) => {
+    let page = selected + 1;
+    setFilters({ ...filters, page });
+  };
 
-  const handlePageChange = async (selected: number) => {
-    setLoading(true);
-    // const { data } = await search(filters, 18, selected + 1);
+  const fetchData = async () => {
     setLoading(false);
-    // setItems(data.result);
+    const res = await filterExp(filters);
+    setCount(res.data.count);
+    setContent(res.data.result);
+    setLoading(true);
   };
 
   useEffect(() => {
-    const items: ContentType[] = [];
-    for (let index = 0; index < 12; index++) {
-      items.push({
-        id: parseInt(faker.random.numeric()),
-        type: faker.random.word(),
-        title: faker.random.word(),
-        description: faker.lorem.words(20),
-        demography: faker.datatype.string(),
-        image: "https://picsum.photos/225/300",
-        genres: [],
-        status: faker.word.noun(),
-        Episodes: [],
-        banner: "",
-      });
-    }
-
-    setContent(items);
-  }, []);
+    fetchData();
+  }, [filters.page]);
 
   return (
     <ExploradorContext.Provider
@@ -75,9 +66,9 @@ const Explorador = () => {
             <div className="flex justify-center">
               <Pagination
                 totalItems={count}
-                itemsPerPage={itemPerPage}
+                itemsPerPage={filters.limit}
                 onPageChange={handlePageChange}
-                pageCount={Math.ceil(count / itemPerPage)}
+                pageCount={Math.ceil(count / filters.limit)}
               />
             </div>
           </div>
