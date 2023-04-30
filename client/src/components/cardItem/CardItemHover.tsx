@@ -24,7 +24,7 @@ const CardItemHover: FC<Props> = ({ title, type, desc, id }) => {
     "
     >
       <Link href={`/content/${id}`}>
-        <strong className="block mb-2">{title}</strong>
+        <strong className="block mb-2 break-words">{title}</strong>
       </Link>
 
       <ContentPill contentType={type} isAbsolute={false} full={true} />

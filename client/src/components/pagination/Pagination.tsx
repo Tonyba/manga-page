@@ -18,7 +18,7 @@ const Pagination: FC<Props> = ({
   itemsPerPage,
   initialPage = 0,
 }) => {
-  return (
+  return pageCount > 1 ? (
     <Paginate
       className="flex gap-5 items-center"
       pageClassName="hover:bg-slate-700 rounded-full bg-slate-800"
@@ -38,6 +38,8 @@ const Pagination: FC<Props> = ({
       renderOnZeroPageCount={() => null}
       forcePage={initialPage}
     />
+  ) : (
+    <></>
   );
 };
 

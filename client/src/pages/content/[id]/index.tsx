@@ -8,6 +8,7 @@ import Filter from "@/components/filter/Filter";
 import Pagination from "@/components/pagination/Pagination";
 import Carousel from "@/components/carousel/Carousel";
 import { BiBookmarks } from "react-icons/bi";
+import { FaRegSadCry } from "react-icons/fa";
 import { getManga } from "@/utils/axios/contentType";
 import Router from "next/router";
 import {
@@ -26,7 +27,7 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [paginatedCaps, setPaginatedCaps] = useState<ChapterItemType[][]>([]);
 
-  const itemsPerPage = 2;
+  const itemsPerPage = 12;
   const totalPages =
     content?.numEpisodes && Math.ceil(content?.numEpisodes / itemsPerPage);
 
@@ -147,7 +148,16 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
             <Filter data={filteredCaps} onChange={onChange} type="chapters" />
           </div>
 
-          <h2 className="text-2xl font-medium">Capitulos</h2>
+          {content?.numEpisodes === 0 && (
+            <h2 className="text-2xl font-medium">Capitulos</h2>
+          )}
+
+          {content?.numEpisodes === 0 && (
+            <div className="flex flex-col items-center gap-5">
+              <FaRegSadCry className="text-dark" size={120} />
+              <p className="font-semibold text-xl">No hay Capitulos</p>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-4">
             {paginatedCaps[currentPage] &&
@@ -195,7 +205,7 @@ export const getStaticProps: GetStaticProps = async (
 
   if (!id) Router.reload();
 
-  const resp = await getManga(id as string);
+  const resp = await getManga(id);
   const contentResp = resp.data;
 
   return {

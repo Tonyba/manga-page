@@ -14,33 +14,16 @@ export default function Home() {
   const [content, setContent] = useState<ContentType[]>([]);
 
   useEffect(() => {
-    const items: ContentType[] = [];
-
-    const test = async () => {
+    const fetchData = async () => {
       const resp = await getMangas();
       const content = resp.data;
 
-      console.log(content);
+      console.log(resp);
+
+      setContent(content);
     };
 
-    test();
-
-    for (let index = 0; index < 12; index++) {
-      items.push({
-        id: parseInt(faker.random.numeric()),
-        type: faker.random.word(),
-        title: faker.random.word(),
-        description: faker.lorem.words(20),
-        demography: faker.datatype.string(),
-        image: "https://picsum.photos/225/300",
-        genres: [],
-        status: faker.word.noun(),
-        Episodes: [],
-        banner: 'https://picsum.photos/225/300"',
-      });
-    }
-
-    setContent(items);
+    fetchData();
   }, []);
 
   return (

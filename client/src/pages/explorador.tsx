@@ -1,27 +1,18 @@
 import ExploradorSidebar from "@/components/sidebars/ExploradorSidebar";
 import { ExploradorContext } from "@/utils/context/ExploradorContext";
 import { ContentType, FiltersType } from "@/utils/types";
-import React, { useEffect, useRef, useState } from "react";
-import { faker } from "@faker-js/faker";
+import React, { useEffect, useState } from "react";
 import CardLoop from "@/components/cardLoop/cardLoop";
 import Pagination from "@/components/pagination/Pagination";
 import ExploradorSearch from "@/components/Explorador/ExploradorSearch";
 import { filterExp } from "@/utils/axios/filters";
-
-const initFilters: FiltersType = {
-  type: "Manga",
-  demography: "",
-  status: "",
-  genres: [],
-  limit: 12,
-  page: 1,
-};
+import { initFilterState } from "@/utils/helpers";
 
 const Explorador = () => {
   const [content, setContent] = useState<ContentType[]>([]);
   const [loading, setLoading] = useState(true);
   const [count, setCount] = useState(0);
-  const [filters, setFilters] = useState<FiltersType>(initFilters);
+  const [filters, setFilters] = useState<FiltersType>(initFilterState);
 
   const handlePageChange = (selected: number) => {
     let page = selected + 1;

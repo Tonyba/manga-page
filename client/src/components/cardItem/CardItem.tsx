@@ -26,7 +26,7 @@ const CardItem: FC<Props> = ({ content, showHover = true, action = "add" }) => {
     >
       <Link
         className="text-center mb-3"
-        href={`/content/${22}`}
+        href={`/content/${id}`}
         // href={{
         //   pathname: "/content/[id]",
         //   query: { mangaId: 22 },
@@ -36,7 +36,7 @@ const CardItem: FC<Props> = ({ content, showHover = true, action = "add" }) => {
         <div className="relative overflow-hidden  rounded-lg ">
           <ContentPill contentType={type} />
           <Image
-            src={"https://picsum.photos/250/300"}
+            src={image as string}
             className="object-cover rounded-lg  
           w-full
           cursor-pointer hover:scale-110
@@ -66,12 +66,14 @@ const CardItem: FC<Props> = ({ content, showHover = true, action = "add" }) => {
           </div>
         </div>
       </Link>
-      <Link href={`/content/${22}`}>
-        <h3 className="text-xl font-medium line-clamp-2 mt-1">{title}</h3>
+      <Link href={`/content/${id}`}>
+        <h3 className="text-xl font-medium line-clamp-2 mt-1 break-words">
+          {title}
+        </h3>
       </Link>
 
       {showHover && (
-        <CardItemHover id={22} title={title} desc={description} type={type} />
+        <CardItemHover id={id} title={title} desc={description} type={type} />
       )}
     </motion.div>
   );

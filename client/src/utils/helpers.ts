@@ -71,6 +71,15 @@ export const findFavorite = (
   return false;
 };
 
+export const initFilterState = {
+  type: "Manga",
+  demography: "",
+  status: "",
+  genres: [],
+  limit: 12,
+  page: 1,
+};
+
 export const toSlug = (str: string) => {
   return str
     .normalize("NFD")
