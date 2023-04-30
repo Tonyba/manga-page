@@ -24,8 +24,9 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
     content?.manga.Episodes || []
   );
   const [currentPage, setCurrentPage] = useState(0);
+  const [paginatedCaps, setPaginatedCaps] = useState<ChapterItemType[][]>([]);
 
-  const itemsPerPage = 1;
+  const itemsPerPage = 2;
   const totalPages =
     content?.numEpisodes && Math.ceil(content?.numEpisodes / itemsPerPage);
 
@@ -46,9 +47,28 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
     setFilteredCaps(data);
   };
 
-  const onPageChange = (page: number) => {};
+  const onPageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const paginateChapters = () => {
+    const paginated = [...Episodes].reduce(
+      (acc: ChapterItemType[][], val, i) => {
+        let idx = Math.floor(i / itemsPerPage);
+        let page: ChapterItemType[] = acc[idx] || (acc[idx] = []);
+        page.push(val);
+
+        return acc;
+      },
+      []
+    );
+
+    setPaginatedCaps(paginated);
+  };
 
   useEffect(() => {
+    paginateChapters();
+
     const rel: ContentType[] = [];
     for (let index = 0; index < 10; index++) {
       rel.push({
@@ -64,7 +84,6 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
         banner: "",
       });
     }
-
     setRelated(rel);
   }, []);
 
@@ -131,9 +150,10 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
           <h2 className="text-2xl font-medium">Capitulos</h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-4">
-            {content?.manga.Episodes.map((ch, index) => (
-              <ContentChapters key={index} {...ch} />
-            ))}
+            {paginatedCaps[currentPage] &&
+              paginatedCaps[currentPage].map((ch, index) => {
+                return <ContentChapters key={index} {...ch} />;
+              })}
           </div>
           <div className="mt-10">
             <Pagination

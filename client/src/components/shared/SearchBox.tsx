@@ -1,8 +1,9 @@
 import React, { FC } from "react";
 import ContentChapters from "../content/ContentChapters";
+import { ChapterItemType, ContentType } from "@/utils/types";
 
 type Props = {
-  data: any[];
+  data: ChapterItemType[] | ContentType[];
   type: "chapters" | "mangas";
 };
 
@@ -11,11 +12,15 @@ const SearchBox: FC<Props> = ({ data, type }) => {
     <div className="bg-primary rounded-lg absolute w-full top-16 z-10">
       <div className="grid grid-cols-1 divider-dark divide-y">
         {type === "chapters" ? (
-          data.map((d) => (
-            <div key={d.id} className="px-5 py-3">
-              <ContentChapters {...d} />
-            </div>
-          ))
+          data.map((d, index) => {
+            const ch = d as ChapterItemType;
+
+            return (
+              <div key={ch.id} className="px-5 py-3">
+                <ContentChapters {...ch} />
+              </div>
+            );
+          })
         ) : (
           <></>
         )}

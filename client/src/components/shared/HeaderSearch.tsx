@@ -2,10 +2,11 @@ import React, { FC, useEffect, useState } from "react";
 import UseAnimations from "react-useanimations";
 import second from "react-useanimations/lib/searchToX";
 import SearchBox from "./SearchBox";
+import { ChapterItemType, ContentType } from "@/utils/types";
 
 type Props = {
   placeholder?: string;
-  data?: any[];
+  data?: ChapterItemType[] | ContentType[];
   type?: "chapters" | "mangas";
   onChange: (src: any[]) => void;
 };
@@ -22,7 +23,10 @@ const HeaderSearch: FC<Props> = ({
 
   useEffect(() => {
     if (type === "chapters") {
-      const searchArr: any[] = original.filter((d) => d.capNumber === search);
+      const chapters = original as ChapterItemType[];
+      const searchArr = chapters.filter(
+        (d: ChapterItemType) => d.capNumber === search
+      );
 
       if (!search) {
         onChange([]);
