@@ -23,6 +23,11 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
   const [filteredCaps, setFilteredCaps] = useState<ChapterItemType[]>(
     content?.manga.Episodes || []
   );
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const itemsPerPage = 1;
+  const totalPages =
+    content?.numEpisodes && Math.ceil(content?.numEpisodes / itemsPerPage);
 
   const { manga } = content as ContentResponseType;
   const {
@@ -38,9 +43,10 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
   } = manga;
 
   const onChange = (data: any) => {
-    console.log(data);
     setFilteredCaps(data);
   };
+
+  const onPageChange = (page: number) => {};
 
   useEffect(() => {
     const rel: ContentType[] = [];
@@ -130,7 +136,13 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
             ))}
           </div>
           <div className="mt-10">
-            <Pagination />
+            <Pagination
+              itemsPerPage={itemsPerPage}
+              onPageChange={onPageChange}
+              totalItems={content?.numEpisodes || 0}
+              pageCount={totalPages ? totalPages : 0}
+              initialPage={currentPage}
+            />
           </div>
         </div>
       </section>

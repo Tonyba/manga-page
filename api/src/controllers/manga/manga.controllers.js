@@ -1,8 +1,10 @@
-import { Mangas } from "../../models/manga/manga.model.js";
 import fs from "fs";
-import { Episodes } from "../../models/episodes/episodes.model.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { Mangas } from "../../models/manga/manga.model.js";
+
+import { Episodes } from "../../models/episodes/episodes.model.js";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -75,18 +77,23 @@ export const getMangaById = async (req, res) => {
       where: {
         id: id,
       },
-      include: Episodes,
+      include: [
+        {
+          model: Episodes,
+        },
+      ],
     });
 
     if (!manga)
       res.status(500).json({
-        message: "Nose encontro ningun manga por el id: " + id,
+        message: "No se encontro ningun manga por el id: " + id,
       });
 
     const numEpisodes = parseInt(manga.Episodes.length);
 
     res.status(200).json({ manga, numEpisodes });
   } catch (err) {
+    console.log(err);
     res.status(500).json({
       message: "Error al obtener la informacion del manga",
     });

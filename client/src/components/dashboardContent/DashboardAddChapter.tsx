@@ -5,9 +5,8 @@ import React, { useEffect, useState } from "react";
 import DashboardTitle from "./DashboardTitle";
 import DashboardAddChapterSide from "../sidebars/DashboardAddChapterSide";
 import ContentChapters from "@/components/content/ContentChapters";
-import { FaPlus, FaTimes } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import DashboardAddChapterModal from "./DashboardAddChapterModal";
-import { motion } from "framer-motion";
 
 const DashboardAddChapter = () => {
   const router = useRouter();
@@ -15,14 +14,14 @@ const DashboardAddChapter = () => {
   const { contentId } = router.query;
   const [modalOpen, setModalOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const resp = await getManga(contentId as string);
-      const contentResp = resp.data;
-      console.log(contentResp);
-      setContent(contentResp);
-    };
+  const fetchData = async () => {
+    const resp = await getManga(contentId as string);
+    const contentResp = resp.data;
 
+    setContent(contentResp);
+  };
+
+  useEffect(() => {
     fetchData();
   }, [contentId]);
 
@@ -39,7 +38,7 @@ const DashboardAddChapter = () => {
             Agregar Capitulo
           </button>
 
-          <div className="grid grid-cols-4">
+          <div className="grid grid-cols-4 gap-y-4">
             {content?.manga.Episodes.map((episode, i) => (
               <ContentChapters key={i} {...episode} />
             ))}
