@@ -44,7 +44,12 @@ const Explorador = () => {
             <CardLoop items={content} fourCols={true} />
 
             <div className="flex justify-center">
-              <Pagination />
+              <Pagination
+                itemsPerPage={0}
+                onPageChange={() => {}}
+                pageCount={0}
+                totalItems={0}
+              />
             </div>
           </div>
         </section>
