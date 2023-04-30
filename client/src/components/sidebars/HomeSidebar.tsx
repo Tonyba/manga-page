@@ -26,6 +26,7 @@ export const HomeSidebar = () => {
           Episodes: [],
           genres: [],
           status: faker.random.word(),
+          banner: "https://picsum.photos/250/300",
         });
       }
 

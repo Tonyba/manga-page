@@ -23,6 +23,7 @@ const Explorador = () => {
         genres: [],
         status: faker.word.noun(),
         Episodes: [],
+        banner: "",
       });
     }
 
