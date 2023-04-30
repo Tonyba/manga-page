@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import React, { FC, useContext, useEffect, useState } from "react";
 import Popup from "../shared/Popup";
 import { ChapterItemType } from "@/utils/types";
+import ScrollbarBox from "../scrollbarBox/ScrollbarBox";
 
 type Props = {
   isOpen: boolean;
@@ -50,29 +51,31 @@ const ChapterSearch: FC<Props> = ({ isOpen = false, onModalClose }) => {
           </div>
         </div>
 
-        <ul className="flex flex-col gap-3  max-h-64 scrollbar scrollbar-w-[5px] px-2 scrollbar-thumb-rounded  scrollbar-thumb-slate-300 overflow-auto">
-          {filteredChaps.map((ch, index) => {
-            return (
-              <li key={index} className="w-full">
-                <Link
-                  className={`${
-                    ch.id === currentChapter?.id
-                      ? "bg-slate-500"
-                      : "bg-slate-700"
-                  } flex w-full px-2 py-1 hover:bg-slate-500 items-center justify-between`}
-                  href={`/content/${id}/capitulo-${ch.capNumber}`}
-                >
-                  {ch.title}
-                  {ch.id === currentChapter?.id && (
-                    <span className="bg-black p-1 rounded-md text-sm">
-                      Leyendo
-                    </span>
-                  )}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        <ScrollbarBox>
+          <ul className="flex flex-col gap-3 px-2 max-h-64">
+            {filteredChaps.map((ch, index) => {
+              return (
+                <li key={index} className="w-full">
+                  <Link
+                    className={`${
+                      ch.id === currentChapter?.id
+                        ? "bg-slate-500"
+                        : "bg-slate-700"
+                    } flex w-full px-2 py-1 hover:bg-slate-500 items-center justify-between`}
+                    href={`/content/${id}/capitulo-${ch.capNumber}`}
+                  >
+                    {ch.title}
+                    {ch.id === currentChapter?.id && (
+                      <span className="bg-black p-1 rounded-md text-sm">
+                        Leyendo
+                      </span>
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </ScrollbarBox>
       </div>
     </Popup>
   );

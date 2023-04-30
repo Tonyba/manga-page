@@ -1,10 +1,17 @@
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import HeaderSearch from "./HeaderSearch";
 import Logo from "./Logo";
 import { FaDiscord } from "react-icons/fa";
+import { ContentType } from "@/utils/types";
 
 const Header = () => {
+  const [data, setData] = useState<ContentType[]>([]);
+
+  const onChange = (items: ContentType[]) => {
+    setData(items);
+  };
+
   return (
     <header className="max-w-7xl w-full mx-auto col-span-4 flex py-5 justify-between align-middle h-24 px-5 xl:px-0">
       <div className="flex items-center gap-3">
@@ -17,7 +24,14 @@ const Header = () => {
       </div>
 
       <div className="flex align-middle items-center gap-5">
-        <HeaderSearch onChange={() => {}} />
+        <HeaderSearch
+          type="mangas"
+          onChange={(items) => {
+            const content = [...items] as ContentType[];
+            onChange(content);
+          }}
+          data={data}
+        />
 
         <div className="bg-primary-dark-hover p-3 rounded-full cursor-pointer">
           <FaDiscord size={21} color="white" />
