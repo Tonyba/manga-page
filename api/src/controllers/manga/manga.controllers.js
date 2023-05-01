@@ -1,11 +1,11 @@
-import { Mangas } from "../../models/manga/manga.model.js";
+import { Mangas } from "../../models/Manga/manga.model.js";
 import fs from "fs";
 import { Episodes } from "../../models/episodes/episodes.model.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
+import { Sequelize } from "sequelize";
 export const createManga = async (req, res) => {
   const { title, description, type, demography } = req.body;
   const genres = req.body["genres[]"];
@@ -75,7 +75,11 @@ export const getMangaById = async (req, res) => {
       where: {
         id: id,
       },
-      include: Episodes,
+      include: [
+        {
+          model: Episodes,
+        },
+      ],
     });
 
     if (!manga)
