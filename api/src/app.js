@@ -6,7 +6,7 @@ import episodes from "./routes/episodes/episodes.routes.js";
 import users from "./routes/user/user.routes.js";
 import filters from "./routes/filter/filter.routes.js";
 // ----------------------------------------------------------------
-import { Mangas } from "./models/manga/manga.model.js";
+import { Mangas } from "./models/Manga/manga.model.js";
 import { Episodes } from "./models/episodes/episodes.model.js";
 import { Users } from "./models/User/user.model.js";
 import { MangaFav } from "./models/manga_fav/manga_fav.js";

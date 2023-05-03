@@ -16,7 +16,7 @@ export const Episodes = sequelize.define(
       allowNull: false,
     },
     capNumber: {
-      type: DataTypes.TEXT,
+      type: DataTypes.INTEGER,
     },
     path: {
       type: DataTypes.TEXT,

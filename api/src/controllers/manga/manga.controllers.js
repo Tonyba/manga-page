@@ -1,10 +1,8 @@
+import { Mangas } from "../../models/Manga/manga.model.js";
 import fs from "fs";
+import { Episodes } from "../../models/episodes/episodes.model.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import { Mangas } from "../../models/manga/manga.model.js";
-
-import { Episodes } from "../../models/episodes/episodes.model.js";
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
