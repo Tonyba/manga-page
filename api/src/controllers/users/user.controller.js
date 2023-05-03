@@ -1,5 +1,5 @@
 import { Users } from "../../models/User/user.model.js";
-import { Mangas } from "../../models/manga/manga.model.js";
+import { Mangas } from "../../models/Manga/manga.model.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
