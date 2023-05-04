@@ -3,6 +3,7 @@ import ContentChapters from "../content/ContentChapters";
 import { ChapterItemType, ContentType } from "@/utils/types";
 import ContentSearchItem from "../content/ContentSearchItem";
 import ScrollbarBox from "../scrollbarBox/ScrollbarBox";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 type Props = {
   data: ChapterItemType[] | ContentType[];
@@ -10,8 +11,17 @@ type Props = {
 };
 
 const SearchBox: FC<Props> = ({ data, type }) => {
+  const [isMobile] = useIsMobile();
+
+  const mobileStyles = "top-20 mt-5";
+  const desktopStyles = "w-full  absolute";
+
   return (
-    <div className="bg-primary rounded-lg absolute w-full top-16 z-20">
+    <div
+      className={`bg-primary rounded-lg ${
+        !isMobile ? desktopStyles : mobileStyles
+      }  z-20`}
+    >
       <SearchBoxInner data={data} type={type} />
     </div>
   );

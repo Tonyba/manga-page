@@ -4,7 +4,7 @@ import ValidationError from "./ValidationError";
 type Props = {
   type?: string;
   onChange: (val: string) => void;
-  label: string;
+  label?: string;
   defaulValue?: string;
   value?: string | number;
   placeholder?: string;
@@ -23,9 +23,12 @@ const Input: FC<Props> = ({
 }) => {
   return (
     <div>
-      <label className="mb-2 block" htmlFor={name}>
-        {label}
-      </label>
+      {label && (
+        <label className="mb-2 block" htmlFor={name}>
+          {label}
+        </label>
+      )}
+
       <input
         className="w-full bg-primary p-3 rounded-md text-sm outline-none"
         type={type}

@@ -19,7 +19,11 @@ const ImageReaderItem: FC<Props> = ({ imgSrc, index, onClick = () => {} }) => {
 
   return (
     <>
-      {!loadedImg && <ChapterSpinner />}
+      {!loadedImg && (
+        <div className="h-[800px] flex items-center justify-center">
+          <ChapterSpinner />
+        </div>
+      )}
       <img
         src={imgSrc}
         className={`mx-auto ${

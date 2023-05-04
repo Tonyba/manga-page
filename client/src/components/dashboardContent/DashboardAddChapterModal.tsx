@@ -19,7 +19,7 @@ type Props = {
 };
 
 const initState: CreateChapterParams = {
-  capNumber: 0,
+  capNumber: 1,
   episode: "",
   images: [],
   mangaId: 0,

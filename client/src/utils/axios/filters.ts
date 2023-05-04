@@ -13,5 +13,3 @@ export const filterExp = (dato: FiltersType) => {
 
 export const searchByTitle = (txt: string) =>
   axios.get<FiltersResponseType>(`${API_URL}/filter/title?title=${txt}`);
-
-}

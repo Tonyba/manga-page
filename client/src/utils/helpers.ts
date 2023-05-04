@@ -91,5 +91,5 @@ export const toSlug = (str: string) => {
 
 export const getChapterNumber = (txt: string) => {
   const newTxt = txt.split("-")[1];
-  return newTxt;
+  return parseInt(newTxt);
 };

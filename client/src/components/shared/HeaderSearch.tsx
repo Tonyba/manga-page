@@ -4,8 +4,11 @@ import second from "react-useanimations/lib/searchToX";
 import SearchBox from "./SearchBox";
 import { ChapterItemType, ContentType } from "@/utils/types";
 import { searchByTitle } from "@/utils/axios/filters";
-import { useDevideWidth } from "@/hooks/useDevideWidth";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import Popup from "./Popup";
+import Input from "../forms/Input";
+import SlideFromLeft from "./SlideFromLeft";
+import SearchMobile from "./SearchMobile";
 
 type Props = {
   placeholder?: string;
@@ -23,7 +26,7 @@ const HeaderSearch: FC<Props> = ({
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [original, setOriginal] = useState(data);
-  const [isMobile] = useIsMobile();
+  const [isMobile, isT] = useIsMobile();
 
   const fetchData = async () => {
     await searchByTitle(search)
@@ -45,7 +48,7 @@ const HeaderSearch: FC<Props> = ({
     if (type === "chapters") {
       const chapters = original as ChapterItemType[];
       const searchArr = chapters.filter(
-        (d: ChapterItemType) => d.capNumber === search
+        (d: ChapterItemType) => d.capNumber.toString() === search
       );
 
       if (!search) {
@@ -119,7 +122,19 @@ const HeaderSearch: FC<Props> = ({
           />
         </div>
       </div>
-      <SearchBox data={data} type={type} />
+
+      {isMobile ? (
+        <SearchMobile
+          data={data}
+          type={type}
+          handleOpen={handleOpen}
+          open={open}
+          search={search}
+          setSearch={setSearch}
+        />
+      ) : (
+        <SearchBox data={data} type={type} />
+      )}
     </div>
   );
 };

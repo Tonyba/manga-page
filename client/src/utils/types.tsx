@@ -96,7 +96,7 @@ export type ChapterItemType = {
   title: string;
   id: number;
   path: string;
-  capNumber: string;
+  capNumber: number;
   mangaId: number;
 };
 

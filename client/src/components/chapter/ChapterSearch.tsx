@@ -21,7 +21,9 @@ const ChapterSearch: FC<Props> = ({ isOpen = false, onModalClose }) => {
 
   useEffect(() => {
     if (search) {
-      const newFilter = chapters.filter((ch) => ch.capNumber === search);
+      const newFilter = chapters.filter(
+        (ch) => ch.capNumber.toString() === search
+      );
       setFilteredChaps(newFilter);
     } else {
       setFilteredChaps(chapters);
@@ -34,7 +36,7 @@ const ChapterSearch: FC<Props> = ({ isOpen = false, onModalClose }) => {
       onModalClose={onModalClose}
       className="bg-black bg-opacity-30 backdrop-blur-sm justify-center items-center"
     >
-      <div className="bg-slate-600 p-5 rounded-lg ">
+      <div className="bg-primary p-5 rounded-lg">
         <div className="px-2">
           <h3 className="uppercase font-semibold mb-2">Capitulos</h3>
           <div>
@@ -61,7 +63,7 @@ const ChapterSearch: FC<Props> = ({ isOpen = false, onModalClose }) => {
                       ch.id === currentChapter?.id
                         ? "bg-slate-500"
                         : "bg-slate-700"
-                    } flex w-full px-2 py-1 hover:bg-slate-500 items-center justify-between`}
+                    } flex w-full px-2 py-1 hover:bg-slate-500 items-center justify-between capitalize`}
                     href={`/content/${id}/capitulo-${ch.capNumber}`}
                   >
                     {ch.title}

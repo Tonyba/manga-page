@@ -18,8 +18,10 @@ import {
   NextPage,
 } from "next";
 import { ContentResponseType } from "@/utils/types";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const Content: NextPage<ContentResponseType | undefined> = (content) => {
+  const [isMobile] = useIsMobile();
   const [related, setRelated] = useState<ContentType[]>([]);
   const [filteredCaps, setFilteredCaps] = useState<ChapterItemType[]>(
     content?.manga.Episodes || []
@@ -32,6 +34,9 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
     content?.numEpisodes && Math.ceil(content?.numEpisodes / itemsPerPage);
 
   const { manga } = content as ContentResponseType;
+
+  console.log(manga);
+
   const {
     banner,
     demography,
@@ -91,9 +96,9 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
   return (
     <>
       <section
-        className="py-5"
+        className="md:py-5"
         style={{
-          backgroundImage: `url(${banner})`,
+          backgroundImage: isMobile ? "" : `url(${banner})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center center",
@@ -102,7 +107,8 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
         <Image
           width={530}
           height={530}
-          className="rounded-lg 
+          className="
+          md:rounded-lg
           h-[380px]  
           mx-auto
           -mb-10
@@ -114,7 +120,7 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
           src={image as string}
           alt={title || ""}
         />
-        <div className="mx-7 2xl:mx-0">
+        <div className="mx-0 md:mx-7">
           <div
             className="
       max-w-7xl 
@@ -124,7 +130,8 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
       px-7
       pt-14
       pb-7
-      rounded-md
+      md:rounded-md
+     
       "
           >
             <h1 className="text-center font-medium mb-3 text-4xl">{title}</h1>
