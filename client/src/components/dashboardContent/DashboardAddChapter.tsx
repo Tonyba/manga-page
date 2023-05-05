@@ -15,6 +15,8 @@ const DashboardAddChapter = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const fetchData = async () => {
+    if (!contentId) return;
+
     const resp = await getManga(contentId as string);
     const contentResp = resp.data;
 
