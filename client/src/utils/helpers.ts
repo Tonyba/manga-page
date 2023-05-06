@@ -8,6 +8,12 @@ export const fileTypes = {
   "image/avif": [".avif"],
 };
 
+export const RemoveLastDirectoryPartOf = (the_url: string) => {
+  var the_arr = the_url.split("/");
+  the_arr.pop();
+  return the_arr.join("/");
+};
+
 export const selectStyles: StylesConfig = {
   control: (styles, { isFocused }) => ({
     ...styles,
