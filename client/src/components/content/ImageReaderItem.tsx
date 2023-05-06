@@ -1,5 +1,5 @@
 import React, { FC, useContext, useEffect, useState } from "react";
-import ChapterSpinner from "../chapter/ChapterSpinner";
+import LoadingSpinner from "../chapter/LoadingSpinner";
 import { ChapterContext } from "@/utils/context/ChapterContext";
 import { readStyleEnum } from "@/utils/types";
 
@@ -21,7 +21,7 @@ const ImageReaderItem: FC<Props> = ({ imgSrc, index, onClick = () => {} }) => {
     <>
       {!loadedImg && (
         <div className="h-[800px] flex items-center justify-center">
-          <ChapterSpinner />
+          <LoadingSpinner />
         </div>
       )}
       <img

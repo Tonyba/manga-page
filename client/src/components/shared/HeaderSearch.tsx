@@ -1,13 +1,11 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import UseAnimations from "react-useanimations";
 import second from "react-useanimations/lib/searchToX";
 import SearchBox from "./SearchBox";
 import { ChapterItemType, ContentType } from "@/utils/types";
 import { searchByTitle } from "@/utils/axios/filters";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import Popup from "./Popup";
-import Input from "../forms/Input";
-import SlideFromLeft from "./SlideFromLeft";
+
 import SearchMobile from "./SearchMobile";
 
 type Props = {
@@ -26,13 +24,14 @@ const HeaderSearch: FC<Props> = ({
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [original, setOriginal] = useState(data);
-  const [isMobile, isT] = useIsMobile();
+  const [isMobile] = useIsMobile();
+  const [isLoading, setLoading] = useState(true);
 
   const fetchData = async () => {
     await searchByTitle(search)
       .then((res) => res.data)
       .then((res) => {
-        // setLoading(false);
+        setLoading(false);
         onChange(res.result);
       })
       .catch((err) => console.log(err));
@@ -59,6 +58,8 @@ const HeaderSearch: FC<Props> = ({
     } else {
       if (!search) onChange([]);
       if (search.length < 2) return;
+      onChange([]);
+      setLoading(true);
       let searchTimer = setTimeout(() => {
         fetchData();
       }, 1000);
@@ -66,7 +67,6 @@ const HeaderSearch: FC<Props> = ({
       return () => {
         clearTimeout(searchTimer);
       };
-      // fechData();
     }
   }, [search]);
 
@@ -131,9 +131,10 @@ const HeaderSearch: FC<Props> = ({
           open={open}
           search={search}
           setSearch={setSearch}
+          isLoading={isLoading}
         />
       ) : (
-        <SearchBox data={data} type={type} />
+        search && <SearchBox data={data} type={type} isLoading={isLoading} />
       )}
     </div>
   );

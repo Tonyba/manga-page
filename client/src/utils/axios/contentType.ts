@@ -5,13 +5,14 @@ import {
   ContentType,
   CreateChapterParams,
 } from "../types";
+import { axiosInstance } from "./axiosGlobal";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const getMangas = () => axios.get<ContentType[]>(`${API_URL}/manga`);
+export const getMangas = () => axiosInstance.get<ContentType[]>("/manga");
 
 export const getManga = (id: string) =>
-  axios.get<ContentResponseType>(`${API_URL}/manga/${id}`);
+  axiosInstance.get<ContentResponseType>(`/manga/${id}`);
 
 export const addChapter = (params: CreateChapterParams) =>
   axios({
@@ -24,7 +25,7 @@ export const addChapter = (params: CreateChapterParams) =>
   });
 
 export const getChapterImages = (title: string, episode: string) =>
-  axios.get(`${API_URL}/episode/images?title=${title}&episode=${episode}`);
+  axiosInstance.get(`/episode/images?title=${title}&episode=${episode}`);
 
 export const addContent = (content: AddContentParams) =>
   axios({

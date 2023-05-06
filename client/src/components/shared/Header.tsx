@@ -4,6 +4,7 @@ import HeaderSearch from "./HeaderSearch";
 import Logo from "./Logo";
 import { FaDiscord } from "react-icons/fa";
 import { ContentType } from "@/utils/types";
+import HeaderUser from "./HeaderUser";
 
 const Header = () => {
   const [data, setData] = useState<ContentType[]>([]);
@@ -32,6 +33,8 @@ const Header = () => {
           }}
           data={data}
         />
+
+        <HeaderUser />
 
         <div className="bg-primary-dark-hover p-3 rounded-full cursor-pointer">
           <FaDiscord size={21} color="white" />

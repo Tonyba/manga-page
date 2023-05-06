@@ -45,11 +45,11 @@ const CarouselSwiper: FC<Props> = ({ content }) => {
       <div className="splide__arrows">
         <button
           className=" splide__arrow--prev bg-primary bg-hover  
-        absolute top-1/2 -translate-y-1/2 rounded-full p-2  text-center flex justify-center items-center !-left-4"
+        absolute top-1/3 md:top-1/2 md:-translate-y-1/2 rounded-full p-2  text-center flex justify-center items-center !-left-4"
         >
           <FaChevronRight />
         </button>
-        <button className="bg-primary bg-hover  absolute top-1/2 -translate-y-1/2 rounded-full p-2 !-right-4  text-center flex justify-center items-center splide__arrow--next">
+        <button className="bg-primary bg-hover absolute top-1/3 md:top-1/2 md:-translate-y-1/2 rounded-full p-2 !-right-4  text-center flex justify-center items-center splide__arrow--next">
           <FaChevronRight />
         </button>
       </div>

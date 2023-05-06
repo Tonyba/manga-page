@@ -3,7 +3,6 @@ import React, { FC, PropsWithChildren } from "react";
 type Props = {
   className?: string;
   isOpen: boolean;
-  isAbsolute?: boolean;
   onModalClose: () => void;
 };
 
@@ -12,7 +11,6 @@ const Popup: FC<PropsWithChildren & Props> = ({
   className,
   isOpen = false,
   onModalClose,
-  isAbsolute = false,
 }) => {
   const handleOnModalClose = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement;

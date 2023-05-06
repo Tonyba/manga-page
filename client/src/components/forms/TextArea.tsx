@@ -22,12 +22,14 @@ const TextArea: FC<Props> = ({
 }) => {
   return (
     <div>
-      <label htmlFor={name}>{label}</label>
+      <label className="mb-3 block" htmlFor={name}>
+        {label}
+      </label>
       <textarea
         placeholder={placeholder}
         value={value}
         rows={5}
-        className="bg-primary w-full rounded-md text-sm outline-none p-3"
+        className="bg-primary w-full rounded-md text-md outline-none p-3"
         onChange={(e) => onChange(e.target.value)}
       ></textarea>
       {errMsg && <ValidationError errorMessage={errMsg} />}
