@@ -1,7 +1,12 @@
 import { StylesConfig } from "react-select/dist/declarations/src/styles";
 import { ContentType } from "./types";
-
-export const fileTypes = ["JPG", "PNG", "GIF", "WEBP", "AVIF", "JPEG"];
+export const fileTypes = {
+  "image/png": [".png"],
+  "image/jpge": [".jpeg", ".jpg"],
+  "image/webp": [".wepb"],
+  "image/gif": [".gif"],
+  "image/avif": [".avif"],
+};
 
 export const selectStyles: StylesConfig = {
   control: (styles, { isFocused }) => ({
@@ -64,4 +69,27 @@ export const findFavorite = (
   if (favorite) return true;
 
   return false;
+};
+
+export const initFilterState = {
+  type: "Manga",
+  demography: "",
+  status: "",
+  genres: [],
+  limit: 12,
+  page: 1,
+};
+
+export const toSlug = (str: string) => {
+  return str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[\W_]+/g, "-")
+    .toLowerCase()
+    .replace(/^-+|-+$/g, "");
+};
+
+export const getChapterNumber = (txt: string) => {
+  const newTxt = txt.split("-")[1];
+  return parseInt(newTxt);
 };

@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-import { Sequelize } from "sequelize";
+
 export const createManga = async (req, res) => {
   const { title, description, type, demography } = req.body;
   const genres = req.body["genres[]"];
@@ -84,13 +84,14 @@ export const getMangaById = async (req, res) => {
 
     if (!manga)
       res.status(500).json({
-        message: "Nose encontro ningun manga por el id: " + id,
+        message: "No se encontro ningun manga por el id: " + id,
       });
 
     const numEpisodes = parseInt(manga.Episodes.length);
 
     res.status(200).json({ manga, numEpisodes });
   } catch (err) {
+    console.log(err);
     res.status(500).json({
       message: "Error al obtener la informacion del manga",
     });

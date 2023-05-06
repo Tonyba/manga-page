@@ -1,27 +1,33 @@
 import ChapterComments from "@/components/chapter/ChapterComments";
 import ChapterNavigation from "@/components/chapter/ChapterNavigation";
 import ChapterOptions from "@/components/chapter/ChapterOptions";
-import ChapterSpinner from "@/components/chapter/ChapterSpinner";
 import ChapterUpButton from "@/components/chapter/ChapterUpButton";
+import ImagesReader from "@/components/content/ImageReader";
+import { getChapterImages } from "@/utils/axios/contentType";
+import { getManga } from "@/utils/axios/contentType";
 import { ChapterContext } from "@/utils/context/ChapterContext";
-import { readStyleEnum } from "@/utils/types";
+import { getChapterNumber } from "@/utils/helpers";
+import { ChapterPageParamsType, readStyleEnum } from "@/utils/types";
 import { motion, useScroll } from "framer-motion";
+import { GetStaticPaths, GetStaticProps, GetStaticPropsResult } from "next";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { FC, useContext, useEffect, useState } from "react";
+import Router, { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 
-const ChapterContent = () => {
+const ChapterContent = ({
+  content,
+  currentChapterImgs,
+}: ChapterPageParamsType) => {
   const router = useRouter();
   const { id, chapter } = router.query;
   const [images, setImages] = useState<string[]>([]);
   const [readingStyle, setReadingStyle] = useState<readStyleEnum>(
     readStyleEnum.page
   );
-  const [loading, setLoading] = useState(true);
   const [currentImage, setCurrentImage] = useState<number>(0);
-  const [currentChapter, setCurrentChapter] = useState<number>(
-    parseInt(chapter as string)
+  const [currentChapter, setCurrentChapter] = useState<string>(
+    chapter as string
   );
 
   const handlers = useSwipeable({
@@ -43,32 +49,28 @@ const ChapterContent = () => {
     }
   };
 
-  const handleClickOnImage = (e: React.MouseEvent<HTMLImageElement>) => {
+  const handleClickOnImage = () => {
     if (readingStyle !== readStyleEnum.page) return;
 
     handleChangeImage(currentImage + 1);
   };
 
-  const totalChapters = 10;
   const { scrollYProgress } = useScroll();
 
   useEffect(() => {
-    setLoading(true);
     setCurrentImage(0);
-    const img = [];
-    for (let index = 0; index < 10; index++) {
-      img.push("https://picsum.photos/1000/1000");
-    }
-    setImages(img);
-    setLoading(false);
+
+    setImages(currentChapterImgs);
   }, [chapter, currentChapter]);
 
   return (
     <ChapterContext.Provider
       value={{
-        totalChapters,
-        contentTitle: "Guardian Tirano",
-        currentChapter: parseInt(chapter as string),
+        chapters: content.manga.Episodes,
+        contentTitle: content.manga.title,
+        currentChapter: content.manga.Episodes.find(
+          (v) => v.capNumber === getChapterNumber(chapter as string)
+        ),
         images,
         setCurrentChapter,
         setCurrentImage,
@@ -94,9 +96,9 @@ const ChapterContent = () => {
             className="text-important-hover uppercase"
             href={`/content/${id}`}
           >
-            EL GUARDIÁN DEL TIRANO ES UNA BRUJA MALVADA
+            {content.manga.title}
           </Link>
-          - Capitulo {chapter}
+          - Capitulo {getChapterNumber(chapter as string)}
         </h1>
 
         <ChapterNavigation />
@@ -107,11 +109,7 @@ const ChapterContent = () => {
         )}
 
         <section className="my-10" {...handlers}>
-          {loading ? (
-            <ChapterSpinner />
-          ) : (
-            <ImagesReader onImageClick={handleClickOnImage} />
-          )}
+          <ImagesReader onImageClick={handleClickOnImage} />
         </section>
 
         <ChapterNavigation />
@@ -124,36 +122,35 @@ const ChapterContent = () => {
   );
 };
 
-type Props = {
-  onImageClick: (e: any) => void;
+export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
+  return {
+    paths: [], //indicates that no page needs be created at build time
+    fallback: "blocking", //indicates the type of fallback
+  };
 };
 
-const ImagesReader: FC<Props> = ({ onImageClick }) => {
-  const { readingStyle, images, currentImage } = useContext(ChapterContext);
-  return (
-    <div className="min-h-max">
-      {readingStyle === readStyleEnum.cascade ? (
-        images.map((img, index) => (
-          <p key={index} style={{ all: "unset" }}>
-            <img
-              key={index}
-              src={img}
-              className="mx-auto"
-              alt=""
-              loading="lazy"
-            />
-          </p>
-        ))
-      ) : (
-        <img
-          onClick={onImageClick}
-          src={images[currentImage]}
-          className="mx-auto cursor-pointer"
-          alt={currentImage.toString()}
-        />
-      )}
-    </div>
+export const getStaticProps: GetStaticProps = async (
+  ctx
+): Promise<GetStaticPropsResult<ChapterPageParamsType>> => {
+  const { id, chapter } = ctx.params as { id: string; chapter: string };
+
+  if (!id || !chapter) Router.reload();
+
+  const resp = await getManga(id as string);
+  const contentResp = resp.data;
+
+  const chapters = await getChapterImages(
+    contentResp.manga.title,
+    chapter as string
   );
+  const chapterResp = chapters.data;
+
+  return {
+    props: {
+      content: contentResp,
+      currentChapterImgs: chapterResp,
+    },
+  };
 };
 
 export default ChapterContent;

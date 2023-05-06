@@ -28,11 +28,11 @@ export const filtersGeneral = async (req, res) => {
     }
 
     if (queries.limit) {
-      limit = queries.limit;
+      limit = parseInt(queries.limit);
     }
 
     if (queries.page) {
-      page = queries.page;
+      page = parseInt(queries.page);
     }
 
     if (queries.type) {
@@ -65,7 +65,7 @@ export const filtersGeneral = async (req, res) => {
 
 export const filterTitle = async (req, res) => {
   const { title } = req.query;
-  const manga = await Mangas.findAll({
+  const manga = await Mangas.findAndCountAll({
     where: {
       title: {
         [Op.iLike]: `%${title}%`,
@@ -73,7 +73,10 @@ export const filterTitle = async (req, res) => {
     },
   });
 
-  res.json(manga);
+  const result = manga.rows;
+  const count = manga.count;
+
+  res.json({ result, count });
 };
 
 export const pagination = async (req, res) => {

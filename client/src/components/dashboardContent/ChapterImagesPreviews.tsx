@@ -1,64 +1,65 @@
-import React, { FC, useContext, useEffect, useRef, useState } from "react";
-import DashboardChapterImageItem, {
-  DragDropItemType,
-} from "./DashboardChapterImageItem";
+import React, { useContext, useEffect, useState } from "react";
+import DashboardChapterImageItem from "./DashboardChapterImageItem";
 import { AddChapterContext } from "@/utils/context/AddChapterContext";
-import ChapterImagePreviewWrapper from "./ChapterImagePreviewWrapper";
+import { motion } from "framer-motion";
+import { DragImageItemType } from "@/utils/types";
 
 const ChapterImagesPreviews = () => {
-  const { previews, setFiles, files, setImages } =
-    useContext(AddChapterContext);
-  const [targetId, setartgetId] = useState<number>();
-  const [source, setSource] = useState<number>();
+  const { fileItems, setFileItems } = useContext(AddChapterContext);
+  const [sourceItem, setSource] = useState<DragImageItemType>();
+  const [targetItem, setTarget] = useState<DragImageItemType>();
 
-  const getContainerId = (id: number) => {
-    setSource(id);
+  const getContainerId = (index: DragImageItemType) => {
+    setSource(index);
   };
 
   useEffect(() => {
-    if (source != undefined && targetId != undefined) {
-      swapItems(source, targetId);
+    if (sourceItem != undefined && targetItem != undefined) {
+      swapItems(sourceItem, targetItem);
     }
-  }, [targetId, source]);
+  }, [targetItem?.id, sourceItem?.id]);
 
-  const onItemDrag = (item: DragDropItemType) => {
-    setartgetId(item.index);
+  const swapItems = (
+    sourceItemParam: DragImageItemType,
+    targetItemParam: DragImageItemType
+  ) => {
+    if (sourceItemParam.id == targetItemParam.id) return;
+    let newOrder = [...fileItems];
+
+    const sourceIndex = newOrder.findIndex((i) => i.id === sourceItemParam.id);
+    const targetIndex = newOrder.findIndex((i) => i.id === targetItemParam.id);
+
+    [newOrder[targetIndex], newOrder[sourceIndex]] = [
+      newOrder[sourceIndex],
+      newOrder[targetIndex],
+    ];
+
+    newOrder = newOrder.map((item, i) => ({
+      ...item,
+      imgSrc: URL.createObjectURL(item.file),
+      pag: i,
+    }));
+
+    setFileItems(newOrder);
+    setSource(undefined);
+    setTarget(undefined);
   };
 
-  const swapItems = (from: number, to: number) => {
-    let newOrder = [...files];
-
-    [newOrder[from], newOrder[to]] = [newOrder[to], newOrder[from]];
-
-    // let temp = newOrder[from];
-    // newOrder[from] = newOrder[to];
-    // newOrder[to] = temp;
-    const imagesArray = newOrder.map((f) => {
-      return URL.createObjectURL(f);
-    });
-
-    console.log(newOrder);
-
-    setFiles(files);
-    setImages(imagesArray);
+  const onItemDrag = (item: DragImageItemType) => {
+    setTarget(item);
   };
 
   return (
-    <div className="grid grid-cols-6 gap-10 mt-10">
-      {previews.map((cont, i) => (
-        <ChapterImagePreviewWrapper
-          key={i}
-          id={i}
+    <motion.div layout className="mt-5 grid grid-cols-6 gap-5">
+      {fileItems.map((cont, i) => (
+        <DashboardChapterImageItem
+          key={cont.id}
+          item={cont}
           getContainerId={getContainerId}
-        >
-          <DashboardChapterImageItem
-            key={i}
-            dragItem={{ imgSrc: cont, index: i }}
-            onItemDrag={onItemDrag}
-          />
-        </ChapterImagePreviewWrapper>
+          onItemDrag={onItemDrag}
+        />
       ))}
-    </div>
+    </motion.div>
   );
 };
 

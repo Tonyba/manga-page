@@ -1,8 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { DashboardListItem } from "./DashboardListItem";
 import Link from "next/link";
+import { ContentType } from "@/utils/types";
+import { getMangas } from "@/utils/axios/contentType";
 
 const ContentList = () => {
+  const [content, setContent] = useState<ContentType[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getMangas();
+      const data = res.data;
+
+      setContent(data);
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <div className="flex items-center gap-3 mb-5">
@@ -32,8 +47,8 @@ const ContentList = () => {
             </tr>
           </thead>
           <tbody className="divide-y divider-primary ">
-            <DashboardListItem />
-            <DashboardListItem />
+            {content.map((c) => <DashboardListItem {...c} />)}
+  
           </tbody>
         </table>
       </div>

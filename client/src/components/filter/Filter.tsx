@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 
 import { FaSortNumericDown } from "react-icons/fa";
 import HeaderSearch from "../shared/HeaderSearch";
@@ -6,13 +6,22 @@ import HeaderSearch from "../shared/HeaderSearch";
 type filterProps = {
   order?: "asc" | "desc";
   search?: string;
+  data: any[];
+  type?: "chapters" | "mangas";
+  onChange?: (data: any[]) => void;
 };
 
-const Filter = () => {
+const Filter: FC<filterProps> = ({ type, data, onChange = () => {} }) => {
   const [filter, setFilters] = useState<filterProps>({
     order: "desc",
     search: "",
+    data: [],
+    type,
   });
+
+  useEffect(() => {
+    onChange(filter.data);
+  }, [Object.values(filter)]);
 
   return (
     <div className="flex items-center justify-between">
@@ -30,7 +39,12 @@ const Filter = () => {
         </select>
       </div>
 
-      <HeaderSearch placeholder="Busca un capitulo..." />
+      <HeaderSearch
+        placeholder="Busca un capitulo..."
+        onChange={(src) => setFilters({ ...filter, data: src })}
+        type={type}
+        data={data}
+      />
     </div>
   );
 };

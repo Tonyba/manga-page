@@ -13,6 +13,7 @@ export type ContentType = {
   genres: string[];
   status: string;
   Episodes: ChapterItemType[];
+  banner: string;
 };
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -28,6 +29,22 @@ export type FiltersType = {
   demography: string;
   status: string;
   genres: string[];
+  limit: number;
+  page: number;
+};
+
+export type DragImageItemType = {
+  id: string;
+  file: File;
+  imgSrc: string;
+  pag: number;
+};
+
+export type CreateChapterParams = {
+  episode: string;
+  mangaId: number;
+  capNumber: number;
+  images: File[];
 };
 
 export type TabItemType = {
@@ -57,6 +74,18 @@ export type ContentValidationType = Partial<{
   image: File | string;
 }>;
 
+export type ChapterValidationType = Partial<{
+  episode: string;
+  mangaId: string;
+  capNumber: string;
+  images: string;
+}>;
+
+export type FiltersResponseType = {
+  result: ContentType[];
+  count: number;
+};
+
 export type ContentResponseType = {
   manga: ContentType;
   numEpisodes: number;
@@ -64,9 +93,11 @@ export type ContentResponseType = {
 
 export type ChapterItemType = {
   image: string;
-  text: string;
-  chapter: string;
-  contentId: number;
+  title: string;
+  id: number;
+  path: string;
+  capNumber: number;
+  mangaId: number;
 };
 
 export enum readStyleEnum {
@@ -77,4 +108,9 @@ export enum readStyleEnum {
 export type OptionType = {
   value: string;
   label: string;
+};
+
+export type ChapterPageParamsType = {
+  content: ContentResponseType;
+  currentChapterImgs: string[];
 };

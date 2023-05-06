@@ -1,36 +1,48 @@
 import ExploradorSidebar from "@/components/sidebars/ExploradorSidebar";
 import { ExploradorContext } from "@/utils/context/ExploradorContext";
-import { ContentType } from "@/utils/types";
+import { ContentType, FiltersType } from "@/utils/types";
 import React, { useEffect, useState } from "react";
-import { faker } from "@faker-js/faker";
 import CardLoop from "@/components/cardLoop/cardLoop";
 import Pagination from "@/components/pagination/Pagination";
 import ExploradorSearch from "@/components/Explorador/ExploradorSearch";
+import { filterExp } from "@/utils/axios/filters";
+import { initFilterState } from "@/utils/helpers";
 
 const Explorador = () => {
   const [content, setContent] = useState<ContentType[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [count, setCount] = useState(0);
+  const [filters, setFilters] = useState<FiltersType>(initFilterState);
+
+  const handlePageChange = (selected: number) => {
+    let page = selected + 1;
+    setFilters({ ...filters, page });
+  };
+
+  const fetchData = async () => {
+    setLoading(false);
+    const res = await filterExp(filters);
+    setCount(res.data.count);
+    setContent(res.data.result);
+    setLoading(true);
+  };
 
   useEffect(() => {
-    const items: ContentType[] = [];
-    for (let index = 0; index < 12; index++) {
-      items.push({
-        id: parseInt(faker.random.numeric()),
-        type: faker.random.word(),
-        title: faker.random.word(),
-        description: faker.lorem.words(20),
-        demography: faker.datatype.string(),
-        image: "https://picsum.photos/225/300",
-        genres: [],
-        status: faker.word.noun(),
-        Episodes: [],
-      });
-    }
-
-    setContent(items);
-  }, []);
+    fetchData();
+  }, [filters.page]);
 
   return (
-    <ExploradorContext.Provider value={{ content, setContent }}>
+    <ExploradorContext.Provider
+      value={{
+        content,
+        setContent,
+        loading,
+        filters,
+        setFilters,
+        setCount,
+        setLoading,
+      }}
+    >
       <main className="max-w-7xl mx-auto px-5 xl:px-0 mt-5">
         <section className="w-full">
           <ExploradorSearch />
@@ -43,7 +55,12 @@ const Explorador = () => {
             <CardLoop items={content} fourCols={true} />
 
             <div className="flex justify-center">
-              <Pagination />
+              <Pagination
+                totalItems={count}
+                itemsPerPage={filters.limit}
+                onPageChange={handlePageChange}
+                pageCount={Math.ceil(count / filters.limit)}
+              />
             </div>
           </div>
         </section>

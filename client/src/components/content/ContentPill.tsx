@@ -14,7 +14,7 @@ const ContentPill: FC<Props> = ({
   className,
 }) => {
   const absolute = `${isAbsolute ? "left-3 top-3 absolute z-10" : "block"}`;
-  const isFull = full && "w-full";
+  const isFull = full ? "w-full" : "w-max";
   let contentTypeColor;
 
   switch (contentType.toLowerCase()) {
@@ -22,7 +22,7 @@ const ContentPill: FC<Props> = ({
       contentTypeColor = "bg-manhua";
       break;
 
-    case "manwha":
+    case "manhwa":
       contentTypeColor = "bg-manwha";
       break;
 
@@ -44,12 +44,12 @@ const ContentPill: FC<Props> = ({
         rounded-[5px]
        ${contentTypeColor}
         p-[3px]
+        px-2
         ${isFull}
-        bg-red-500
         ${absolute}
     `}
     >
-      MANGA
+      {contentType}
     </span>
   );
 };

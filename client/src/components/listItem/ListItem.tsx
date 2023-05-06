@@ -9,7 +9,7 @@ const ListItem: FC<ContentType> = ({ title, image, id }) => {
       <div className="w-1/4">
         <Link href={`/content/${id}`}>
           <Image
-            src={"https://picsum.photos/60/80"}
+            src={image as string}
             width={60}
             height={80}
             alt={title}

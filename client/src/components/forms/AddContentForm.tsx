@@ -12,6 +12,7 @@ import {
 } from "@/utils/types";
 import { genres } from "@/utils/valoresParaSelect";
 import DragAndDrop from "./DragAndDrop";
+import SubmitButton from "./SubmitButton";
 
 type Props = {
   data: AddContentParams;
@@ -107,15 +108,7 @@ const AddContentForm: FC<Props> = ({
           />
         </div>
 
-        <button
-          className="w-max p-2 button-primary rounded-xl 
-          font-semibold mt-3 flex gap-3 items-center disabled:cursor-not-allowed"
-          type="submit"
-          disabled={loading}
-        >
-          Crear
-          {loading && <MoonLoader color="white" size={18} />}
-        </button>
+        <SubmitButton text="crear" loading={loading} />
       </div>
 
       <div className="w-1/4 px-7">

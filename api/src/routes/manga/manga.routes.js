@@ -3,7 +3,7 @@ import {
   createManga,
   getMangas,
   getMangaById,
-} from "../../controllers/manga/manga.controllers.js";
+} from "../../controllers/Manga/manga.controllers.js";
 
 const router = Router();
 

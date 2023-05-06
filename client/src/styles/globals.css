@@ -64,6 +64,10 @@ html {
   @apply bg-slate-800;
 }
 
+.bg-primary-dark-opacity {
+  @apply bg-slate-800 bg-opacity-50;
+}
+
 .bg-accent,
 .bg-primary-dark-hover:hover {
   @apply bg-slate-700;

@@ -2,7 +2,7 @@ import { ExploradorContext } from "@/utils/context/ExploradorContext";
 import { selectStyles } from "@/utils/helpers";
 import { FiltersType } from "@/utils/types";
 import { demography, genres, status, types } from "@/utils/valoresParaSelect";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { default as ReactSelect } from "react-select";
 import makeAnimated from "react-select/animated";
 import Accordion from "../accordion/Accordion";
@@ -11,45 +11,49 @@ import { filterExp } from "@/utils/axios/filters";
 const animatedComponents = makeAnimated();
 
 const ExploradorSidebar = () => {
-  const { setContent } = useContext(ExploradorContext);
+  const { setContent, loading, setLoading, setCount, filters, setFilters } =
+    useContext(ExploradorContext);
 
-  const [filters, setFilters] = useState<FiltersType>({
-    type: "Manga",
-    demography: "",
-    status: "",
-    genres: [],
-  });
+  const isMounted = useRef(false);
+
+  const filtersTyped = { ...filters } as FiltersType;
 
   const handlePushGenres = (e: string) => {
-    if (filters?.genres.find((element) => element === e)) {
+    if (filtersTyped?.genres.find((element) => element === e)) {
       setFilters({
-        ...filters,
-        genres: filters?.genres?.filter((item) => item !== e),
+        ...filtersTyped,
+        genres: filtersTyped?.genres?.filter((item) => item !== e),
       });
     } else {
       setFilters({
-        ...filters,
-        genres: [...filters.genres, e],
+        ...filtersTyped,
+        genres: [...filtersTyped.genres, e],
       });
     }
   };
 
   useEffect(() => {
-    const fetchItems = async () => {
-      //if (!loading) setLoading(true);
-      // setLoading(true);
-      const items = await filterExp(filters);
+    // para que no se ejecute el useEffect al momento de
+    if (isMounted.current) {
+      const fetchItems = async () => {
+        setLoading(true);
+        const items = await filterExp(filtersTyped);
 
-      console.log(items?.data?.result);
-    };
+        setCount(items.data.count);
+        setContent(items.data.result);
+        setLoading(false);
+      };
 
-    fetchItems();
-  }, [filters.type, filters.demography, filters.status, filters.genres]);
+      fetchItems();
+    } else {
+      isMounted.current = true;
+    }
+  }, [filters]);
 
   console.log(filters);
 
   return (
-    <div className="bg-primary-dark rounded-md p-5 flex flex-col gap-5">
+    <div className="bg-primary-dark rounded-md p-5 flex flex-col gap-5 sticky top-5">
       <div>
         <span className="text-important font-semibold text-xl block mb-3 ">
           Tipo
@@ -61,7 +65,7 @@ const ExploradorSidebar = () => {
           defaultValue={types[0]}
           styles={selectStyles}
           onChange={(value: any) =>
-            setFilters({ ...filters, type: value.label })
+            setFilters({ ...filtersTyped, type: value.label })
           }
         />
       </div>
@@ -78,7 +82,7 @@ const ExploradorSidebar = () => {
           defaultValue={demography[0]}
           styles={selectStyles}
           onChange={(value: any) =>
-            setFilters({ ...filters, demography: value.label })
+            setFilters({ ...filtersTyped, demography: value.label })
           }
         />
       </div>
@@ -95,7 +99,7 @@ const ExploradorSidebar = () => {
           defaultValue={status[0]}
           styles={selectStyles}
           onChange={(value: any) =>
-            setFilters({ ...filters, status: value.label })
+            setFilters({ ...filtersTyped, status: value.label })
           }
         />
       </div>

@@ -4,51 +4,71 @@ import Tabs from "../Tabs/Tabs";
 import { ContentType, TabItemType } from "@/utils/types";
 import { faker } from "@faker-js/faker";
 import CardLoop from "../cardLoop/cardLoop";
+import { filterExp } from "@/utils/axios/filters";
+import { initFilterState } from "@/utils/helpers";
 
 export const HomeSidebar = () => {
   const [tabs, setTabs] = useState<TabItemType[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const example: TabItemType[] = [];
+  const fetchTabsData = async () => {
+    const mangasRes = await filterExp({
+      ...initFilterState,
+      type: "Manga",
+      limit: 6,
+      page: 1,
+    });
+    const manwhaRes = await filterExp({
+      ...initFilterState,
+      type: "Manhwa",
+      limit: 6,
+      page: 1,
+    });
+    const manhuaRes = await filterExp({
+      ...initFilterState,
+      type: "Manhua",
+      limit: 6,
+      page: 1,
+    });
 
-    for (let index = 0; index < 3; index++) {
-      const items: ContentType[] = [];
+    const mangas = mangasRes.data.result;
+    const manwhas = manwhaRes.data.result;
+    const manhuas = manhuaRes.data.result;
 
-      for (let j = 0; j < 5; j++) {
-        items.push({
-          id: parseInt(faker.random.numeric()),
-          type: faker.random.word(),
-          title: faker.random.words(20),
-          description: faker.lorem.words(20),
-          demography: faker.datatype.string(),
-          image: faker.image,
-          Episodes: [],
-          genres: [],
-          status: faker.random.word(),
-        });
-      }
+    const contentTabs: TabItemType[] = [
+      {
+        label: "Manga",
+        content: <CardLoop items={mangas} itemType="list" oneCol={true} />,
+      },
+      {
+        label: "Manhwa",
+        content: <CardLoop items={manwhas} itemType="list" oneCol={true} />,
+      },
+      {
+        label: "Manhua",
+        content: <CardLoop items={manhuas} itemType="list" oneCol={true} />,
+      },
+    ];
 
-      example.push({
-        content: <CardLoop items={items} itemType="list" oneCol={true} />,
-        label: faker.lorem.words(1),
-      });
-    }
-
-    console.log(example);
-    setTabs(example);
+    setTabs(contentTabs);
     setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchTabsData();
   }, []);
 
   return (
     <>
       <AdComponent />
 
-      <h3 className="my-5 text-2xl font-semibold text-center">
-        Recomendaciones
-      </h3>
+      <div className="sticky top-3">
+        <h3 className="my-5 text-2xl font-semibold text-center">
+          Recomendaciones
+        </h3>
 
-      <Tabs tabs={tabs} loading={loading} />
+        <Tabs tabs={tabs} loading={loading} />
+      </div>
     </>
   );
 };

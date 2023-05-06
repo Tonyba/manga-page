@@ -24,11 +24,19 @@ const CardItem: FC<Props> = ({ content, showHover = true, action = "add" }) => {
       layout
       className="mb-5 text-center relative group"
     >
-      <Link className="text-center mb-3" href={`/content/${id}`}>
+      <Link
+        className="text-center mb-3"
+        href={`/content/${id}`}
+        // href={{
+        //   pathname: "/content/[id]",
+        //   query: { mangaId: 22 },
+        // }}
+        // as={`/content/${22}`}
+      >
         <div className="relative overflow-hidden  rounded-lg ">
-          <ContentPill contentType={"MANGA"} />
+          <ContentPill contentType={type} />
           <Image
-            src={"https://picsum.photos/250/300"}
+            src={image as string}
             className="object-cover rounded-lg  
           w-full
           cursor-pointer hover:scale-110
@@ -54,12 +62,14 @@ const CardItem: FC<Props> = ({ content, showHover = true, action = "add" }) => {
         w-full justify-center font-medium
         bg-[#00000080]"
           >
-            <p className="text-lg">slide</p>
+            <p className="text-lg">{demography}</p>
           </div>
         </div>
       </Link>
       <Link href={`/content/${id}`}>
-        <h3 className="text-xl font-medium line-clamp-2 mt-1">{title}</h3>
+        <h3 className="text-xl font-medium line-clamp-2 mt-1 break-words">
+          {title}
+        </h3>
       </Link>
 
       {showHover && (

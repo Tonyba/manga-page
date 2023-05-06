@@ -73,7 +73,7 @@ const CarouselItem: FC<Props> = ({
       >
         <Link
           href={`/content/${id}`}
-          className="text-lg w-full line-clamp-1 text-center"
+          className="text-lg w-full line-clamp-1 text-center text-ellipsis"
         >
           {title}
         </Link>

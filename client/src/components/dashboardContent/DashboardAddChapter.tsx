@@ -5,9 +5,8 @@ import React, { useEffect, useState } from "react";
 import DashboardTitle from "./DashboardTitle";
 import DashboardAddChapterSide from "../sidebars/DashboardAddChapterSide";
 import ContentChapters from "@/components/content/ContentChapters";
-import { FaPlus, FaTimes } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import DashboardAddChapterModal from "./DashboardAddChapterModal";
-import { motion } from "framer-motion";
 
 const DashboardAddChapter = () => {
   const router = useRouter();
@@ -15,13 +14,16 @@ const DashboardAddChapter = () => {
   const { contentId } = router.query;
   const [modalOpen, setModalOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const resp = await getManga(contentId as string);
-      const contentResp = resp.data;
-      setContent(contentResp);
-    };
+  const fetchData = async () => {
+    if (!contentId) return;
 
+    const resp = await getManga(contentId as string);
+    const contentResp = resp.data;
+
+    setContent(contentResp);
+  };
+
+  useEffect(() => {
     fetchData();
   }, [contentId]);
 
@@ -38,25 +40,10 @@ const DashboardAddChapter = () => {
             Agregar Capitulo
           </button>
 
-          <div className="grid grid-cols-4">
-            <ContentChapters
-              text="Capitulo 1"
-              image="https://picsum.photos/225/300"
-              chapter="1"
-              contentId={parseInt(contentId as string | "22")}
-            />
-            <ContentChapters
-              text="Capitulo 1"
-              image="https://picsum.photos/225/300"
-              chapter="1"
-              contentId={parseInt(contentId as string | "22")}
-            />
-            <ContentChapters
-              text="Capitulo 1"
-              image="https://picsum.photos/225/300"
-              chapter="1"
-              contentId={parseInt(contentId as string | "22")}
-            />
+          <div className="grid grid-cols-4 gap-y-4">
+            {content?.manga.Episodes.map((episode, i) => (
+              <ContentChapters key={i} {...episode} />
+            ))}
           </div>
 
           <DashboardAddChapterModal
@@ -64,7 +51,7 @@ const DashboardAddChapter = () => {
             onModalClose={() => setModalOpen(false)}
           />
         </div>
-        <aside className="w-1/4	 px-5">
+        <aside className="w-1/4	 px-5 sticky top-5">
           {content && <DashboardAddChapterSide content={content} />}
         </aside>
       </div>
