@@ -45,7 +45,7 @@ const DashboardAddChapterSide: FC<Props> = ({ content }) => {
         </div>
         <div className="flex flex-wrap items-center justify-between py-3">
           <span>Generos</span>
-          <div className="flex gap-3">
+          <div className="flex gap-3 flex-wrap">
             {content?.manga.genres.map((g, index) => (
               <GenreItem key={index} genre={g} />
             ))}

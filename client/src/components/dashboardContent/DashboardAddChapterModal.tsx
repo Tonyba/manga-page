@@ -40,7 +40,7 @@ const DashboardAddChapterModal: FC<Props> = ({
     e.preventDefault();
     setSubmitting(true);
     setErrors(validateChapter(chapter));
-    router.reload();
+    //router.reload();
   };
 
   useEffect(() => {
