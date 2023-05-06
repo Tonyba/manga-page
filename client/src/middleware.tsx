@@ -4,6 +4,8 @@ import jwt_decode from "jwt-decode";
 export async function middleware(request: NextRequest) {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+  console.log(request.cookies);
+
   if (request.cookies.has("x-token")) {
     const token = request.cookies.get("x-token")?.value;
 
@@ -39,5 +41,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard", "/dasboard/:path*"],
+  matcher: ["/dashboard", "/dashboard/:path*"],
 };

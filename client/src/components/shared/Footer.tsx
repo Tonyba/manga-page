@@ -3,10 +3,13 @@ import React from "react";
 
 const Footer = () => {
   const router = useRouter();
+  const isDashboard = router.asPath.includes("dashboard");
 
-  if (router.asPath.includes("dashboard")) return;
-
-  return <footer className="text-white col-span-4 ">Footer</footer>;
+  return isDashboard ? (
+    <></>
+  ) : (
+    <footer className="text-white col-span-4 ">Footer</footer>
+  );
 };
 
 export default Footer;
