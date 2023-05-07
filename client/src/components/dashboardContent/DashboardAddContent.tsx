@@ -33,6 +33,7 @@ const DashboardAddContent = () => {
   const saveContent = () => {
     addContent(data).then((res) => {
       console.log(res);
+      setSubmitting(false);
       Swal.fire(`${data.type} creado`, "", "success");
     });
   };
@@ -45,7 +46,6 @@ const DashboardAddContent = () => {
       } else {
         saveContent();
       }
-      setSubmitting(false);
     }
   }, [JSON.stringify(errors), submitting]);
   return (

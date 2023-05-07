@@ -4,16 +4,26 @@ import HeaderSearch from "./HeaderSearch";
 import Logo from "./Logo";
 import { FaDiscord } from "react-icons/fa";
 import { ContentType } from "@/utils/types";
+import HeaderUser from "./HeaderUser";
+import { useRouter } from "next/router";
 
 const Header = () => {
   const [data, setData] = useState<ContentType[]>([]);
+
+  const router = useRouter();
 
   const onChange = (items: ContentType[]) => {
     setData(items);
   };
 
   return (
-    <header className="max-w-7xl w-full mx-auto col-span-4 flex py-5 justify-between align-middle h-24 px-5 xl:px-0">
+    <header
+      className={`${
+        router.asPath.includes("dashboard")
+          ? "ml-72 max-w-6xl 2xl:max-w-7xl"
+          : "mx-auto max-w-7xl"
+      } w-full col-span-4 flex py-5 justify-between align-middle h-24 px-5 2xl:px-0`}
+    >
       <div className="flex items-center gap-3">
         <Link href={"/"}>
           <Logo />
@@ -32,6 +42,8 @@ const Header = () => {
           }}
           data={data}
         />
+
+        <HeaderUser />
 
         <div className="bg-primary-dark-hover p-3 rounded-full cursor-pointer">
           <FaDiscord size={21} color="white" />

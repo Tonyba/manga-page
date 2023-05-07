@@ -47,7 +47,7 @@ const ContentList = () => {
             </tr>
           </thead>
           <tbody className="divide-y divider-primary ">
-            {content.map((c) => <DashboardListItem {...c} />)}
+            {content.map((c) => <DashboardListItem key={c.id} {...c} />)}
   
           </tbody>
         </table>

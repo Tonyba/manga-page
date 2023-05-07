@@ -105,9 +105,8 @@ const ExploradorSidebar = () => {
       </div>
 
       <div className="mt-2">
-        <Accordion
-          title="Generos"
-          content={genres.map((genre) => (
+        <Accordion title="Generos">
+          {genres.map((genre) => (
             <div key={genre.value} className="form-check">
               <input
                 className="accent-important"
@@ -116,7 +115,6 @@ const ExploradorSidebar = () => {
                 name="genre"
                 // cuando se marca se agrega el genero al array de generos si se desmarca se elimina
                 onChange={(e) => {
-                  console.log(e.target, "Este es el target");
                   if (e.target.value) {
                     handlePushGenres(e.target.value);
                   }
@@ -125,7 +123,7 @@ const ExploradorSidebar = () => {
               <label className="ms-2">{genre.label}</label>
             </div>
           ))}
-        />
+        </Accordion>
       </div>
     </div>
   );

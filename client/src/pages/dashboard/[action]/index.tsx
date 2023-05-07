@@ -2,6 +2,7 @@ import ContentList from "@/components/dashboardContent/ContentList";
 import Dashboard from "@/components/dashboardContent/Dashboard";
 import DashboardAddChapter from "@/components/dashboardContent/DashboardAddChapter";
 import DashboardAddContent from "@/components/dashboardContent/DashboardAddContent";
+import DashboardFavorites from "@/components/dashboardContent/DashboardFavorites";
 import Settings from "@/components/dashboardContent/Settings";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import { NextPageWithLayout } from "@/utils/types";
@@ -23,11 +24,15 @@ const DashboardAction: NextPageWithLayout = () => {
         setContent(<Settings />);
         break;
 
+      case "favorites":
+        setContent(<DashboardFavorites />);
+        break;
+
       case "add":
         setContent(<DashboardAddContent />);
         break;
 
-      case `add-chapter`:
+      case "add-chapter":
         setContent(<DashboardAddChapter />);
     }
   }, [action]);

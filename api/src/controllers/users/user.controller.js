@@ -151,7 +151,7 @@ export const getUser = async (req, res) => {
       return res.status(400).json({ error: "User not found" });
     }
 
-    const favorites = [mangas];
+    const favorites = [...mangas];
 
     res.status(200).json({ user: userFound, favorites });
   } catch (error) {

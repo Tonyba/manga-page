@@ -49,6 +49,7 @@ const DashboardAddChapter = () => {
           <DashboardAddChapterModal
             isOpen={modalOpen}
             onModalClose={() => setModalOpen(false)}
+            updateCaps={fetchData}
           />
         </div>
         <aside className="w-1/4	 px-5 sticky top-5">

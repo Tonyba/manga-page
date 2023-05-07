@@ -2,8 +2,8 @@ import React from "react";
 
 import BeatLoader from "react-spinners/BeatLoader";
 
-const ChapterSpinner = () => {
+const LoadingSpinner = () => {
   return <BeatLoader size={30} color="#0ea5e9" />;
 };
 
-export default ChapterSpinner;
+export default LoadingSpinner;

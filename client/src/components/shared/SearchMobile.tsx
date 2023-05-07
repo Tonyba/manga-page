@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import Popup from "./Popup";
 import SlideFromLeft from "./SlideFromLeft";
 import Input from "../forms/Input";
@@ -12,6 +12,7 @@ type Props = {
   search: string;
   setSearch: (val: string) => void;
   data: ContentType[] | ChapterItemType[];
+  isLoading?: boolean;
 };
 
 const SearchMobile: FC<Props> = ({
@@ -21,6 +22,7 @@ const SearchMobile: FC<Props> = ({
   search,
   setSearch,
   data,
+  isLoading,
 }) => {
   return type === "mangas" ? (
     <Popup
@@ -39,7 +41,9 @@ const SearchMobile: FC<Props> = ({
           onChange={(val) => setSearch(val)}
         />
         <div className="max-w-full">
-          <SearchBox data={data} type={type} />
+          {search && (
+            <SearchBox data={data} type={type} isLoading={isLoading} />
+          )}
         </div>
       </SlideFromLeft>
     </Popup>

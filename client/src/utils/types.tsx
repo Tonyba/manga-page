@@ -16,6 +16,33 @@ export type ContentType = {
   banner: string;
 };
 
+export type User = {
+  id: number;
+  email: string;
+  userName: string;
+  role: "Usuario" | "Admin";
+  paypal?: string;
+  avatar?: string;
+};
+
+export type GetUserResponseType = {
+  user: User;
+  favorites: ContentType[];
+};
+
+export type LoginResponseType = {
+  token: string;
+};
+
+export type LoginRegisterParams = {
+  email: string;
+  password: string;
+  confirmPassword?: string;
+  userName?: string;
+  avatar?: string;
+  paypal?: string;
+};
+
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -99,6 +126,13 @@ export type ChapterItemType = {
   capNumber: number;
   mangaId: number;
 };
+
+export type LoginRegisterValidation = Partial<{
+  userName: string;
+  password: string;
+  confirmPassword: string;
+  email: string;
+}>;
 
 export enum readStyleEnum {
   cascade = "Cascada",
