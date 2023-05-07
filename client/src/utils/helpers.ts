@@ -1,5 +1,5 @@
 import { StylesConfig } from "react-select/dist/declarations/src/styles";
-import { ContentType } from "./types";
+import { ContentType, OptionType } from "./types";
 export const fileTypes = {
   "image/png": [".png"],
   "image/jpge": [".jpeg", ".jpg"],
@@ -12,6 +12,15 @@ export const RemoveLastDirectoryPartOf = (the_url: string) => {
   var the_arr = the_url.split("/");
   the_arr.pop();
   return the_arr.join("/");
+};
+
+export const handlePush = (elems: OptionType[]): string[] => {
+  const values: string[] = [];
+  elems.forEach((elem) => {
+    values.push(elem.label);
+  });
+
+  return values;
 };
 
 export const selectStyles: StylesConfig = {
@@ -63,14 +72,8 @@ export const selectStyles: StylesConfig = {
   singleValue: (styles) => ({ ...styles, color: "white" }),
 };
 
-export const findFavorite = (
-  id: number,
-  contentType: string,
-  favorites: ContentType[]
-) => {
-  const favorite = favorites.find(
-    (favorite) => favorite.id === id && favorite.type === contentType
-  );
+export const findFavorite = (id: number, favorites: ContentType[]) => {
+  const favorite = favorites.find((favorite) => favorite.id === id);
 
   if (favorite) return true;
 
@@ -78,7 +81,7 @@ export const findFavorite = (
 };
 
 export const initFilterState = {
-  type: "Manga",
+  type: "",
   demography: "",
   status: "",
   genres: [],

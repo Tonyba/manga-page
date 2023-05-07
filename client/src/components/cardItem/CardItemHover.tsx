@@ -9,7 +9,7 @@ type Props = {
   id: number;
 };
 
-const CardItemHover: FC<Props> = ({ title, type, desc, id }) => {
+const CardItemHover: FC<Props> = ({ title, type = "manga", desc, id }) => {
   return (
     <div
       className="text-left bg-gray-700 rounded-lg p-5 

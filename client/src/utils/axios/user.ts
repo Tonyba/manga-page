@@ -1,4 +1,4 @@
-import { GetUserResponseType, LoginResponseType } from "../types";
+import { ContentType, GetUserResponseType, LoginResponseType } from "../types";
 import { axiosInstance } from "./axiosGlobal";
 
 export const login = (email: string, password: string) =>
@@ -9,3 +9,9 @@ export const register = (email: string, password: string, userName: string) =>
 
 export const getUserById = (id: number) =>
   axiosInstance.get<GetUserResponseType>(`/getuserid/${id}`);
+
+export const addFavorite = (idContent: number, idUser: number) =>
+  axiosInstance.post<ContentType>("/addfavorite", { idContent, idUser });
+
+export const removeFavorite = (idContent: number, idUser: number) =>
+  axiosInstance.delete("/deletefavorite", { data: { idContent, idUser } });

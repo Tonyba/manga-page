@@ -21,6 +21,7 @@ const CardLoop: FC<Props> = ({
   fourCols = false,
   oneCol = false,
   itemType = "card",
+  action = "add",
 }) => {
   let cols = fourCols ? "xl:grid-cols-4" : "xl:grid-cols-6";
   cols += " grid-cols-2 sm:grid-cols-3 md:grid-cols-4";
@@ -45,7 +46,7 @@ const CardLoop: FC<Props> = ({
               content={item}
               index={index}
               showHover={showDesc}
-              action="add"
+              action={action}
             />
           ) : (
             <ListItem key={index} {...item} />

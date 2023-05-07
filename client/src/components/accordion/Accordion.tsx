@@ -1,14 +1,13 @@
 import { motion, AnimatePresence } from "framer-motion";
-import React, { FC, useState } from "react";
+import React, { FC, PropsWithChildren, useRef, useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 
 type Props = {
   title: string;
-  content: any;
 };
 
-const Accordion: FC<Props> = ({ title, content }) => {
-  const [show, setShow] = useState(false);
+const Accordion: FC<Props & PropsWithChildren> = ({ title, children }) => {
+  const [show, setShow] = useState<boolean>(false);
 
   return (
     <div className="w-full">
@@ -27,19 +26,20 @@ const Accordion: FC<Props> = ({ title, content }) => {
         </div>
 
         <AnimatePresence>
-          {show && (
-            <motion.div
-              initial={{ height: 0 }}
-              animate={{
-                height: "auto",
-              }}
-              exit={{ height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="overflow-clip pt-2"
-            >
-              {content}
-            </motion.div>
-          )}
+          <motion.div
+            initial={{
+              height: 0,
+              paddingTop: 0,
+            }}
+            animate={{
+              height: !show ? 0 : "auto",
+              paddingTop: !show ? 0 : "8px",
+            }}
+            transition={{ duration: 0.3 }}
+            className={`${!show ? "overflow-hidden" : ""}`}
+          >
+            {children}
+          </motion.div>
         </AnimatePresence>
       </div>
     </div>

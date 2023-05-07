@@ -20,6 +20,9 @@ const HeaderUser = () => {
   const { user } = useAppContext();
   const { setToken } = useAuth();
 
+  const iconLink =
+    user?.role === "Admin" ? "/dashboard" : "/dashboard/settings";
+
   const handleOpen = () => {
     setOpen(false);
   };
@@ -31,7 +34,7 @@ const HeaderUser = () => {
       <div className="relative group">
         {user ? (
           <>
-            <Link role="button" className={buttonStyles} href={"/dashboard"}>
+            <Link role="button" className={buttonStyles} href={iconLink}>
               {user?.avatar && user?.avatar !== "https" ? (
                 <Image
                   src={user.avatar}

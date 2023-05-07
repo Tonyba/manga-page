@@ -1,10 +1,12 @@
-import React, { FC } from "react";
+import React, { FC, use } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ContentType } from "@/utils/types";
 import { motion } from "framer-motion";
 import ContentPill from "../content/ContentPill";
 import CardItemHover from "./CardItemHover";
+import CardAction from "./CardAction";
+import { useAppContext } from "@/utils/context/AppContext";
 
 type Props = {
   content: ContentType;
@@ -15,6 +17,7 @@ type Props = {
 
 const CardItem: FC<Props> = ({ content, showHover = true, action = "add" }) => {
   const { type, id, title, demography, description, image } = content;
+  const { user } = useAppContext();
 
   return (
     <motion.div
@@ -24,6 +27,7 @@ const CardItem: FC<Props> = ({ content, showHover = true, action = "add" }) => {
       layout
       className="mb-5 text-center relative group"
     >
+      {user && <CardAction action={action} contentId={id} />}
       <Link
         className="text-center mb-3"
         href={`/content/${id}`}

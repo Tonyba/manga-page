@@ -15,9 +15,16 @@ const dashboardItemsList = [
   {
     label: "Panel",
     url: "/dashboard",
-    role: "Usuario",
+    role: "Admin",
     action: undefined,
     Icon: <RiDashboardLine size={iconsSize} />,
+  },
+  {
+    label: "Mangas",
+    url: "/dashboard/content",
+    role: "Admin",
+    action: "content",
+    Icon: <BsBook size={iconsSize} />,
   },
   {
     label: "Favoritos",
@@ -35,20 +42,17 @@ const dashboardItemsList = [
   },
 ];
 
-const adminItems = [
-  {
-    label: "Mangas",
-    url: "/dashboard/content",
-    role: "Admin",
-    action: "content",
-    Icon: <BsBook size={iconsSize} />,
-  },
-];
-
 export const DashboardSidebar = () => {
   const router = useRouter();
   const { action } = router.query;
   const { user } = useAppContext();
+
+  const dashboardItemsListFiltered = dashboardItemsList.filter((item) => {
+    if (item.role === "Admin" && user?.role !== "Admin") {
+      return;
+    }
+    return item;
+  });
 
   return (
     <>
@@ -65,7 +69,7 @@ export const DashboardSidebar = () => {
       </div>
 
       <ul className="py-5">
-        {dashboardItemsList.map((item, i) => {
+        {dashboardItemsListFiltered.map((item, i) => {
           return (
             <li
               key={i}
@@ -83,26 +87,6 @@ export const DashboardSidebar = () => {
             </li>
           );
         })}
-
-        {user?.role === "Admin" &&
-          adminItems.map((item, i) => {
-            return (
-              <li
-                key={i}
-                className={`bg-accent-hover ${
-                  item.action === action && "bg-primary"
-                }  font-medium text-lg`}
-              >
-                <Link
-                  className="flex gap-3 p-4 py-3 items-center"
-                  href={item.url}
-                >
-                  {item.Icon}
-                  {item.label}
-                </Link>
-              </li>
-            );
-          })}
       </ul>
     </>
   );

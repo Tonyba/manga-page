@@ -105,9 +105,8 @@ const ExploradorSidebar = () => {
       </div>
 
       <div className="mt-2">
-        <Accordion
-          title="Generos"
-          content={genres.map((genre) => (
+        <Accordion title="Generos">
+          {genres.map((genre) => (
             <div key={genre.value} className="form-check">
               <input
                 className="accent-important"
@@ -124,7 +123,7 @@ const ExploradorSidebar = () => {
               <label className="ms-2">{genre.label}</label>
             </div>
           ))}
-        />
+        </Accordion>
       </div>
     </div>
   );

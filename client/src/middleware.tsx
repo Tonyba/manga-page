@@ -27,10 +27,11 @@ export async function middleware(request: NextRequest) {
       (request.nextUrl.pathname.includes("/add") ||
         request.nextUrl.pathname.includes("/edit") ||
         request.nextUrl.pathname.includes("/add-chapter") ||
+        request.nextUrl.pathname.endsWith("/dashboard") ||
         request.nextUrl.pathname.includes("/content")) &&
       user.role !== "Admin"
     ) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+      return NextResponse.redirect(new URL("/dashboard/settings", request.url));
     }
   } else {
     return NextResponse.redirect(new URL("/", request.url));
