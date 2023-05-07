@@ -42,30 +42,30 @@ const CardAction: FC<Props> = ({ action, contentId }) => {
     const deleted = await removeFavorite(contentId, user?.id!);
 
     if (deleted?.status === 200) {
-      const favCopy = [...favorites];
-      const favIndex = favCopy.findIndex((fav) => fav.id == contentId);
-      favCopy.splice(favIndex, 1);
+      const favCopy = [...favorites].filter((fav) => fav.id !== contentId);
 
       setFavorites(favCopy);
     }
   };
 
   return action === "add" ? (
-    <UseAnimations
-      reverse={isAdded}
-      size={32}
-      animation={heart}
-      onClick={() => (isAdded ? removeFromFavorites() : addToFavorites())}
-      className="absolute top-2 right-2 z-20 cursor-pointer bg-primary rounded-full p-1"
-      fillColor="#fff"
-      strokeColor={"#fff"}
-    />
+    <>
+      <UseAnimations
+        reverse={isAdded}
+        size={32}
+        animation={heart}
+        onClick={() => (isAdded ? removeFromFavorites() : addToFavorites())}
+        className="absolute top-2 right-2 z-10 cursor-pointer bg-primary rounded-full p-1"
+        fillColor="#fff"
+        strokeColor={"#fff"}
+      />
+    </>
   ) : (
     <BsTrashFill
-      size={32}
+      size={25}
       color="#fff"
       onClick={() => removeFromFavorites()}
-      className="absolute top-2 right-2 z-20 cursor-pointer bg-primary rounded-full p-1"
+      className="absolute top-2 right-2 z-10 cursor-pointer bg-primary rounded-full p-1"
     />
   );
 };
