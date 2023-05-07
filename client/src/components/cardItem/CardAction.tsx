@@ -57,6 +57,7 @@ const CardAction: FC<Props> = ({ action, contentId }) => {
       size={32}
       animation={heart}
       color="#fff"
+      fillColor="#fff"
       onClick={() => (isAdded ? removeFromFavorites() : addToFavorites())}
       className="absolute top-2 right-2 z-20 cursor-pointer bg-primary rounded-full p-1"
       strokeColor={"#fff"}
