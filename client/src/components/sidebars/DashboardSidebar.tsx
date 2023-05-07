@@ -6,11 +6,13 @@ import { RiDashboardLine } from "react-icons/ri";
 import { BsBook } from "react-icons/bs";
 import { MdSettings } from "react-icons/md";
 import { useRouter } from "next/router";
+import { useAppContext } from "@/utils/context/AppContext";
 
 export const DashboardSidebar = () => {
   const iconsSize = 22;
   const router = useRouter();
   const { action } = router.query;
+  const { user } = useAppContext();
 
   return (
     <>
@@ -23,7 +25,7 @@ export const DashboardSidebar = () => {
           width={100}
           height={100}
         />
-        <span className="font-semibold">Fulano de tal</span>
+        <span className="font-semibold">{user?.userName}</span>
       </div>
 
       <ul className="py-5">

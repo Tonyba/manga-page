@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 type Props = {
   isOpen: boolean;
   onModalClose: () => void;
+  updateCaps: () => void;
 };
 
 const initState: CreateChapterParams = {
@@ -28,6 +29,7 @@ const initState: CreateChapterParams = {
 const DashboardAddChapterModal: FC<Props> = ({
   isOpen = false,
   onModalClose,
+  updateCaps,
 }) => {
   const [chapter, setChapter] = useState<CreateChapterParams>(initState);
   const [errors, setErrors] = useState<ChapterValidationType>();
@@ -40,7 +42,6 @@ const DashboardAddChapterModal: FC<Props> = ({
     e.preventDefault();
     setSubmitting(true);
     setErrors(validateChapter(chapter));
-    //router.reload();
   };
 
   useEffect(() => {
@@ -77,6 +78,7 @@ const DashboardAddChapterModal: FC<Props> = ({
       .then((res) => {
         console.log(res);
         Swal.fire("Capitulo creado", "", "success");
+        updateCaps();
         cleanForm();
       })
       .catch((err) => {
