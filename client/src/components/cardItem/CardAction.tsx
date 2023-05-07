@@ -3,6 +3,7 @@ import { useAppContext } from "@/utils/context/AppContext";
 import { findFavorite } from "@/utils/helpers";
 import React, { FC } from "react";
 import heart from "react-useanimations/lib/heart";
+import trash from "react-useanimations/lib/trash2";
 import UseAnimations from "react-useanimations";
 import { BsTrashFill } from "react-icons/bs";
 
@@ -55,13 +56,19 @@ const CardAction: FC<Props> = ({ action, contentId }) => {
       reverse={isAdded}
       size={32}
       animation={heart}
+      color="#fff"
+      onClick={() => (isAdded ? removeFromFavorites() : addToFavorites())}
       className="absolute top-2 right-2 z-20 cursor-pointer bg-primary rounded-full p-1"
       strokeColor={"#fff"}
     />
   ) : (
-    <BsTrashFill
-      className="absolute top-2 right-2 z-20 cursor-pointer bg-primary rounded-full p-1"
+    <UseAnimations
+      size={32}
+      animation={trash}
+      color="#fff"
       onClick={() => removeFromFavorites()}
+      className="absolute top-2 right-2 z-20 cursor-pointer bg-primary rounded-full p-1"
+      strokeColor={"#fff"}
     />
   );
 };

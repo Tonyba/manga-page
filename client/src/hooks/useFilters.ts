@@ -50,8 +50,6 @@ const useFilters = (filtersOptions: {
 
     let result = items.filter((fav) => selectedT.every((f) => f(fav)));
 
-    if (Array.isArray(result[0])) result = [];
-
     let paginated = result.slice(
       currentPag * itemsPerPage,
       currentPag * itemsPerPage + itemsPerPage
