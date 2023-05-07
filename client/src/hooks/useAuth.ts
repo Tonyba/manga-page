@@ -29,7 +29,6 @@ export const useAuth = (): {
         localStorage.removeItem("token");
         deleteCookie("x-token");
       }
-      console.log(decoded, "decoded");
       getUserById(decoded.id)
         .then((res) => {
           const data = res.data;

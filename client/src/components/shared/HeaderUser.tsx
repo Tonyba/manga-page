@@ -7,6 +7,7 @@ import { useAppContext } from "@/utils/context/AppContext";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
+import UserDropdown from "./UserDropdown";
 
 const buttonStyles = `h-12 
 w-12  
@@ -27,25 +28,30 @@ const HeaderUser = () => {
 
   return (
     <>
-      {user ? (
-        <Link role="button" className={buttonStyles} href={"/dashboard"}>
-          {user?.avatar && user?.avatar !== "https" ? (
-            <Image
-              src={user.avatar}
-              alt="avatar"
-              width={18}
-              height={18}
-              className="rounded-full"
-            />
-          ) : (
+      <div className="relative group">
+        {user ? (
+          <>
+            <Link role="button" className={buttonStyles} href={"/dashboard"}>
+              {user?.avatar && user?.avatar !== "https" ? (
+                <Image
+                  src={user.avatar}
+                  alt="avatar"
+                  width={18}
+                  height={18}
+                  className="rounded-full"
+                />
+              ) : (
+                <FaUserAlt size={16} />
+              )}
+            </Link>
+            <UserDropdown />
+          </>
+        ) : (
+          <button onClick={() => setOpen(true)} className={buttonStyles}>
             <FaUserAlt size={16} />
-          )}
-        </Link>
-      ) : (
-        <button onClick={() => setOpen(true)} className={buttonStyles}>
-          <FaUserAlt size={16} />
-        </button>
-      )}
+          </button>
+        )}
+      </div>
 
       <Popup
         onModalClose={handleOpen}

@@ -7,9 +7,45 @@ import { BsBook } from "react-icons/bs";
 import { MdSettings } from "react-icons/md";
 import { useRouter } from "next/router";
 import { useAppContext } from "@/utils/context/AppContext";
+import { FaHeart } from "react-icons/fa";
+
+const iconsSize = 22;
+
+const dashboardItemsList = [
+  {
+    label: "Panel",
+    url: "/dashboard",
+    role: "Usuario",
+    action: undefined,
+    Icon: <RiDashboardLine size={iconsSize} />,
+  },
+  {
+    label: "Favoritos",
+    url: "/dashboard/favorites",
+    role: "Usuario",
+    action: "favorites",
+    Icon: <FaHeart size={iconsSize} />,
+  },
+  {
+    label: "Configuracion",
+    url: "/dashboard/settings",
+    role: "Usuario",
+    action: "settings",
+    Icon: <MdSettings size={iconsSize} />,
+  },
+];
+
+const adminItems = [
+  {
+    label: "Mangas",
+    url: "/dashboard/content",
+    role: "Admin",
+    action: "content",
+    Icon: <BsBook size={iconsSize} />,
+  },
+];
 
 export const DashboardSidebar = () => {
-  const iconsSize = 22;
   const router = useRouter();
   const { action } = router.query;
   const { user } = useAppContext();
@@ -29,45 +65,44 @@ export const DashboardSidebar = () => {
       </div>
 
       <ul className="py-5">
-        <li
-          className={`bg-accent-hover ${
-            !action && "bg-primary"
-          }  font-medium text-lg`}
-        >
-          <Link
-            className="flex gap-3 p-4 py-3 items-center"
-            href={"/dashboard"}
-          >
-            <RiDashboardLine size={iconsSize} />
-            Panel
-          </Link>
-        </li>
-        <li
-          className={`bg-accent-hover ${
-            action === "content" && "bg-primary"
-          } font-medium text-lg`}
-        >
-          <Link
-            className="flex gap-3 p-4 py-3 items-center"
-            href={"/dashboard/content"}
-          >
-            <BsBook size={iconsSize} />
-            Mangas
-          </Link>
-        </li>
-        <li
-          className={`bg-accent-hover ${
-            action === "settings" && "bg-primary"
-          } font-medium text-lg`}
-        >
-          <Link
-            className="flex gap-3 p-4 py-3 items-center"
-            href={"/dashboard/settings"}
-          >
-            <MdSettings size={iconsSize} />
-            Configuracion
-          </Link>
-        </li>
+        {dashboardItemsList.map((item, i) => {
+          return (
+            <li
+              key={i}
+              className={`bg-accent-hover ${
+                item.action === action && "bg-primary"
+              }  font-medium text-lg`}
+            >
+              <Link
+                className="flex gap-3 p-4 py-3 items-center"
+                href={item.url}
+              >
+                {item.Icon}
+                {item.label}
+              </Link>
+            </li>
+          );
+        })}
+
+        {user?.role === "Admin" &&
+          adminItems.map((item, i) => {
+            return (
+              <li
+                key={i}
+                className={`bg-accent-hover ${
+                  item.action === action && "bg-primary"
+                }  font-medium text-lg`}
+              >
+                <Link
+                  className="flex gap-3 p-4 py-3 items-center"
+                  href={item.url}
+                >
+                  {item.Icon}
+                  {item.label}
+                </Link>
+              </li>
+            );
+          })}
       </ul>
     </>
   );

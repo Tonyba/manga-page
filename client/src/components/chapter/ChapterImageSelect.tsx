@@ -18,7 +18,6 @@ const ChapterImageSelect = ({}) => {
       }
 
       setTotal(arr);
-      console.log(arr);
     }
   }, [images.length]);
 

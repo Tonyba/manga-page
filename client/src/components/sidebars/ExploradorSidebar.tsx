@@ -116,7 +116,6 @@ const ExploradorSidebar = () => {
                 name="genre"
                 // cuando se marca se agrega el genero al array de generos si se desmarca se elimina
                 onChange={(e) => {
-                  console.log(e.target, "Este es el target");
                   if (e.target.value) {
                     handlePushGenres(e.target.value);
                   }

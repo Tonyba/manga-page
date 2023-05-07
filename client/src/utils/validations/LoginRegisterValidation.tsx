@@ -11,8 +11,6 @@ export const validateUser = (
   const required = "Este campo es Requerido";
   const isSame = "Las contraseñas deben ser iguales";
 
-  console.log(values);
-
   if (!values.email.trim() || !regexEmail.test(values.email)) {
     errors.email = isEmail;
   }

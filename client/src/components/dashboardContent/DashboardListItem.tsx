@@ -26,6 +26,7 @@ export const DashboardListItem: FC<ContentType> = ({
             src={image as string}
             alt={title}
             className="rounded-sm"
+            priority={true}
             width={120}
             height={68}
           />

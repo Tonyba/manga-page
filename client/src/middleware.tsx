@@ -2,9 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt_decode from "jwt-decode";
 
 export async function middleware(request: NextRequest) {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-  console.log(request.cookies);
+  const API_URL = request.cookies.get("apiUrl")?.value;
 
   if (request.cookies.has("x-token")) {
     const token = request.cookies.get("x-token")?.value;
@@ -12,7 +10,6 @@ export async function middleware(request: NextRequest) {
     const decoded: any = jwt_decode(token!);
 
     if (decoded.exp * 1000 < Date.now()) {
-      console.log("borrado");
       request.cookies.delete("x-token");
       return NextResponse.redirect(new URL("/", request.url));
     }
@@ -33,7 +30,7 @@ export async function middleware(request: NextRequest) {
         request.nextUrl.pathname.includes("/content")) &&
       user.role !== "Admin"
     ) {
-      return NextResponse.redirect(new URL("/user/configurar", request.url));
+      return NextResponse.redirect(new URL("/dashboard", request.url));
     }
   } else {
     return NextResponse.redirect(new URL("/", request.url));
