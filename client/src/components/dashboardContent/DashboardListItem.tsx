@@ -10,6 +10,7 @@ export const DashboardListItem: FC<ContentType> = ({
   id,
   type,
   image,
+  description,
 }) => {
   const handleDelete = () => {};
 
@@ -32,10 +33,7 @@ export const DashboardListItem: FC<ContentType> = ({
           <div>
             <span>{title}</span>
             <p className="text-sm font-light text-dark group-hover:hidden">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-              Voluptate laborum, quam, eos perspiciatis at quaerat a fugiat
-              beatae fuga veritatis nemo dolores eius minima ab debitis pariatur
-              tempore officiis vero!
+              {description}
             </p>
             <div className="gap-3 hidden group-hover:flex mt-3">
               <DashboardHoverItem

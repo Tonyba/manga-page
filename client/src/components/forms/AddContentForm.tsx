@@ -1,7 +1,6 @@
 import React, { FC } from "react";
 import Input from "./Input";
 import TextArea from "./TextArea";
-import MoonLoader from "react-spinners/MoonLoader";
 
 import { demography, status, types } from "@/utils/valoresParaSelect";
 import FormSelect from "./FormSelect";

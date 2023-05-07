@@ -3,11 +3,7 @@ import Popup from "../shared/Popup";
 import AddChapterForm from "../forms/AddChapterForm";
 import { motion } from "framer-motion";
 import { FaTimes } from "react-icons/fa";
-import {
-  ChapterValidationType,
-  ContentValidationType,
-  CreateChapterParams,
-} from "@/utils/types";
+import { ChapterValidationType, CreateChapterParams } from "@/utils/types";
 import { validateChapter } from "@/utils/validations/ChapterAddValidation";
 import Swal from "sweetalert2";
 import { addChapter } from "@/utils/axios/contentType";
@@ -51,7 +47,6 @@ const DashboardAddChapterModal: FC<Props> = ({
       } else {
         saveContent();
       }
-      setSubmitting(false);
     }
   }, [submitting, JSON.stringify(errors)]);
 
@@ -78,6 +73,7 @@ const DashboardAddChapterModal: FC<Props> = ({
       .then((res) => {
         console.log(res);
         Swal.fire("Capitulo creado", "", "success");
+        setSubmitting(false);
         updateCaps();
         cleanForm();
       })

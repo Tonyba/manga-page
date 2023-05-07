@@ -42,13 +42,17 @@ const LoginRegisterFormModal: FC<Props> = ({ closeModal, setToken }) => {
     if (variant === "login") {
       login(data.email, data.password)
         .then((res) => {
+          setLoading(false);
+
           const data = res.data;
+
           Swal.fire({
             icon: "success",
             title: "Usuario logueado con exito",
             showConfirmButton: false,
             timer: 1500,
           });
+
           localStorage.setItem("token", data.token);
           setToken(data.token);
           closeModal();
@@ -56,6 +60,8 @@ const LoginRegisterFormModal: FC<Props> = ({ closeModal, setToken }) => {
           console.log(data);
         })
         .catch((err) => {
+          setLoading(false);
+
           console.log(err);
           Swal.fire(
             "Error inesperado",
@@ -66,6 +72,8 @@ const LoginRegisterFormModal: FC<Props> = ({ closeModal, setToken }) => {
     } else {
       register(data.email, data.password, data.userName!)
         .then((res) => {
+          setLoading(false);
+
           Swal.fire({
             icon: "success",
             title: "Usuario registrado con exito",
@@ -75,6 +83,8 @@ const LoginRegisterFormModal: FC<Props> = ({ closeModal, setToken }) => {
           setVariant("login");
         })
         .catch((err) => {
+          setLoading(false);
+
           console.log(err);
           Swal.fire({
             icon: "error",
@@ -94,7 +104,6 @@ const LoginRegisterFormModal: FC<Props> = ({ closeModal, setToken }) => {
       } else {
         execRequest();
       }
-      setLoading(false);
     }
   }, [JSON.stringify(errors), loading]);
 
