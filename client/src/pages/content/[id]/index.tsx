@@ -217,6 +217,7 @@ export const getStaticProps: GetStaticProps = async (
 
   return {
     props: contentResp,
+    revalidate: 10,
   };
 };
 

@@ -150,6 +150,7 @@ export const getStaticProps: GetStaticProps = async (
       content: contentResp,
       currentChapterImgs: chapterResp,
     },
+    revalidate: 10,
   };
 };
 
