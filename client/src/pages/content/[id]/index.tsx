@@ -19,6 +19,7 @@ import {
 } from "next";
 import { ContentResponseType } from "@/utils/types";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { revalidate } from "@/utils/axios/revalidate";
 
 const Content: NextPage<ContentResponseType | undefined> = (content) => {
   const [isMobile] = useIsMobile();
@@ -217,7 +218,6 @@ export const getStaticProps: GetStaticProps = async (
 
   return {
     props: contentResp,
-    revalidate: 10,
   };
 };
 

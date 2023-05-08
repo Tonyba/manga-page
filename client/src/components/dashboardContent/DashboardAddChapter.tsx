@@ -7,6 +7,7 @@ import DashboardAddChapterSide from "../sidebars/DashboardAddChapterSide";
 import ContentChapters from "@/components/content/ContentChapters";
 import { FaPlus } from "react-icons/fa";
 import DashboardAddChapterModal from "./DashboardAddChapterModal";
+import { revalidate } from "@/utils/axios/revalidate";
 
 const DashboardAddChapter = () => {
   const router = useRouter();
@@ -16,7 +17,7 @@ const DashboardAddChapter = () => {
 
   const fetchData = async () => {
     if (!contentId) return;
-
+    await revalidate(`content/${contentId}`);
     const resp = await getManga(contentId as string);
     const contentResp = resp.data;
 

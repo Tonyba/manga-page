@@ -31,11 +31,17 @@ const DashboardAddContent = () => {
   };
 
   const saveContent = () => {
-    addContent(data).then((res) => {
-      console.log(res);
-      setSubmitting(false);
-      Swal.fire(`${data.type} creado`, "", "success");
-    });
+    addContent(data)
+      .then((res) => {
+        console.log(res);
+        setSubmitting(false);
+        Swal.fire(`${data.type} creado`, "", "success");
+      })
+      .catch((err) => {
+        console.log(err);
+        Swal.fire(`Error al crear ${data.type}`, "", "error");
+        setSubmitting(false);
+      });
   };
 
   useEffect(() => {
