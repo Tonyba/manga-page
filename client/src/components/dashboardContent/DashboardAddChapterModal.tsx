@@ -81,6 +81,7 @@ const DashboardAddChapterModal: FC<Props> = ({
       })
       .catch((err) => {
         console.log(err);
+        setSubmitting(false);
         Swal.fire("Error inesperado", "algo salio mal", "error");
       });
   };
