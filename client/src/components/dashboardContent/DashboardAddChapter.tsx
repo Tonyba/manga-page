@@ -17,7 +17,6 @@ const DashboardAddChapter = () => {
 
   const fetchData = async () => {
     if (!contentId) return;
-    await revalidate(`content/${contentId}`);
     const resp = await getManga(contentId as string);
     const contentResp = resp.data;
 

@@ -10,11 +10,19 @@ const dropDownOptions = [
     label: "Favoritos",
     role: "link",
     url: "/dashboard/favorites",
+    auth: "Usuario",
   },
   {
     label: "Configuracion",
     role: "link",
     url: "/dashboard/settings",
+    auth: "Usuario",
+  },
+  {
+    label: "Mangas",
+    role: "link",
+    url: "/dashboard/settings",
+    auth: "Admin",
   },
   {
     label: "Cerrar Sesion",
@@ -26,6 +34,13 @@ const UserDropdown = () => {
   const { setToken } = useAuth();
   const { setUser, user } = useAppContext();
   const router = useRouter();
+
+  const dropwnDownItems = dropDownOptions.filter((item) => {
+    if (item.auth === "Admin" && user?.role !== "Admin") {
+      return;
+    }
+    return item;
+  });
 
   const closeSession = () => {
     localStorage.removeItem("token");
@@ -51,7 +66,7 @@ const UserDropdown = () => {
     group-hover:opacity-100
     "
     >
-      {dropDownOptions.map((opt, i) => {
+      {dropwnDownItems.map((opt, i) => {
         return opt.role === "link" ? (
           <Link
             href={opt.url!}

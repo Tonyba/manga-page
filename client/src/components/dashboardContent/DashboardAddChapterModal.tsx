@@ -8,6 +8,7 @@ import { validateChapter } from "@/utils/validations/ChapterAddValidation";
 import Swal from "sweetalert2";
 import { addChapter } from "@/utils/axios/contentType";
 import { useRouter } from "next/router";
+import { revalidate } from "@/utils/axios/revalidate";
 
 type Props = {
   isOpen: boolean;
@@ -70,8 +71,9 @@ const DashboardAddChapterModal: FC<Props> = ({
       mangaId: parseInt(contentId as string),
       images: numberedImages,
     })
-      .then((res) => {
+      .then(async (res) => {
         console.log(res);
+        await revalidate(`content/${contentId}`);
         Swal.fire("Capitulo creado", "", "success");
         setSubmitting(false);
         updateCaps();
