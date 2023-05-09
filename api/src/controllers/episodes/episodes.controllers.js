@@ -8,7 +8,11 @@ const __dirname = dirname(__filename);
 
 export const createEpisode = async (req, res) => {
   let { episode, mangaId, capNumber } = req.body;
-  const imagesArr = req.files["images[]"];
+  let imagesArr = req.files["images[]"];
+
+  if (!Array.isArray(imagesArr)) imagesArr = [imagesArr];
+
+  console.log(imagesArr);
 
   try {
     let manga = await Mangas.findOne({

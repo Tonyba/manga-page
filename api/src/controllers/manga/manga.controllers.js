@@ -8,8 +8,10 @@ const __dirname = dirname(__filename);
 
 export const createManga = async (req, res) => {
   const { title, description, type, demography } = req.body;
-  const genres = req.body["genres[]"];
+  let genres = req.body["genres[]"];
   const { image, banner } = req.files;
+
+  if (!Array.isArray(genres)) genres = [genres];
 
   try {
     let path = __dirname + "/../../public/mangas/" + image?.name;
