@@ -1,9 +1,9 @@
-import React, { FC, useEffect } from "react";
-import { selectStyles } from "@/utils/helpers";
+import React, { FC } from "react";
 import makeAnimated from "react-select/animated";
 import { default as ReactSelect } from "react-select";
 import { OptionType } from "@/utils/types";
 import ValidationError from "./ValidationError";
+import { SELECT_STYLES } from "@/utils/constants";
 
 const animatedComponents = makeAnimated();
 
@@ -39,7 +39,7 @@ const FormSelect: FC<Props> = ({
         placeholder={placeholder}
         isMulti={isMulti}
         defaultValue={defaultValue}
-        styles={selectStyles}
+        styles={SELECT_STYLES}
         onChange={(value: any) => onChange(value)}
       />
       {errMsg && <ValidationError errorMessage={errMsg as string} />}

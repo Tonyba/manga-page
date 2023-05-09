@@ -2,8 +2,9 @@ import React, { useContext } from "react";
 import FiltersFavorites from "./favoritesComponents/FiltersFavorites";
 import useFilters from "@/hooks/useFilters";
 import { AuthContext } from "@/utils/context/AuthContext";
-import { initFilterState } from "@/utils/helpers";
+
 import CardLoop from "../cardLoop/cardLoop";
+import { INIT_FILTER_STATE } from "@/utils/constants";
 
 const itemsPerPage = 18;
 
@@ -15,7 +16,7 @@ const DashboardFavorites = () => {
   const [filters, setFilters, filterItems, currentPag, setCurrentPag] =
     useFilters({
       currentPag: 0,
-      filters: initFilterState,
+      filters: INIT_FILTER_STATE,
       items: favorites,
       itemsPerPage,
     });

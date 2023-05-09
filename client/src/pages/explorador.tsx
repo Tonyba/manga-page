@@ -6,13 +6,13 @@ import CardLoop from "@/components/cardLoop/cardLoop";
 import Pagination from "@/components/pagination/Pagination";
 import ExploradorSearch from "@/components/Explorador/ExploradorSearch";
 import { filterExp } from "@/utils/axios/filters";
-import { initFilterState } from "@/utils/helpers";
+import { INIT_FILTER_STATE } from "@/utils/constants";
 
 const Explorador = () => {
   const [content, setContent] = useState<ContentType[]>([]);
   const [loading, setLoading] = useState(true);
   const [count, setCount] = useState(0);
-  const [filters, setFilters] = useState<FiltersType>(initFilterState);
+  const [filters, setFilters] = useState<FiltersType>(INIT_FILTER_STATE);
 
   const handlePageChange = (selected: number) => {
     let page = selected + 1;

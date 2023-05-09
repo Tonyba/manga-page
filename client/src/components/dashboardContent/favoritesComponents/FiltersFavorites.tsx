@@ -1,10 +1,10 @@
 import Accordion from "@/components/accordion/Accordion";
-import useFilters from "@/hooks/useFilters";
-import { AuthContext } from "@/utils/context/AuthContext";
-import { handlePush, initFilterState, selectStyles } from "@/utils/helpers";
+import { INIT_FILTER_STATE, SELECT_STYLES } from "@/utils/constants";
+import { handlePush } from "@/utils/helpers";
+
 import { FiltersType, OptionType } from "@/utils/types";
 import { demography, genres, status, types } from "@/utils/valoresParaSelect";
-import React, { FC, useContext } from "react";
+import React, { FC } from "react";
 import { default as ReactSelect } from "react-select";
 import makeAnimated from "react-select/animated";
 
@@ -37,7 +37,7 @@ const FiltersFavorites: FC<Props> = ({ filters, setFilters }) => {
               value={handleValue(
                 types.filter((f) => f.label === filters.type)[0]
               )}
-              styles={selectStyles}
+              styles={SELECT_STYLES}
               placeholder="Seleccione un Tipo"
               onChange={(value: any) =>
                 setFilters({ ...filters, type: value.label })
@@ -54,7 +54,7 @@ const FiltersFavorites: FC<Props> = ({ filters, setFilters }) => {
                 demography.filter((f) => f.label === filters.demography)[0]
               )}
               placeholder={"Seleccione una demografia"}
-              styles={selectStyles}
+              styles={SELECT_STYLES}
               onChange={(value: any) =>
                 setFilters({ ...filters, demography: value.label })
               }
@@ -71,7 +71,7 @@ const FiltersFavorites: FC<Props> = ({ filters, setFilters }) => {
               value={handleValue(
                 status.filter((f) => f.label === filters.status)[0]
               )}
-              styles={selectStyles}
+              styles={SELECT_STYLES}
               onChange={(value: any) =>
                 setFilters({ ...filters, status: value.label })
               }
@@ -87,7 +87,7 @@ const FiltersFavorites: FC<Props> = ({ filters, setFilters }) => {
               isMulti={true}
               value={genres.filter((g) => filters.genres.includes(g.label))}
               placeholder={"Seleccione generos"}
-              styles={selectStyles}
+              styles={SELECT_STYLES}
               onChange={(value: any) =>
                 setFilters({ ...filters, genres: handlePush(value) })
               }
@@ -96,7 +96,7 @@ const FiltersFavorites: FC<Props> = ({ filters, setFilters }) => {
         </div>
         <button
           className="bg-important rounded-md p-2 mt-4 font-medium"
-          onClick={() => setFilters(initFilterState)}
+          onClick={() => setFilters(INIT_FILTER_STATE)}
         >
           Limpiar filtros
         </button>

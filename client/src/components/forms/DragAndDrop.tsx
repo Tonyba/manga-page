@@ -1,4 +1,3 @@
-import { fileTypes } from "@/utils/helpers";
 import React, { FC, useEffect, useState } from "react";
 import { RiImageAddFill } from "react-icons/ri";
 import ValidationError from "./ValidationError";
@@ -8,6 +7,7 @@ import Dropzone from "react-dropzone";
 import { DragImageItemType } from "@/utils/types";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { FILE_TYPES } from "@/utils/constants";
 
 type Props = {
   onChange: (file: File[]) => void;
@@ -82,7 +82,7 @@ const DragAndDrop: FC<Props> = ({
     <div className="mb-4">
       {label && <label htmlFor="">{label}</label>}
 
-      <Dropzone onDrop={handleDrop} multiple={isMulti} accept={fileTypes}>
+      <Dropzone onDrop={handleDrop} multiple={isMulti} accept={FILE_TYPES}>
         {({ getRootProps, getInputProps }) => (
           <div
             className="py-4 flex items-center justify-center gap-3 border-dashed border-2 border-important cursor-pointer mt-3"
