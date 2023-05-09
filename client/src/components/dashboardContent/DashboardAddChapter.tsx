@@ -46,7 +46,7 @@ const DashboardAddChapter = () => {
             ))}
           </div>
 
-          {content?.numEpisodes && (
+          {content?.numEpisodes != null && content.numEpisodes != undefined && (
             <DashboardAddChapterModal
               isOpen={modalOpen}
               chaptersTotal={content?.numEpisodes || 0}
