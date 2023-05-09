@@ -14,6 +14,7 @@ type Props = {
   isOpen: boolean;
   onModalClose: () => void;
   updateCaps: () => void;
+  chaptersTotal: number;
 };
 
 const initState: CreateChapterParams = {
@@ -27,8 +28,12 @@ const DashboardAddChapterModal: FC<Props> = ({
   isOpen = false,
   onModalClose,
   updateCaps,
+  chaptersTotal,
 }) => {
-  const [chapter, setChapter] = useState<CreateChapterParams>(initState);
+  const [chapter, setChapter] = useState<CreateChapterParams>({
+    ...initState,
+    capNumber: chaptersTotal + 1,
+  });
   const [errors, setErrors] = useState<ChapterValidationType>();
   const [submitting, setSubmitting] = useState(false);
   const [clearForm, setClearForm] = useState(false);

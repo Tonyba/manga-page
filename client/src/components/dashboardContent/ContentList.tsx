@@ -42,13 +42,16 @@ const ContentList = () => {
               <th className="pl-2 pr-4">Capitulos</th>
               <th className="pl-2 pr-4">Fecha</th>
               <th className="pl-2 pr-4">Tipo</th>
+              <th className="pl-2 pr-4">Estado</th>
+              <th className="pl-2 pr-4">Demografia</th>
               <th className="pl-2 pr-4">Comentarios</th>
               <th className="pl-2 pr-4">Vistas</th>
             </tr>
           </thead>
           <tbody className="divide-y divider-primary ">
-            {content.map((c) => <DashboardListItem key={c.id} {...c} />)}
-  
+            {content.map((c) => (
+              <DashboardListItem key={c.id} {...c} />
+            ))}
           </tbody>
         </table>
       </div>

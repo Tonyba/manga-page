@@ -11,6 +11,8 @@ export const DashboardListItem: FC<ContentType> = ({
   type,
   image,
   description,
+  status,
+  demography,
 }) => {
   const handleDelete = () => {};
 
@@ -64,6 +66,9 @@ export const DashboardListItem: FC<ContentType> = ({
       <td className="pl-2 pr-4 text-sm">
         <ContentPill contentType={type} isAbsolute={false} />
       </td>
+
+      <td className="pl-2 pr-4 text-sm">{status}</td>
+      <td className="pl-2 pr-4 text-sm">{demography}</td>
 
       <td className="pl-2 pr-4">1230</td>
 

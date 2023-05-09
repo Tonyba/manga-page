@@ -21,7 +21,7 @@ const dropDownOptions = [
   {
     label: "Mangas",
     role: "link",
-    url: "/dashboard/settings",
+    url: "/dashboard/content",
     auth: "Admin",
   },
   {
