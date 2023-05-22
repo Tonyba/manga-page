@@ -5,7 +5,6 @@ import ChapterUpButton from "@/components/chapter/ChapterUpButton";
 import ImagesReader from "@/components/content/ImageReader";
 import { getChapterImages } from "@/utils/axios/contentType";
 import { getManga } from "@/utils/axios/contentType";
-import { revalidate } from "@/utils/axios/revalidate";
 import { ChapterContext } from "@/utils/context/ChapterContext";
 import { getChapterNumber } from "@/utils/helpers";
 import { ChapterPageParamsType, readStyleEnum } from "@/utils/types";

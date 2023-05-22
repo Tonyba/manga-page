@@ -1,31 +1,31 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import FiltersFavorites from "./favoritesComponents/FiltersFavorites";
 import useFilters from "@/hooks/useFilters";
 import { AuthContext } from "@/utils/context/AuthContext";
 
 import CardLoop from "../cardLoop/cardLoop";
 import { INIT_FILTER_STATE } from "@/utils/constants";
+import { FiltersType } from "@/utils/types";
 
 const itemsPerPage = 18;
 
 const DashboardFavorites = () => {
   const { favorites } = useContext(AuthContext);
+  const [filtersFavorites, setFilters] =
+    useState<FiltersType>(INIT_FILTER_STATE);
 
-  console.log(favorites);
-
-  const [filters, setFilters, filterItems, currentPag, setCurrentPag] =
-    useFilters({
-      currentPag: 0,
-      filters: INIT_FILTER_STATE,
-      items: favorites,
-      itemsPerPage,
-    });
+  const [filterItems, currentPag, setCurrentPag] = useFilters({
+    currentPag: 0,
+    filters: filtersFavorites,
+    items: favorites,
+    itemsPerPage,
+  });
 
   const items = filterItems(currentPag);
 
   return (
     <>
-      <FiltersFavorites filters={filters} setFilters={setFilters} />
+      <FiltersFavorites filters={filtersFavorites} setFilters={setFilters} />
       <div className="mt-7">
         {items.length > 0 && <CardLoop items={items} action="remove" />}
       </div>

@@ -6,4 +6,5 @@ export const axiosInstance = axios.create({
   baseURL: API_URL?.endsWith("/")
     ? RemoveLastDirectoryPartOf(API_URL)
     : API_URL,
+  withCredentials: true,
 });

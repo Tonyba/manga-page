@@ -65,3 +65,12 @@ export const INIT_FILTER_STATE = {
   limit: 12,
   page: 1,
 };
+
+export const VALIDATION_MESSAGES = {
+  is_required: "Este campo es requerido",
+  valid_email: "Debe ingresar un email valido",
+};
+
+export const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+export const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;

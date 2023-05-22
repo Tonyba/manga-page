@@ -58,7 +58,11 @@ export const DashboardSidebar = () => {
     <>
       <div className="text-center">
         <Image
-          src="/img/user.png"
+          src={
+            user?.avatar && user?.avatar !== "https"
+              ? user.avatar
+              : "/img/user.png"
+          }
           alt="user"
           className="rounded-full mx-auto mb-3"
           priority={true}

@@ -17,6 +17,7 @@ type Props = {
   errMsg?: string;
   isMulti?: boolean;
   clearForm?: boolean;
+  previews?: string[] | File[];
 };
 
 const DragAndDrop: FC<Props> = ({
@@ -27,8 +28,10 @@ const DragAndDrop: FC<Props> = ({
   errMsg,
   isMulti = false,
   clearForm = false,
+  previews = [],
 }) => {
   const [filesItem, setFilesItems] = useState<DragImageItemType[]>([]);
+  const [prevs, setPreview] = useState<string[] | File[]>([]);
 
   const handlePreview = (files: File[] | File) => {
     if (!Array.isArray(files) && files instanceof Blob) files = [files];
@@ -68,6 +71,10 @@ const DragAndDrop: FC<Props> = ({
   };
 
   useEffect(() => {
+    setPreview(previews);
+  }, []);
+
+  useEffect(() => {
     onChange(filesItem.map((f) => f.file));
 
     return () =>
@@ -90,15 +97,27 @@ const DragAndDrop: FC<Props> = ({
           >
             <input {...getInputProps()} />
             {filesItem.length > 0 && !isMulti ? (
-              !isMulti &&
               filesItem.map((prev, i) => <img key={i} src={prev.imgSrc} />)
             ) : (
-              <div className="flex items-center flex-col py-4 h-full w-full">
-                <RiImageAddFill className="mb-3" size={50} />
-                <span className="font-semibold text-2xl">
-                  Arrasta una imagen aca!
-                </span>
-              </div>
+              <>
+                {previews.length > 0 ? (
+                  <>
+                    {prevs.map(
+                      (previewF, i) =>
+                        typeof previewF === "string" && (
+                          <img key={i} src={previewF} />
+                        )
+                    )}
+                  </>
+                ) : (
+                  <div className="flex items-center flex-col py-4 h-full w-full">
+                    <RiImageAddFill className="mb-3" size={50} />
+                    <span className="font-semibold text-2xl">
+                      Arrasta una imagen aca!
+                    </span>
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}

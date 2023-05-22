@@ -125,6 +125,7 @@ export type ChapterItemType = {
   path: string;
   capNumber: number;
   mangaId: number;
+  Manga?: ContentType;
 };
 
 export type LoginRegisterValidation = Partial<{
@@ -147,4 +148,23 @@ export type OptionType = {
 export type ChapterPageParamsType = {
   content: ContentResponseType;
   currentChapterImgs: string[];
+};
+
+export type UserEditParams = {
+  avatar?: File | string;
+  userName: string;
+  email: string;
+};
+
+export type UserEditValidation = Partial<{
+  userName: string;
+  email: string;
+}>;
+
+export type DashboardData = {
+  mangasCount: number;
+  manhuasCount: number;
+  manhwasCount: number;
+  lastAddedChapters: ChapterItemType[];
+  lastAddedMangas: ContentType[];
 };

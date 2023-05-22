@@ -54,7 +54,7 @@ const UserDropdown = () => {
     <div
       className="grid-cols-1 
     divide-y divider-dark bg-primary 
-    rounded-md z-10 min-w-max
+    rounded-md z-20 min-w-max
     absolute overflow-hidden invisible
     duration-300 transform
     opacity-0

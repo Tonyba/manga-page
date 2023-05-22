@@ -27,6 +27,10 @@ export const addChapter = (params: CreateChapterParams) =>
 export const getChapterImages = (title: string, episode: string) =>
   axiosInstance.get(`/episode/images?title=${title}&episode=${episode}`);
 
+export const getDashboardData = () => {
+  axiosInstance.get(`/dashboard`);
+};
+
 export const addContent = (content: AddContentParams) =>
   axios({
     method: "POST",
