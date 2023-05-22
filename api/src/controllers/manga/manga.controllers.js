@@ -6,6 +6,73 @@ import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+export const getDashboardData = async (req, res) => {
+  try {
+    const mangasCount = await countMangaType("Manga");
+    const manhuasCount = await countMangaType("Manhua");
+    const manhwasCount = await countMangaType("Manhwa");
+
+    const lastAddedChapters = await Episodes.findAll({
+      limit: 10,
+      order: [["id", "DESC"]],
+      include: [
+        {
+          model: Mangas,
+          attributes: {
+            exclude: [
+              "genres",
+              "banner",
+              "demography",
+              "description",
+              "status",
+              "path",
+            ],
+          },
+        },
+      ],
+      attributes: { exclude: ["mangaId"] },
+    });
+
+    const lastAddedMangas = await Mangas.findAll({
+      limit: 10,
+      order: [["id", "DESC"]],
+      attributes: {
+        exclude: [
+          "banner",
+          "genres",
+          "demography",
+          "description",
+          "status",
+          "path",
+        ],
+      },
+    });
+
+    res.json({
+      mangasCount,
+      manhuasCount,
+      manhwasCount,
+      lastAddedChapters,
+      lastAddedMangas,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error al obtener los datos",
+    });
+  }
+};
+
+const countMangaType = async (type) => {
+  const count = await Mangas.count({
+    where: {
+      type,
+    },
+  });
+
+  return count;
+};
+
 export const createManga = async (req, res) => {
   const { title, description, type, demography } = req.body;
   let genres = req.body["genres[]"];
