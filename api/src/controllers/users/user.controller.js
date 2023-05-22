@@ -144,6 +144,7 @@ export const getUser = async (req, res) => {
         "demography",
         "genres",
         "status",
+        "type",
       ],
     });
 
@@ -184,8 +185,7 @@ export const deleteFavorite = async (req, res) => {
 export const updateUserData = async (req, res) => {
   const { userName, paypal } = req?.body;
 
-  const img = req?.files?.image;
-
+  const img = req?.files?.avatar;
   const { id } = req?.params;
 
   const userFind = await Users.findByPk(id);
@@ -210,8 +210,13 @@ export const updateUserData = async (req, res) => {
       where: {
         id: id,
       },
+      returning: true,
+      plain: true,
     }
   );
 
-  res.json(updateData);
+  delete updateData[1].dataValues.password;
+  delete updateData[1].dataValues.paypal;
+
+  res.json(updateData[1].dataValues);
 };
