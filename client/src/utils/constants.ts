@@ -1,4 +1,5 @@
 import { StylesConfig } from "react-select";
+import { DashboardData } from "./types";
 
 export const FILE_TYPES = {
   "image/png": [".png"],
@@ -74,3 +75,11 @@ export const VALIDATION_MESSAGES = {
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
+export const INIT_DASHBOARD_DATA:DashboardData = {
+  lastAddedChapters: [],
+  lastAddedMangas: [],
+  mangasCount: 0,
+  manhuasCount: 0,
+  manhwasCount: 0
+}

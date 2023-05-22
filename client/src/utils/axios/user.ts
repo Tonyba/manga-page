@@ -7,6 +7,7 @@ import {
 } from "../types";
 import { axiosInstance } from "./axiosGlobal";
 import { API_URL } from "../constants";
+import { DashboardData } from "../types";
 
 export const login = (email: string, password: string) =>
   axiosInstance.post<LoginResponseType>("/login", { email, password });
