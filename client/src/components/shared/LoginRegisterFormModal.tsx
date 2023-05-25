@@ -100,7 +100,7 @@ const LoginRegisterFormModal: FC<Props> = ({ closeModal, setToken }) => {
   useEffect(() => {
     if (errors && loading) {
       if (Object.keys(errors).length !== 0) {
-        console.log(errors);
+        setLoading(false);
       } else {
         execRequest();
       }
@@ -108,7 +108,7 @@ const LoginRegisterFormModal: FC<Props> = ({ closeModal, setToken }) => {
   }, [JSON.stringify(errors), loading]);
 
   return (
-    <div className="bg-primary-dark py-10 rounded-md min-w-[500px]">
+    <div className="bg-primary-dark py-10 rounded-md md:min-w-[500px]">
       <span className="text-4xl mb-8 font-semibold block px-6">
         {variant === "login" ? "Logeate" : "Registrate"}
       </span>

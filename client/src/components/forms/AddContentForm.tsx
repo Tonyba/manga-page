@@ -42,8 +42,11 @@ const AddContentForm: FC<Props> = ({
   };
 
   return (
-    <form onSubmit={(e) => onSubmit(e)} className="flex w-full">
-      <div className="w-3/4 flex-col flex gap-3">
+    <form
+      onSubmit={(e) => onSubmit(e)}
+      className="flex w-full flex-wrap-reverse xl:flex-wrap"
+    >
+      <div className="w-full xl:w-3/4 flex-col flex gap-3 ">
         <DragAndDrop
           name="banner"
           onChange={(f) => handleBannerChange(f[0], "banner")}
@@ -110,7 +113,7 @@ const AddContentForm: FC<Props> = ({
         <SubmitButton text="crear" loading={loading} />
       </div>
 
-      <div className="w-1/4 px-7">
+      <div className="w-full xl:w-1/4 xl:pl-7">
         <DragAndDrop
           name="Image"
           onChange={(f) => handleBannerChange(f[0], "image")}

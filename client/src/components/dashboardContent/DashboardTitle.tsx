@@ -17,7 +17,7 @@ const DashboardTitle: FC<Props> = ({ text }) => {
       >
         <FaTimes size={25} />
       </Link>
-      <h1 className="font-semibold text-3xl">{text}</h1>
+      <h1 className="font-semibold text-2xl md:text-3xl">{text}</h1>
     </div>
   );
 };

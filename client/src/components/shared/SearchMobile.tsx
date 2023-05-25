@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import Popup from "./Popup";
-import SlideFromLeft from "./SlideFromLeft";
+import SlideContainer from "./SlideContainer";
 import Input from "../forms/Input";
 import SearchBox from "./SearchBox";
 import { ChapterItemType, ContentType } from "@/utils/types";
@@ -28,9 +28,12 @@ const SearchMobile: FC<Props> = ({
     <Popup
       isOpen={open}
       onModalClose={handleOpen}
-      className="bg-primary-dark-opacity"
+      className="bg-primary-dark-opacity justify-center items-start"
     >
-      <SlideFromLeft className="relative bg-primary-dark p-5 w-11/12">
+      <SlideContainer
+        className="relative bg-primary-dark w-full p-5"
+        direction="up"
+      >
         <span className="uppercase font-semibold mb-2 block">
           Buscar series
         </span>
@@ -45,7 +48,7 @@ const SearchMobile: FC<Props> = ({
             <SearchBox data={data} type={type} isLoading={isLoading} />
           )}
         </div>
-      </SlideFromLeft>
+      </SlideContainer>
     </Popup>
   ) : (
     <Popup

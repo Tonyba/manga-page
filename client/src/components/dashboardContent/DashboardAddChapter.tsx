@@ -30,8 +30,8 @@ const DashboardAddChapter = () => {
   return (
     <>
       <DashboardTitle text="Agregar Capitulos" />
-      <div className="py-5 flex w-full">
-        <div className="w-3/4	relative">
+      <div className="py-5 flex w-full flex-wrap-reverse xl:flex-wrap ">
+        <div className="w-full lg:w-3/4	relative">
           <button
             className="bg-primary bg-hover py-2 px-3 rounded-lg flex gap-3 items-center mb-6"
             onClick={() => setModalOpen(true)}
@@ -40,7 +40,7 @@ const DashboardAddChapter = () => {
             Agregar Capitulo
           </button>
 
-          <div className="grid grid-cols-4 gap-y-4">
+          <div className="grid  md:grid-cols-3 xl:grid-cols-4 gap-y-4 gap-x-2">
             {content?.manga.Episodes.map((episode, i) => (
               <ContentChapters key={i} {...episode} />
             ))}
@@ -55,7 +55,7 @@ const DashboardAddChapter = () => {
             />
           )}
         </div>
-        <aside className="w-1/4	 px-5 sticky top-5">
+        <aside className="w-full lg:w-1/4 xl:pl-5 xl:sticky top-5 mb-5">
           {content && <DashboardAddChapterSide content={content} />}
         </aside>
       </div>

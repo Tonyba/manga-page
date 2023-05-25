@@ -112,7 +112,7 @@ const DragAndDrop: FC<Props> = ({
                 ) : (
                   <div className="flex items-center flex-col py-4 h-full w-full">
                     <RiImageAddFill className="mb-3" size={50} />
-                    <span className="font-semibold text-2xl">
+                    <span className="font-semibold text-sm xl:text-lg 2xl:text-2xl">
                       Arrasta una imagen aca!
                     </span>
                   </div>

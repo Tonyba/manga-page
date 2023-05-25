@@ -38,7 +38,7 @@ export const DashboardListItem: FC<ContentType> = ({
             <p className="text-sm font-light text-dark group-hover:hidden">
               {description}
             </p>
-            <div className="gap-3 hidden group-hover:flex mt-3">
+            <div className="gap-3 flex xl:hidden group-hover:flex mt-3">
               <DashboardHoverItem
                 link={`/dashboard/edit?contentId=${id}`}
                 textHover="Editar"

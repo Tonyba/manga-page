@@ -59,6 +59,8 @@ const UserDropdown = () => {
     duration-300 transform
     opacity-0
     -translate-y-1
+    hidden
+    xl:block
     -translate-x-3
     group-hover:overflow-visible
     group-hover:visible
