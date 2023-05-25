@@ -31,8 +31,8 @@ const ContentList = () => {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 ">
-        <table className="divide-y divider-primary">
+      <div className="grid grid-cols-1 overflow-auto">
+        <table className="divide-y divider-primary inline-block lg:block">
           <thead>
             <tr className="[&>*]:font-normal [&>*]:text-left [&>*]:py-3">
               <th className="pl-2 pr-4">
