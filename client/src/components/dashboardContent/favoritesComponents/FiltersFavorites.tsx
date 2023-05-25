@@ -2,10 +2,10 @@ import Accordion from "@/components/accordion/Accordion";
 import { INIT_FILTER_STATE, SELECT_STYLES } from "@/utils/constants";
 import { handlePush } from "@/utils/helpers";
 
-import { FiltersType, OptionType } from "@/utils/types";
+import { FiltersType } from "@/utils/types";
 import { demography, genres, status, types } from "@/utils/valoresParaSelect";
 import React, { FC, useRef } from "react";
-import { GroupBase, default as ReactSelect } from "react-select";
+import { default as ReactSelect } from "react-select";
 import makeAnimated from "react-select/animated";
 
 const animatedComponents = makeAnimated();
@@ -26,12 +26,13 @@ const FiltersFavorites: FC<Props> = ({ filters, setFilters }) => {
     demoRef?.current?.clearValue();
     statusRef?.current?.clearValue();
     genresRef?.current?.clearValue();
+    setFilters(INIT_FILTER_STATE);
   };
 
   return (
     <Accordion title="Filtros">
       <div className="pb-3 z-20 relative">
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid md:grid-cols-2 2xl:grid-cols-4 gap-4">
           <div>
             <h3 className="mb-2 font-semibold">Tipos</h3>
             <ReactSelect
