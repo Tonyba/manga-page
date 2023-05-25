@@ -11,7 +11,7 @@ const Settings = () => {
   const [data, setData] = useState<UserEditParams>({
     email: user?.email!,
     userName: user?.userName!,
-    avatar: user?.avatar,
+    avatar: user?.avatar && user?.avatar != "https" ? user.avatar : "",
   });
   const [errors, setErrors] = useState<UserEditValidation>();
   const [submitting, setSubmitting] = useState(false);
