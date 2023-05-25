@@ -5,21 +5,32 @@ import jwt_decode from "jwt-decode";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { setCookie, deleteCookie } from "cookies-next";
 import { getUserById } from "@/utils/axios/user";
+import { useRouter } from "next/router";
 
 export const useAuth = (): {
   user?: User;
   setToken: Dispatch<SetStateAction<string | null | undefined>>;
   loading: boolean;
+  closeSession: () => void;
 } => {
   const controller = new AbortController();
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState<string | null>();
   const [user, setUser] = useState<User>();
   const authContext = useAppContext();
+  const router = useRouter();
 
   useEffect(() => {
     setToken(localStorage.getItem("token"));
   }, []);
+
+  const closeSession = () => {
+    localStorage.removeItem("token");
+    deleteCookie("x-token");
+    setToken(null);
+    authContext.setUser(undefined);
+    if (router.asPath.includes("/dashboard")) router.replace("/");
+  };
 
   useEffect(() => {
     console.log("pasa");
@@ -50,5 +61,5 @@ export const useAuth = (): {
     };
   }, [token]);
 
-  return { user, setToken, loading };
+  return { user, setToken, loading, closeSession };
 };

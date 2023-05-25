@@ -2,12 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-import { RiDashboardLine } from "react-icons/ri";
-import { BsBook } from "react-icons/bs";
-import { MdSettings } from "react-icons/md";
 import { useRouter } from "next/router";
 import { useAppContext } from "@/utils/context/AppContext";
+import { BsBook } from "react-icons/bs";
+import { MdSettings } from "react-icons/md";
 import { FaHeart } from "react-icons/fa";
+import { BiLogOut } from "react-icons/bi";
+import { useAuth } from "@/hooks/useAuth";
+import { RiDashboardLine } from "react-icons/ri";
 
 const iconsSize = 22;
 
@@ -46,6 +48,7 @@ export const DashboardSidebar = () => {
   const router = useRouter();
   const { action } = router.query;
   const { user } = useAppContext();
+  const { closeSession } = useAuth();
 
   const dashboardItemsListFiltered = dashboardItemsList.filter((item) => {
     if (item.role === "Admin" && user?.role !== "Admin") {
@@ -72,7 +75,7 @@ export const DashboardSidebar = () => {
         <span className="font-semibold">{user?.userName}</span>
       </div>
 
-      <ul className="py-5">
+      <ul className="py-5 divide-y divider-primary">
         {dashboardItemsListFiltered.map((item, i) => {
           return (
             <li
@@ -91,6 +94,12 @@ export const DashboardSidebar = () => {
             </li>
           );
         })}
+        <li
+          className="bg-accent-hover font-medium text-lg flex gap-3 p-4 py-3 items-center cursor-pointer"
+          onClick={closeSession}
+        >
+          <BiLogOut size={iconsSize} /> Cerrar Sesion
+        </li>
       </ul>
     </>
   );
