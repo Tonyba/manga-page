@@ -1,5 +1,5 @@
+import LoadingSpinner from "@/components/chapter/LoadingSpinner";
 import ContentList from "@/components/dashboardContent/ContentList";
-import Dashboard from "@/components/dashboardContent/Dashboard";
 import DashboardAddChapter from "@/components/dashboardContent/DashboardAddChapter";
 import DashboardAddContent from "@/components/dashboardContent/DashboardAddContent";
 import DashboardFavorites from "@/components/dashboardContent/DashboardFavorites";
@@ -11,8 +11,12 @@ import React, { ReactElement, useEffect, useState } from "react";
 
 const DashboardAction: NextPageWithLayout = () => {
   const router = useRouter();
-  const [content, setContent] = useState(<Dashboard />);
-  const { action, contentId } = router.query;
+  const [content, setContent] = useState(
+    <div className="flex justify-center items-center mt-64">
+      <LoadingSpinner />
+    </div>
+  );
+  const { action } = router.query;
 
   useEffect(() => {
     switch (action) {
@@ -34,6 +38,7 @@ const DashboardAction: NextPageWithLayout = () => {
 
       case "add-chapter":
         setContent(<DashboardAddChapter />);
+        break;
     }
   }, [action]);
 

@@ -80,7 +80,7 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
     for (let index = 0; index < 10; index++) {
       rel.push({
         id: parseInt(faker.random.numeric()),
-        type: faker.random.word(),
+        type: "Manga",
         title: faker.random.word(),
         description: faker.lorem.words(20),
         demography: faker.datatype.string(),
