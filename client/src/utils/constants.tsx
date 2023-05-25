@@ -1,5 +1,11 @@
 import { StylesConfig } from "react-select";
 import { DashboardData } from "./types";
+import { FaDiscord } from "react-icons/fa";
+import { BsBook } from "react-icons/bs";
+import { MdSettings } from "react-icons/md";
+import { FaHeart } from "react-icons/fa";
+import { BiLogOut } from "react-icons/bi";
+import { RiDashboardLine } from "react-icons/ri";
 
 export const FILE_TYPES = {
   "image/png": [".png"],
@@ -76,10 +82,64 @@ export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
-export const INIT_DASHBOARD_DATA:DashboardData = {
+export const INIT_DASHBOARD_DATA: DashboardData = {
   lastAddedChapters: [],
   lastAddedMangas: [],
   mangasCount: 0,
   manhuasCount: 0,
-  manhwasCount: 0
-}
+  manhwasCount: 0,
+};
+
+export const HEADER_MENU_ITEMS = [
+  {
+    label: "Mangas",
+    link: "/explorador",
+  },
+  {
+    label: "Explorador",
+    link: "/explorador",
+  },
+];
+
+export const HEADER_SOCIAL_ITEMS = [
+  {
+    icon: <FaDiscord size="16" />,
+    link: "",
+  },
+];
+
+export const USER_LOGGED_MENU_ITEMS = [
+  {
+    label: "Panel",
+    role: "link",
+    link: "/dashboard",
+    auth: "Admin",
+    icon: <RiDashboardLine size={16} />,
+  },
+  {
+    label: "Favoritos",
+    role: "link",
+    link: "/dashboard/favorites",
+    auth: "Usuario",
+    icon: <FaHeart size={16} />,
+  },
+  {
+    label: "Configuracion",
+    role: "link",
+    link: "/dashboard/settings",
+    auth: "Usuario",
+    icon: <MdSettings size={16} />,
+  },
+  {
+    label: "Mangas",
+    role: "link",
+    link: "/dashboard/content",
+    auth: "Admin",
+    icon: <BsBook size={16} />,
+  },
+  {
+    label: "Cerrar Sesion",
+    role: "button",
+    icon: <BiLogOut size={16} />,
+  },
+];
