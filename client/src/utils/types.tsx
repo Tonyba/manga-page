@@ -8,7 +8,7 @@ export type ContentType = {
   title: string;
   image: string | ImageModule;
   description: string;
-  type: string;
+  type: "Manga" | "Manhwa" | "Manhua";
   demography: string;
   genres: string[];
   status: string;
