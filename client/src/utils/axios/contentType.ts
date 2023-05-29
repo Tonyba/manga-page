@@ -5,6 +5,7 @@ import {
   ContentType,
   CreateChapterParams,
   DashboardData,
+  GetChapterResponse,
 } from "../types";
 import { axiosInstance } from "./axiosGlobal";
 
@@ -25,12 +26,13 @@ export const addChapter = (params: CreateChapterParams) =>
     },
   });
 
-export const getChapterImages = (title: string, episode: string) =>
-  axiosInstance.get(`/episode/images?title=${title}&episode=${episode}`);
+export const getChapterImages = (episode: string, mangaId: string) =>
+  axiosInstance.get<GetChapterResponse>(
+    `/episode/images?episode=${episode}&mangaId=${mangaId}`
+  );
 
-export const getDashboardData = () => 
+export const getDashboardData = () =>
   axiosInstance.get<DashboardData>(`/dashboard`);
-
 
 export const addContent = (content: AddContentParams) =>
   axios({

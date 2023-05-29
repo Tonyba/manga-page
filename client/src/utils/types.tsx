@@ -14,6 +14,7 @@ export type ContentType = {
   status: string;
   Episodes: ChapterItemType[];
   banner: string;
+  lastChapter?: number;
 };
 
 export type User = {
@@ -145,11 +146,6 @@ export type OptionType = {
   label: string;
 };
 
-export type ChapterPageParamsType = {
-  content: ContentResponseType;
-  currentChapterImgs: string[];
-};
-
 export type UserEditParams = {
   avatar?: File | string;
   userName: string;
@@ -167,4 +163,9 @@ export type DashboardData = {
   manhwasCount: number;
   lastAddedChapters: ChapterItemType[];
   lastAddedMangas: ContentType[];
+};
+
+export type GetChapterResponse = {
+  images: string[];
+  manga: ContentType;
 };

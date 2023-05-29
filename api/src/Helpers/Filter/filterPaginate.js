@@ -1,31 +1,62 @@
 import { Mangas } from "../../models/Manga/manga.model.js";
+import { Episodes } from "../../models/episodes/episodes.model.js";
+import sequelize from "../../database/database.js";
 
-export const filterAndPaginateContent = async (
-  type = "Manga",
-  filters,
-  page,
-  limit
-) => {
+export const filterAndPaginateContent = async (_, filters, page, limit) => {
   try {
     let searchFilters = {
       where: filters,
-      offset: (page - 1) * limit, // 6
-      limit, // 4
+      group: [sequelize.col("Mangas.id")],
+      order: [["id", "DESC"]],
+      attributes: [
+        "id",
+        "title",
+        "description",
+        "image",
+        "type",
+        "demography",
+        [
+          sequelize.fn("max", sequelize.col("Episodes.capNumber")),
+          "lastChapter",
+        ],
+      ],
+      include: [
+        {
+          duplicating: false,
+          model: Episodes,
+          attributes: [],
+        },
+      ],
+      offset: (page - 1) * limit,
+      limit,
     };
 
     let result = [];
     let count = 0;
 
-    if (type) {
-      const mangas = await Mangas.findAndCountAll(searchFilters);
-      result = mangas.rows;
-      count = mangas.count;
+    if (filters.type) {
+      const mangasCount = await Mangas.count({
+        ...searchFilters,
+        include: undefined,
+        attributes: [],
+        group: undefined,
+      });
+      const mangas = await Mangas.findAll(searchFilters);
+
+      result = mangas;
+      count = mangasCount;
       return { result, count };
     } else {
       searchFilters.limit /= 4;
-      const AllMangas = await Mangas.findAndCountAll(searchFilters);
+      const mangasCount = await Mangas.count({
+        ...searchFilters,
+        include: undefined,
+        attributes: [],
+        group: undefined,
+      });
+      const AllMangas = await Mangas.findAll(searchFilters);
       result = AllMangas.rows;
-      count += AllMangas.count;
+      count += mangasCount;
       return { result, count };
     }
   } catch (err) {

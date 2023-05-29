@@ -57,9 +57,21 @@ export const createEpisode = async (req, res) => {
 
 export const getImages = async (req, res) => {
   try {
-    const { title, episode } = req.query;
+    const { episode, mangaId } = req.query;
 
-    let pathTitle = title
+    const manga = await Mangas.findOne({
+      attributes: ["id", "title"],
+      where: {
+        id: mangaId,
+      },
+      include: [
+        {
+          model: Episodes,
+        },
+      ],
+    });
+
+    let pathTitle = manga.title
       .toLowerCase()
       .replace(/ /g, "_")
       .replace(/\-/g, "_")
@@ -84,12 +96,16 @@ export const getImages = async (req, res) => {
           `http://localhost:3000/episodes/${pathTitle}/${pathEpisode}/${file}`
         );
       });
-      res.status(200).json(imagesPath);
+
+      res.status(200).json({
+        images: imagesPath,
+        manga,
+      });
     });
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      message: "Error al crear el episodio",
+      message: "Error al obtener el episodio",
     });
   }
 };

@@ -1,15 +1,23 @@
 import Link from "next/link";
 import React, { FC } from "react";
 import ContentPill from "../content/ContentPill";
+import LastEpisodeBtn from "./LastEpisodeBtn";
 
 type Props = {
   title: string;
   type: string;
   desc: string;
   id: number;
+  lastChapter?: number;
 };
 
-const CardItemHover: FC<Props> = ({ title, type = "manga", desc, id }) => {
+const CardItemHover: FC<Props> = ({
+  title,
+  type = "manga",
+  desc,
+  id,
+  lastChapter,
+}) => {
   return (
     <div
       className="text-left bg-gray-700 rounded-lg p-5 
@@ -30,9 +38,7 @@ const CardItemHover: FC<Props> = ({ title, type = "manga", desc, id }) => {
       <ContentPill contentType={type} isAbsolute={false} full={true} />
       <p className="text-sm my-3 line-clamp-[10]">{desc}</p>
 
-      <button className="mb-5 font-medium w-full text-sm py-1 bg-primary bg-hover text-center rounded-md">
-        Capitulo 23
-      </button>
+      <LastEpisodeBtn id={id} lastChapter={lastChapter} />
 
       <div className="text-right">
         <Link

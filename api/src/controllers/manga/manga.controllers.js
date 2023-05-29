@@ -3,6 +3,8 @@ import fs from "fs";
 import { Episodes } from "../../models/episodes/episodes.model.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import sequelize from "../../database/database.js";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -126,7 +128,29 @@ export const createManga = async (req, res) => {
 
 export const getMangas = async (req, res) => {
   try {
-    const mangas = await Mangas.findAll();
+    const mangas = await Mangas.findAll({
+      group: [sequelize.col("Mangas.id")],
+      order: [["id", "DESC"]],
+      attributes: [
+        "id",
+        "title",
+        "description",
+        "image",
+        "type",
+        "demography",
+        [
+          sequelize.fn("max", sequelize.col("Episodes.capNumber")),
+          "lastChapter",
+        ],
+      ],
+      include: [
+        {
+          duplicating: false,
+          model: Episodes,
+          attributes: [],
+        },
+      ],
+    });
     res.status(200).json(mangas);
   } catch (err) {
     console.log(err);
@@ -142,7 +166,7 @@ export const getMangaById = async (req, res) => {
 
     const manga = await Mangas.findOne({
       where: {
-        id: id,
+        id,
       },
       include: [
         {

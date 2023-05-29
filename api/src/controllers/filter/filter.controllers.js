@@ -1,6 +1,9 @@
 import { Mangas } from "../../models/Manga/manga.model.js";
 import { Op } from "sequelize";
 import { filterAndPaginateContent } from "../../Helpers/Filter/filterPaginate.js";
+import sequelize from "../../database/database.js";
+import { Episodes } from "../../models/episodes/episodes.model.js";
+
 // ! Finalizada
 export const filtersGeneral = async (req, res) => {
   try {
@@ -66,11 +69,28 @@ export const filtersGeneral = async (req, res) => {
 export const filterTitle = async (req, res) => {
   const { title } = req.query;
   const manga = await Mangas.findAndCountAll({
+    group: ["Mangas.id"],
+    attributes: [
+      "id",
+      "title",
+      "description",
+      "image",
+      "type",
+      "demography",
+      [sequelize.fn("max", sequelize.col("Episodes.capNumber")), "lastChapter"],
+    ],
     where: {
       title: {
         [Op.iLike]: `%${title}%`,
       },
     },
+    include: [
+      {
+        duplicating: false,
+        model: Episodes,
+        attributes: [],
+      },
+    ],
   });
 
   const result = manga.rows;
