@@ -4,6 +4,7 @@ import { Episodes } from "../../models/episodes/episodes.model.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import sequelize from "../../database/database.js";
+import getImagesFromEpisode from "../../Helpers/Filter/getImagesFromEpisode.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -165,9 +166,21 @@ export const getMangaById = async (req, res) => {
     const { id } = req.params;
 
     const manga = await Mangas.findOne({
+     
       where: {
         id,
       },
+      attributes: [
+        'id',
+        'title',
+        'type',
+        'demography',
+        'description',
+        'genres',
+        'image',
+        'banner',
+        'status',
+      ],
       include: [
         {
           model: Episodes,
@@ -175,12 +188,16 @@ export const getMangaById = async (req, res) => {
       ],
     });
 
+    console.log(manga)
+
     if (!manga)
       res.status(500).json({
         message: "No se encontro ningun manga por el id: " + id,
       });
 
     const numEpisodes = parseInt(manga.Episodes.length);
+
+
 
     res.status(200).json({ manga, numEpisodes });
   } catch (err) {
