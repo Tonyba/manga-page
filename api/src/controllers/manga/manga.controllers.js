@@ -4,7 +4,7 @@ import { Episodes } from "../../models/episodes/episodes.model.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import sequelize from "../../database/database.js";
-import getImagesFromEpisode from "../../Helpers/Filter/getImagesFromEpisode.js";
+import { Images } from "../../models/images/images.model.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -166,10 +166,7 @@ export const getMangaById = async (req, res) => {
     const { id } = req.params;
 
     const manga = await Mangas.findOne({
-     
-      where: {
-        id,
-      },
+      // group: ['Mangas.id', 'Episodes.id', 'Episodes->Images.id'],
       attributes: [
         'id',
         'title',
@@ -181,14 +178,27 @@ export const getMangaById = async (req, res) => {
         'banner',
         'status',
       ],
+      where: {
+        id,
+      },
       include: [
         {
-          model: Episodes,
+          model: Episodes,        
+          order: ['mangaId'],
+          include: [
+            {
+              model: Images,
+              order: [['position', 'ASC']],
+              limit: 1,
+              as: 'image'
+            }
+           
+          ]
+        
         },
       ],
     });
 
-    console.log(manga)
 
     if (!manga)
       res.status(500).json({
@@ -207,3 +217,57 @@ export const getMangaById = async (req, res) => {
     });
   }
 };
+
+export const deleteManga = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if(!id) res.status(404).json({message: 'El id es requerido'});
+
+    const manga = await Mangas.findOne({
+      where: { id}
+    });
+
+    if(manga) {
+      await manga.destroy();
+    } else {
+      res.status(404).json({message: 'El manga no existe'})
+    }
+
+    res.status(200).json({message: 'Manga Borrado con Exito'})
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error al crear borrar el manga",
+    });
+  }
+}
+
+export  const updateManga = async (req, res) => {
+  try {
+    
+    const { id } = req.params;
+    const { title, description, type, demography } = req.body;
+
+    if(!id) res.status(404).json({message: 'El id es requerido'});
+
+    const manga = await Mangas.findOne({
+      where: { id}
+    });
+
+    if(manga) {
+     
+    } else {
+      res.status(404).json({message: 'El manga no existe'})
+    }
+    
+    res.status(200).json({message: 'Manga Actualizado con Exito'});
+    
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error al crear actualizar el manga",
+    });
+  }
+}

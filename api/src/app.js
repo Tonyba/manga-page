@@ -19,6 +19,7 @@ import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 import path from "path";
+import { Images } from "./models/images/images.model.js";
 dotenv.config();
 const app = express();
 
@@ -54,6 +55,13 @@ app.use((req, res, next) => {
 */
 Episodes.belongsTo(Mangas, { foreignKey: "mangaId" });
 Mangas.hasMany(Episodes, { foreignKey: "mangaId" });
+
+/* 
+  ! Relacionamiento Images y Episodes
+*/
+Episodes.hasMany(Images, { foreignKey: "episodeId", as: 'image', onDelete: 'CASCADE' })
+Images.belongsTo(Episodes, { foreignKey: "episodeId", onDelete: 'CASCADE',   onUpdate: 'CASCADE'});
+ 
 
 /* 
  ! Relacionamiento Favoritos de usuarios

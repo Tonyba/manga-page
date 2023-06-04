@@ -22,6 +22,7 @@ const Explorador = () => {
   const fetchData = async () => {
     setLoading(false);
     const res = await filterExp(filters);
+    console.log(res.data)
     setCount(res.data.count);
     setContent(res.data.result);
     setLoading(true);

@@ -19,7 +19,6 @@ import {
 } from "next";
 import { ContentResponseType } from "@/utils/types";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { revalidate } from "@/utils/axios/revalidate";
 
 const Content: NextPage<ContentResponseType | undefined> = (content) => {
   const [isMobile] = useIsMobile();
@@ -36,7 +35,6 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
 
   const { manga } = content as ContentResponseType;
 
-  console.log(manga);
 
   const {
     banner,
@@ -54,12 +52,17 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
     setFilteredCaps(data);
   };
 
+  const onOrderChange = (newOrder: ChapterItemType[]) => {
+    setFilteredCaps(newOrder);
+    paginateChapters(newOrder);
+  }
+
   const onPageChange = (page: number) => {
     setCurrentPage(page);
   };
 
-  const paginateChapters = () => {
-    const paginated = [...Episodes].reduce(
+  const paginateChapters = (chapters: ChapterItemType[]) => {
+    const paginated = [...chapters].reduce(
       (acc: ChapterItemType[][], val, i) => {
         let idx = Math.floor(i / itemsPerPage);
         let page: ChapterItemType[] = acc[idx] || (acc[idx] = []);
@@ -74,7 +77,7 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
   };
 
   useEffect(() => {
-    paginateChapters();
+    paginateChapters(Episodes);
 
     const rel: ContentType[] = [];
     for (let index = 0; index < 10; index++) {
@@ -153,7 +156,7 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
 
         <div className="w-full xl:w-3/4  xl:pl-10 mt-10 xl:mt-0">
           <div className="mb-3">
-            <Filter data={filteredCaps} onChange={onChange} type="chapters" />
+            <Filter data={filteredCaps} onChange={onChange} onOrderChange={onOrderChange} type="chapters" />
           </div>
 
           {content?.numEpisodes === 0 && (

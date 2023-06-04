@@ -65,13 +65,13 @@ const CardItem: FC<Props> = ({ content, showHover = true, action = "add" }) => {
       </Link>
 
       <Link
-        href={`/content/${id}/capitulo-${lastChapter}`}
+        href={`/content/${id}/${lastChapter ? `capitulo-${lastChapter}` : `` }`}
         role="button"
         className="absolute z-10 right-2 top-1/2 rounded-md
         px-2
         p-1 text-sm bg-[#475569da] block xl:hidden"
       >
-        Cap {lastChapter}
+         {lastChapter ? `Cap ${lastChapter}` : `No Caps` }
       </Link>
 
       <Link href={`/content/${id}`}>

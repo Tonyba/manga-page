@@ -120,14 +120,21 @@ export type ContentResponseType = {
 };
 
 export type ChapterItemType = {
-  image: string;
   title: string;
   id: number;
   path: string;
   capNumber: number;
   mangaId: number;
   Manga?: ContentType;
+  image: ImageType[];
 };
+
+export type ImageType = {
+  id: number;
+  name: string;
+  position: number;
+  url: string;
+}
 
 export type LoginRegisterValidation = Partial<{
   userName: string;

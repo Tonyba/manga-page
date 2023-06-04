@@ -47,7 +47,10 @@ const HeaderSearch: FC<Props> = ({
     if (type === "chapters") {
       const chapters = original as ChapterItemType[];
       const searchArr = chapters.filter(
-        (d: ChapterItemType) => d.capNumber.toString() === search
+        (d: ChapterItemType) => {
+          const regex = RegExp(`${search}`, 'g');
+          return  d.capNumber.toString().match(regex);
+        }
       );
 
       if (!search) {

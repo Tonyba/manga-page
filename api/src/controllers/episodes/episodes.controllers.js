@@ -1,5 +1,6 @@
 import { Mangas } from "../../models/Manga/manga.model.js";
 import { Episodes } from "../../models/episodes/episodes.model.js";
+import { Images } from "../../models/images/images.model.js";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -11,8 +12,6 @@ export const createEpisode = async (req, res) => {
   let imagesArr = req.files["images[]"];
 
   if (!Array.isArray(imagesArr)) imagesArr = [imagesArr];
-
-  console.log(imagesArr);
 
   try {
     let manga = await Mangas.findOne({
@@ -40,12 +39,22 @@ export const createEpisode = async (req, res) => {
       urls.push(path);
     }
 
-    const episodes = Episodes.create({
+    const episodeDb = await Episodes.create({
       title: episode,
       capNumber,
       path: dir,
       mangaId,
     });
+
+    await urls.forEach(async (url, i) => {
+      const savedImage = await Images.create({
+              name: images[i].name,  
+              position: i,
+              url: process.env.API_URL + url.replace('./src/public', ''),
+              episodeId: episodeDb.id
+        })
+    });
+
     res.status(200).json("Capitulo creado con exito");
   } catch (err) {
     console.log(err);

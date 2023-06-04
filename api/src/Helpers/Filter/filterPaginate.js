@@ -55,8 +55,9 @@ export const filterAndPaginateContent = async (_, filters, page, limit) => {
         group: undefined,
       });
       const AllMangas = await Mangas.findAll(searchFilters);
-      result = AllMangas.rows;
+      result = AllMangas;
       count += mangasCount;
+      console.log(AllMangas.result)
       return { result, count };
     }
   } catch (err) {
