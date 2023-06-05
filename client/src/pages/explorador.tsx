@@ -46,7 +46,7 @@ const Explorador = () => {
     >
       <main className="max-w-7xl mx-auto px-5 xl:px-0 mt-5">
         <section className="w-full">
-          <ExploradorSearch />
+          <ExploradorSearch setContent={setContent} setCount={setCount}  filters={filters}/>
         </section>
         <section className="flex py-10 flex-col xl:flex-row flex-wrap">
           <aside className="w-full mb-10 xl:mb-0 xl:w-1/4">

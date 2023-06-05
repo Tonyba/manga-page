@@ -75,7 +75,7 @@ app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(mangas);
-app.use(episodes);
+app.use(episodes); 
 app.use(users);
 app.use(filters);
 

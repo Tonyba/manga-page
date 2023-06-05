@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import FiltersFavorites from "./favoritesComponents/FiltersFavorites";
+import FiltersFavorites from "./favoritesComponents/FilterContent";
 import useFilters from "@/hooks/useFilters";
 import { AuthContext } from "@/utils/context/AuthContext";
 

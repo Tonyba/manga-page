@@ -1,22 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { DashboardListItem } from "./DashboardListItem";
 import Link from "next/link";
-import { ContentType } from "@/utils/types";
-import { getMangas } from "@/utils/axios/contentType";
+import { ContentType, FiltersType } from "@/utils/types";
+import FilterContent from "./favoritesComponents/FilterContent";
+import { INIT_FILTER_STATE } from "@/utils/constants";
+import Pagination from "../pagination/Pagination";
+import { filterExp } from "@/utils/axios/filters";
+import ExploradorSearch from "../Explorador/ExploradorSearch";
+
 
 const ContentList = () => {
   const [content, setContent] = useState<ContentType[]>([]);
+  const [filters, setFilters] =
+  useState<FiltersType>(INIT_FILTER_STATE);
+
+  const [ count, setCount ] = useState(0)
+
+  const onPageChange = (page: number) => {
+    setFilters({...filters, page});
+  }
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await getMangas();
+      const res = await filterExp(filters);
       const data = res.data;
 
-      setContent(data);
+      setCount(count);
+      setContent(data.result);
     };
 
     fetchData();
-  }, []);
+  }, [JSON.stringify(filters)]);
 
   return (
     <>
@@ -30,9 +44,16 @@ const ContentList = () => {
           Agregar
         </Link>
       </div>
-
+      <FilterContent filters={filters} setFilters={setFilters} />
+      <section className="w-full">
+         
+        </section>
       <div className="grid grid-cols-1 overflow-auto">
-        <table className="divide-y divider-primary inline-block lg:block">
+       
+    
+       
+      
+        <table className="divide-y divider-primary inline-block lg:table">
           <thead>
             <tr className="[&>*]:font-normal [&>*]:text-left [&>*]:py-3">
               <th className="pl-2 pr-4">
@@ -55,6 +76,14 @@ const ContentList = () => {
           </tbody>
         </table>
       </div>
+      <div className="flex justify-center lg:justify-start my-5">
+          <Pagination
+            itemsPerPage={filters.limit}
+            onPageChange={(val) => onPageChange(val)}
+            pageCount={Math.ceil(count / filters.limit)}
+            totalItems={count}
+          />
+        </div>
     </>
   );
 };

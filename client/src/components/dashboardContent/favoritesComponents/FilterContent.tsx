@@ -15,7 +15,7 @@ type Props = {
   setFilters: (filters: FiltersType) => void;
 };
 
-const FiltersFavorites: FC<Props> = ({ filters, setFilters }) => {
+const FilterContent: FC<Props> = ({ filters, setFilters }) => {
   const typeRef = useRef<any>();
   const demoRef = useRef<any>();
   const statusRef = useRef<any>();
@@ -112,4 +112,4 @@ const FiltersFavorites: FC<Props> = ({ filters, setFilters }) => {
   );
 };
 
-export default FiltersFavorites;
+export default FilterContent;

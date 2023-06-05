@@ -14,6 +14,7 @@ export const filterAndPaginateContent = async (_, filters, page, limit) => {
         "description",
         "image",
         "type",
+        'status',
         "demography",
         [
           sequelize.fn("max", sequelize.col("Episodes.capNumber")),
@@ -34,8 +35,8 @@ export const filterAndPaginateContent = async (_, filters, page, limit) => {
     let result = [];
     let count = 0;
 
-    if (filters.type) {
-      const mangasCount = await Mangas.count({
+    
+    const mangasCount = await Mangas.count({
         ...searchFilters,
         include: undefined,
         attributes: [],
@@ -46,20 +47,7 @@ export const filterAndPaginateContent = async (_, filters, page, limit) => {
       result = mangas;
       count = mangasCount;
       return { result, count };
-    } else {
-      searchFilters.limit /= 4;
-      const mangasCount = await Mangas.count({
-        ...searchFilters,
-        include: undefined,
-        attributes: [],
-        group: undefined,
-      });
-      const AllMangas = await Mangas.findAll(searchFilters);
-      result = AllMangas;
-      count += mangasCount;
-      console.log(AllMangas.result)
-      return { result, count };
-    }
+ 
   } catch (err) {
     console.log(`Se Presento un problema al intentar filtrar: ${err}`);
   }
