@@ -23,9 +23,9 @@ const HeaderSearch: FC<Props> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [original, setOriginal] = useState(data);
   const [isMobile] = useIsMobile();
   const [isLoading, setLoading] = useState(true);
+  const [filteredCaps, setFilteredCaps] = useState<ChapterItemType[]>([])
 
   const fetchData = async () => {
     await searchByTitle(search)
@@ -45,19 +45,22 @@ const HeaderSearch: FC<Props> = ({
 
   useEffect(() => {
     if (type === "chapters") {
-      const chapters = original as ChapterItemType[];
+     
+      const chapters = data as ChapterItemType[];
+     
       const searchArr = chapters.filter(
         (d: ChapterItemType) => {
-          const regex = RegExp(`${search}`, 'g');
-          return  d.capNumber.toString().match(regex);
+          const regex = new RegExp(`${search}`, 'g');
+          return regex.test(d.capNumber.toString());
         }
       );
 
       if (!search) {
-        onChange([]);
+        setFilteredCaps([]);
       } else {
-        onChange(searchArr);
+       setFilteredCaps(searchArr);
       }
+
     } else {
       if (!search) onChange([]);
       if (search.length < 2) return;
@@ -128,7 +131,7 @@ const HeaderSearch: FC<Props> = ({
 
       {isMobile ? (
         <SearchMobile
-          data={data}
+          data={ type === 'mangas' ?  data : filteredCaps}
           type={type}
           handleOpen={handleOpen}
           open={open}
@@ -137,7 +140,7 @@ const HeaderSearch: FC<Props> = ({
           isLoading={isLoading}
         />
       ) : (
-        search && <SearchBox data={data} type={type} isLoading={isLoading} />
+        search && <SearchBox data={filteredCaps} type={type} isLoading={isLoading} />
       )}
     </div>
   );

@@ -3,9 +3,7 @@ import { faker } from "@faker-js/faker";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import ContentSidebar from "@/components/content/ContentSidebar";
-import ContentChapters from "@/components/content/ContentChapters";
 import Filter from "@/components/filter/Filter";
-import Pagination from "@/components/pagination/Pagination";
 import Carousel from "@/components/carousel/Carousel";
 import { BiBookmarks } from "react-icons/bi";
 import { FaRegSadCry } from "react-icons/fa";
@@ -19,6 +17,8 @@ import {
 } from "next";
 import { ContentResponseType } from "@/utils/types";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import ViewChapterFilterContext, { ActionsChapterFilterContext } from "@/utils/context/ChapterFilterContext";
+import ChapterList from "@/components/mangaComponents/ChapterList";
 
 const Content: NextPage<ContentResponseType | undefined> = (content) => {
   const [isMobile] = useIsMobile();
@@ -26,15 +26,8 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
   const [filteredCaps, setFilteredCaps] = useState<ChapterItemType[]>(
     content?.manga.Episodes || []
   );
-  const [currentPage, setCurrentPage] = useState(0);
-  const [paginatedCaps, setPaginatedCaps] = useState<ChapterItemType[][]>([]);
-
-  const itemsPerPage = 12;
-  const totalPages =
-    content?.numEpisodes && Math.ceil(content?.numEpisodes / itemsPerPage);
 
   const { manga } = content as ContentResponseType;
-
 
   const {
     banner,
@@ -45,40 +38,10 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
     status,
     title,
     type,
-    Episodes,
   } = manga;
 
-  const onChange = (data: any) => {
-    setFilteredCaps(data);
-  };
-
-  const onOrderChange = (newOrder: ChapterItemType[]) => {
-    setFilteredCaps(newOrder);
-    paginateChapters(newOrder);
-  }
-
-  const onPageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  const paginateChapters = (chapters: ChapterItemType[]) => {
-    const paginated = [...chapters].reduce(
-      (acc: ChapterItemType[][], val, i) => {
-        let idx = Math.floor(i / itemsPerPage);
-        let page: ChapterItemType[] = acc[idx] || (acc[idx] = []);
-        page.push(val);
-
-        return acc;
-      },
-      []
-    );
-
-    setPaginatedCaps(paginated);
-  };
 
   useEffect(() => {
-    paginateChapters(Episodes);
-
     const rel: ContentType[] = [];
     for (let index = 0; index < 10; index++) {
       rel.push({
@@ -155,36 +118,32 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
         </aside>
 
         <div className="w-full xl:w-3/4  xl:pl-10 mt-10 xl:mt-0">
-          <div className="mb-3">
-            <Filter data={filteredCaps} onChange={onChange} onOrderChange={onOrderChange} type="chapters" />
-          </div>
+          <ViewChapterFilterContext.Provider value={{ chapters: filteredCaps}}>
+              <ActionsChapterFilterContext.Provider value={{ setChapters: setFilteredCaps }} >
+              <div className="mb-3">
+                <Filter   type="chapters" />
+              </div>
 
-          {content?.numEpisodes === 0 && (
-            <h2 className="text-2xl font-medium">Capitulos</h2>
-          )}
+              {content?.numEpisodes === 0 && (
+              <h2 className="text-2xl font-medium">Capitulos</h2>
+            )}
 
-          {content?.numEpisodes === 0 && (
-            <div className="flex flex-col items-center gap-5">
-              <FaRegSadCry className="text-dark" size={120} />
-              <p className="font-semibold text-xl">No hay Capitulos</p>
-            </div>
-          )}
+            {content?.numEpisodes === 0 && (
+              <div className="flex flex-col items-center gap-5">
+                <FaRegSadCry className="text-dark" size={120} />
+                <p className="font-semibold text-xl">No hay Capitulos</p>
+              </div>
+            )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-4">
-            {paginatedCaps[currentPage] &&
-              paginatedCaps[currentPage].map((ch, index) => {
-                return <ContentChapters key={index} {...ch} />;
-              })}
-          </div>
-          <div className="mt-10">
-            <Pagination
-              itemsPerPage={itemsPerPage}
-              onPageChange={onPageChange}
-              totalItems={content?.numEpisodes || 0}
-              pageCount={totalPages ? totalPages : 0}
-              initialPage={currentPage}
-            />
-          </div>
+              <ChapterList  totalEpisodes={content?.numEpisodes || 0} />
+        
+            </ActionsChapterFilterContext.Provider>
+           
+       
+          </ViewChapterFilterContext.Provider>
+          
+
+          
         </div>
       </section>
 
