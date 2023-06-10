@@ -16,7 +16,6 @@ const ChapterList:FC<Props> = ({ totalEpisodes }) => {
   const { chapters } = useContext(ViewChapterFilterContext);
   const [currentPage, setCurrentPage] = useState(0);
 
-
   const paginateChapters = (chapters: ChapterItemType[]) => {
     const paginated = [...chapters].reduce(
       (acc: ChapterItemType[][], val, i) => {
@@ -29,7 +28,8 @@ const ChapterList:FC<Props> = ({ totalEpisodes }) => {
       []
     );
 
-    return paginated;
+
+    return paginated || [];
 
   };
 
@@ -44,7 +44,7 @@ const ChapterList:FC<Props> = ({ totalEpisodes }) => {
   const isMounted = useRef(false);
 
   useEffect(() => {
-    if(isMounted.current) {
+    if(!isMounted.current) {
       isMounted.current = true
    } else {
       setPaginatedCaps(paginateChapters(chapters));
@@ -55,18 +55,18 @@ const ChapterList:FC<Props> = ({ totalEpisodes }) => {
 
   return <>
    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-4">
-    { paginatedCaps[currentPage].map((ch, index) =><ContentChapters key={index} {...ch} />) }
+    {paginatedCaps[currentPage] && paginatedCaps[currentPage].map((ch, index) =><ContentChapters key={index} {...ch} />) }
     
     </div>
-  <div className="mt-10">
-            <Pagination
-              itemsPerPage={itemsPerPage}
-              onPageChange={onPageChange}
-              totalItems={totalEpisodes || 0}
-              pageCount={totalPages ? totalPages : 0}
-              initialPage={currentPage}
-            />
-          </div>
+     <div className="mt-10">
+      <Pagination
+        itemsPerPage={itemsPerPage}
+        onPageChange={onPageChange}
+        totalItems={totalEpisodes || 0}
+        pageCount={totalPages ? totalPages : 0}
+        initialPage={currentPage}
+      />
+    </div>
   
   </> ;
     

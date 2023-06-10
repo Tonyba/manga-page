@@ -4,6 +4,7 @@ import { Images } from "../../models/images/images.model.js";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { deleteFolder } from "../../Helpers/Filter/deleteImages.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -118,3 +119,32 @@ export const getImages = async (req, res) => {
     });
   }
 };
+
+export const deleteEpisode = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if(!id) res.status(404).json({message: 'El id es requerido'});
+
+    const episode = await Episodes.findOne({
+      where: { id}
+    });
+
+    console.log(episode);
+
+    if(episode) {
+      await episode.destroy();
+      deleteFolder(episode.path);
+    } else {
+      return res.status(404).json({message: 'El episodio no existe'})
+    }
+
+    res.status(200).json({message: 'Episodio Borrado con Exito'})
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error al crear borrar el episodio",
+    });
+  }
+}

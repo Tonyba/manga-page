@@ -3,6 +3,7 @@ import { Episodes } from "../../models/episodes/episodes.model.js";
 import sequelize from "../../database/database.js";
 
 export const filterAndPaginateContent = async (_, filters, page, limit) => {
+  
   try {
     let searchFilters = {
       where: filters,
@@ -20,6 +21,7 @@ export const filterAndPaginateContent = async (_, filters, page, limit) => {
           sequelize.fn("max", sequelize.col("Episodes.capNumber")),
           "lastChapter",
         ],
+        [sequelize.fn('COUNT', sequelize.col('Episodes.id')), 'numEpisodes']
       ],
       include: [
         {
@@ -28,7 +30,7 @@ export const filterAndPaginateContent = async (_, filters, page, limit) => {
           attributes: [],
         },
       ],
-      offset: (page - 1) * limit,
+      offset: page * limit,
       limit,
     };
 
@@ -43,6 +45,7 @@ export const filterAndPaginateContent = async (_, filters, page, limit) => {
         group: undefined,
       });
       const mangas = await Mangas.findAll(searchFilters);
+
 
       result = mangas;
       count = mangasCount;

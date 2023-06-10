@@ -1,10 +1,10 @@
 import axios from "axios";
+import { NEXT_API_URL } from "../constants";
 
-const url = globalThis.window?.location.origin;
 
 export const revalidate = (path: string) => {
   if (process.env.NODE_ENV === "development") return;
   return axios.get(
-    `${url}/api/revalidate/?path=${path}?secret=${process.env.NEXT_PUBLIC_REVALIDATION_TOKEN}`
+    `${NEXT_API_URL}/api/revalidate/?path=${path}?secret=${process.env.NEXT_PUBLIC_REVALIDATION_TOKEN}`
   );
 };

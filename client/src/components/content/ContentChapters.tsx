@@ -1,19 +1,34 @@
 import { ChapterItemType } from "@/utils/types";
 import Image from "next/image";
 import Link from "next/link";
-import React, { FC } from "react";
+import React, { FC, useContext } from "react";
+import { FaTrash, FaPencilAlt } from "react-icons/fa";
+import DashboardHoverItem from "../dashboardContent/DashboardHoverItem";
+import { useAppContext } from "@/utils/context/AppContext";
+import { ActionsChapterFilterContext } from "@/utils/context/ChapterFilterContext";
+import { deleteChapter, getManga } from "@/utils/axios/contentType";
+import { revalidate } from "@/utils/axios/revalidate";
+import { NEXT_API_URL } from "@/utils/constants";
 
 const ContentChapters: FC<ChapterItemType> = ({
   title,
   mangaId,
   capNumber,
-  image
+  image,
+  id
 }) => {
 
+  const { user } = useAppContext();
+  const { setChapters } = useContext(ActionsChapterFilterContext);
+
+  const onDelete = async () => {
+    await deleteChapter(id);
+    const resp = await getManga(mangaId);
+    setChapters(resp.data.manga.Episodes);
+    await revalidate(`${NEXT_API_URL}/content/${mangaId}`);
+  }
+
   return (
-
-
-
     <div className="flex items-center gap-3">
       <div className="w-24">
         <Link href={`/content/${mangaId}/capitulo-${capNumber}`}>
@@ -27,13 +42,21 @@ const ContentChapters: FC<ChapterItemType> = ({
           />
         </Link>
       </div>
-
-      <Link
-        href={`/content/${mangaId}/capitulo-${capNumber}`}
-        className="capitalize cursor-pointer"
-      >
-        {title}
-      </Link>
+      <div>
+          <Link
+            href={`/content/${mangaId}/capitulo-${capNumber}`}
+            className="capitalize cursor-pointer"
+          >
+            {title}
+          </Link>
+        { user?.role === 'Admin' &&  <div className="gap-3 flex mt-3"> 
+            <DashboardHoverItem onClick={onDelete} textHover="Borrar">
+                  <FaTrash size={18} />
+            </DashboardHoverItem>
+          </div>}
+          
+      </div>
+      
     </div>
   );
 };

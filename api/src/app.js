@@ -1,3 +1,4 @@
+
 import express from "express";
 import morgan from "morgan";
 // ----------------------------------------------------------------
@@ -22,6 +23,8 @@ import path from "path";
 import { Images } from "./models/images/images.model.js";
 dotenv.config();
 const app = express();
+
+global.__basedir = __dirname; 
 
 // middlewares
 app.use(express.json());
@@ -48,21 +51,21 @@ app.use((req, res, next) => {
   );
   next();
 });
-
-// Relacionamientos
+ 
+// Relacionamientos 
 /* 
   ! Relacionamiento Manga y Episodes
 */
-Episodes.belongsTo(Mangas, { foreignKey: "mangaId" });
-Mangas.hasMany(Episodes, { foreignKey: "mangaId" });
+Episodes.belongsTo(Mangas, { foreignKey: "mangaId"});
+Mangas.hasMany(Episodes, { foreignKey: "mangaId",  onDelete: 'CASCADE', hooks: true });
 
-/* 
+/*  
   ! Relacionamiento Images y Episodes
 */
-Episodes.hasMany(Images, { foreignKey: "episodeId", as: 'image', onDelete: 'CASCADE' })
-Images.belongsTo(Episodes, { foreignKey: "episodeId", onDelete: 'CASCADE',   onUpdate: 'CASCADE'});
+Episodes.hasMany(Images, { foreignKey: "episodeId", as: 'image', onDelete: 'CASCADE', onUpdate: 'CASCADE',  hooks: true})
+Images.belongsTo(Episodes, { foreignKey: "episodeId"});
  
-
+ 
 /* 
  ! Relacionamiento Favoritos de usuarios
 */
@@ -74,9 +77,9 @@ Users.belongsToMany(Mangas, { through: MangaFav });
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(mangas);
+app.use(mangas); 
 app.use(episodes); 
 app.use(users);
-app.use(filters);
+app.use(filters); 
 
 export default app;

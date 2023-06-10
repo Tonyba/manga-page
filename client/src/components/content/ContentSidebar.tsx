@@ -22,7 +22,7 @@ const ContentSidebar: FC<Props> = ({
         <span className="text-important font-semibold text-xl block mb-3">
           Tipo
         </span>
-        <ContentPill className="w-40" contentType="Manga" isAbsolute={false} />
+        <ContentPill className="w-40" contentType={contentType} isAbsolute={false} />
       </div>
       <div className="mb-5">
         <span className="font-semibold text-important text-xl block mb-1">

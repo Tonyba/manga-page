@@ -49,6 +49,7 @@ const DashboardAddContent = () => {
       if (Object.keys(errors).length !== 0) {
         console.log("errors");
         Swal.fire("Hay errores en el formulario", "", "error");
+        setSubmitting(false);
       } else {
         saveContent();
       }

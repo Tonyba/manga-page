@@ -13,7 +13,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const getMangas = () => axiosInstance.get<ContentType[]>("/manga");
 
-export const getManga = (id: string) =>
+export const getManga = (id: number) =>
   axiosInstance.get<ContentResponseType>(`/manga/${id}`);
 
 export const addChapter = (params: CreateChapterParams) =>
@@ -26,6 +26,9 @@ export const addChapter = (params: CreateChapterParams) =>
     },
   });
 
+
+export const deleteChapter = (id: number) => axiosInstance.delete(`/episode/${id}`);
+
 export const getChapterImages = (episode: string, mangaId: string) =>
   axiosInstance.get<GetChapterResponse>(
     `/episode/images?episode=${episode}&mangaId=${mangaId}`
@@ -33,7 +36,7 @@ export const getChapterImages = (episode: string, mangaId: string) =>
 
 export const getDashboardData = () =>
   axiosInstance.get<DashboardData>(`/dashboard`);
-
+ 
 export const addContent = (content: AddContentParams) =>
   axios({
     method: "POST",
@@ -42,4 +45,8 @@ export const addContent = (content: AddContentParams) =>
     headers: {
       "Content-Type": "multipart/form-data",
     },
-  });
+});
+
+export const deleteManga = (id: number) => axiosInstance.delete(`/manga/${id}`);
+
+export const bulkDelete = (mangas: number[]) => axiosInstance.delete('/manga/bulk/delete', {data: {mangas}});

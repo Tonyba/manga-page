@@ -70,7 +70,7 @@ export const INIT_FILTER_STATE = {
   status: "",
   genres: [],
   limit: 12,
-  page: 1,
+  page: 0,
 };
 
 export const VALIDATION_MESSAGES = {
@@ -79,6 +79,7 @@ export const VALIDATION_MESSAGES = {
 };
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
+export const NEXT_API_URL = globalThis.window?.location.origin;
 
 export const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 

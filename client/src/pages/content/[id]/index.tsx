@@ -55,6 +55,7 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
         status: faker.word.noun(),
         Episodes: [],
         banner: "",
+        numEpisodes: 0
       });
     }
     setRelated(rel);
@@ -120,22 +121,21 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
         <div className="w-full xl:w-3/4  xl:pl-10 mt-10 xl:mt-0">
           <ViewChapterFilterContext.Provider value={{ chapters: filteredCaps}}>
               <ActionsChapterFilterContext.Provider value={{ setChapters: setFilteredCaps }} >
-              <div className="mb-3">
-                <Filter   type="chapters" />
+              <div className="mb-3 border-b border-primary pb-3">
+                <Filter  type="chapters" />
               </div>
 
-              {content?.numEpisodes === 0 && (
-              <h2 className="text-2xl font-medium">Capitulos</h2>
+              {content?.manga.numEpisodes === 0 && (
+              <h2 className="text-2xl font-medium">Capitulos</h2> 
             )}
 
-            {content?.numEpisodes === 0 && (
+            {content?.manga.numEpisodes === 0 ? (
               <div className="flex flex-col items-center gap-5">
                 <FaRegSadCry className="text-dark" size={120} />
                 <p className="font-semibold text-xl">No hay Capitulos</p>
               </div>
-            )}
+            ) : <ChapterList  totalEpisodes={content?.manga.numEpisodes || 0} />}
 
-              <ChapterList  totalEpisodes={content?.numEpisodes || 0} />
         
             </ActionsChapterFilterContext.Provider>
            
@@ -175,8 +175,10 @@ export const getStaticProps: GetStaticProps = async (
 
   if (!id) Router.reload();
 
-  const resp = await getManga(id);
+  const resp = await getManga(parseInt(id));
   const contentResp = resp.data;
+
+  console.log(contentResp)
 
   return {
     props: contentResp,

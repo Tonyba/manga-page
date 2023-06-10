@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import React, { FC, PropsWithChildren, useRef, useState } from "react";
+import React, { FC, PropsWithChildren, useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 
 type Props = {

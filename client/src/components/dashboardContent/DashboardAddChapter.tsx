@@ -1,26 +1,35 @@
 import { getManga } from "@/utils/axios/contentType";
-import { ContentResponseType } from "@/utils/types";
+import { ChapterItemType, ContentResponseType } from "@/utils/types";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import DashboardTitle from "./DashboardTitle";
 import DashboardAddChapterSide from "../sidebars/DashboardAddChapterSide";
-import ContentChapters from "@/components/content/ContentChapters";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaRegSadCry} from "react-icons/fa";
 import DashboardAddChapterModal from "./DashboardAddChapterModal";
 import { revalidate } from "@/utils/axios/revalidate";
+import { API_URL } from "@/utils/constants";
+import ViewChapterFilterContext, { ActionsChapterFilterContext } from "@/utils/context/ChapterFilterContext";
+import Filter from "../filter/Filter";
+import ChapterList from "../mangaComponents/ChapterList";
 
 const DashboardAddChapter = () => {
   const router = useRouter();
   const [content, setContent] = useState<ContentResponseType>();
   const { contentId } = router.query;
   const [modalOpen, setModalOpen] = useState(false);
+  const [filteredCaps, setFilteredCaps] = useState<ChapterItemType[]>(
+    content?.manga.Episodes || []
+  );
 
   const fetchData = async () => {
     if (!contentId) return;
-    const resp = await getManga(contentId as string);
+    const resp = await getManga(parseInt(contentId as string));
     const contentResp = resp.data;
+    const resultEps = resp.data.manga.Episodes.map( (ep) => ({...ep, checked: false}));
 
     setContent(contentResp);
+    setFilteredCaps(resultEps);
+    await revalidate(`${API_URL}/content/${contentId}`);
   };
 
   useEffect(() => {
@@ -40,19 +49,46 @@ const DashboardAddChapter = () => {
             Agregar Capitulo
           </button>
 
-          <div className="grid  md:grid-cols-3 xl:grid-cols-4 gap-y-4 gap-x-2">
-            {content?.manga.Episodes.map((episode, i) => (
-              <ContentChapters key={i} {...episode} />
-            ))}
-          </div>
+          
+          <ViewChapterFilterContext.Provider value={{ chapters: filteredCaps}}>
+              <ActionsChapterFilterContext.Provider value={{ setChapters: setFilteredCaps }} >
+              <div className="mb-3 border-b border-primary  pb-3">
+                <Filter type="chapters" />
+              </div>
 
-          {content?.numEpisodes != null && content.numEpisodes != undefined && (
+              {content?.manga.numEpisodes === 0 && (
+              <h2 className="text-2xl font-medium">Capitulos</h2> 
+            )}
+
+            {content?.manga.numEpisodes === 0 ? (
+              <div className="flex flex-col items-center gap-5">
+                <FaRegSadCry className="text-dark" size={120} />
+                <p className="font-semibold text-xl">No hay Capitulos</p>
+              </div>
+            ) : <ChapterList  totalEpisodes={content?.manga.numEpisodes || 0} />}
+
+        
+            </ActionsChapterFilterContext.Provider>
+           
+       
+          </ViewChapterFilterContext.Provider>
+         
+
+          {content?.manga.numEpisodes != null && content?.manga.numEpisodes != undefined && (
+            <>
+            
             <DashboardAddChapterModal
               isOpen={modalOpen}
-              chaptersTotal={content?.numEpisodes || 0}
+              chaptersTotal={content?.manga.numEpisodes}
               onModalClose={() => setModalOpen(false)}
               updateCaps={fetchData}
             />
+
+      
+            </>
+          
+
+            
           )}
         </div>
         <aside className="w-full lg:w-1/4 xl:pl-5 xl:sticky top-5 mb-5">

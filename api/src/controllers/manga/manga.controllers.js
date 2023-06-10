@@ -5,6 +5,10 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import sequelize from "../../database/database.js";
 import { Images } from "../../models/images/images.model.js";
+import { deleteFolderAndImageFromManga } from "../../Helpers/Filter/deleteImages.js";
+
+import { v4 as uuidv4 } from 'uuid';
+import { Sequelize } from "sequelize";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -84,23 +88,37 @@ export const createManga = async (req, res) => {
   if (!Array.isArray(genres)) genres = [genres];
 
   try {
-    let path = __dirname + "/../../public/mangas/" + image?.name;
+
+    const exist = await Mangas.findOne({
+      where: {
+        title
+      }
+    })
+
+    console.log(exist)
+
+    if(exist) return res.status(400).json({ message: `Ya hay un ${type} con el mismo titulo` });
+
+    let imageHash = uuidv4() + '_image_';
+    let bannerHash = uuidv4() + '_banner_';
+
+    let path = __dirname + "/../../public/mangas/" + imageHash + image?.name;
     image?.mv(path, function (err, data) {
       if (err) throw err;
       console.log(data);
     });
-    path = __dirname + "/../../public/mangas/" + banner?.name;
+    path = __dirname + "/../../public/mangas/" + bannerHash + banner?.name;
     banner?.mv(path, function (err, data) {
       if (err) throw err;
       console.log(data);
     });
-    let url = "http://localhost:3000/mangas/";
+    let url = `${process.env.API_URL}/mangas/`;
 
     // --------------------------------------------
 
     const slug = title
       .toLowerCase()
-      .replace(/ /g, "_")
+      .replace(/ /g, "_") 
       .replace(/[^\w-]+/g, "");
 
     const dir = `./src/public/episodes/${slug}`;
@@ -111,8 +129,8 @@ export const createManga = async (req, res) => {
     const manga = await Mangas.create({
       title,
       description,
-      image: `${url}${image?.name}`,
-      banner: `${url}${banner?.name}`,
+      image: `${url}${imageHash}${image?.name}`,
+      banner: `${url}${bannerHash}${banner?.name}`,
       genres,
       type,
       demography,
@@ -166,7 +184,7 @@ export const getMangaById = async (req, res) => {
     const { id } = req.params;
 
     const manga = await Mangas.findOne({
-      // group: ['Mangas.id', 'Episodes.id', 'Episodes->Images.id'],
+      group: ['Mangas.id', 'Episodes.id'],
       attributes: [
         'id',
         'title',
@@ -176,9 +194,10 @@ export const getMangaById = async (req, res) => {
         'genres',
         'image',
         'banner',
-        'status',
+        'status', 
+        [Sequelize.fn('COUNT', Sequelize.col('Episodes.id')), 'numEpisodes']
       ],
-      where: {
+      where: { 
         id,
       },
       include: [
@@ -199,7 +218,7 @@ export const getMangaById = async (req, res) => {
       ],
     });
 
-
+ 
     if (!manga)
       res.status(500).json({
         message: "No se encontro ningun manga por el id: " + id,
@@ -230,8 +249,9 @@ export const deleteManga = async (req, res) => {
 
     if(manga) {
       await manga.destroy();
+      deleteFolderAndImageFromManga(manga.path, [manga.image, manga.banner])
     } else {
-      res.status(404).json({message: 'El manga no existe'})
+      return res.status(404).json({message: 'El manga no existe'})
     }
 
     res.status(200).json({message: 'Manga Borrado con Exito'})
@@ -240,6 +260,45 @@ export const deleteManga = async (req, res) => {
     console.log(error);
     res.status(500).json({
       message: "Error al crear borrar el manga",
+    });
+  }
+}
+
+export const bulkDeleteManga = async (req, res) => {
+  try {
+    let { mangas } = req.body;
+    const found = [];
+    const notFound = [];
+
+    if (!Array.isArray(mangas)) mangas = [mangas];
+
+    const existed =  mangas.map(async (id) => {
+      const manga = await Mangas.findByPk(id);
+
+      if(manga) {
+        deleteFolderAndImageFromManga(manga.path, [manga.image, manga.banner]);
+        found.push(id)
+      } else {
+        notFound.push(id)
+      }
+
+      return manga;
+            
+    });   
+
+    const promises = await Promise.all(existed);
+
+    await Mangas.destroy({where: { id: found }})
+
+    res.status(200).json({
+      message: 'Mangas Borrados con Exito',
+      notDeletedMsg: `${notFound.length ? `Los siguientes mangas con los ids ${ notFound.reduce((prev, current) => prev + ', ' + current , '') } no fueron borrados`  : 'Todos fueron borrados'}`
+    })
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error al borrar manga",
     });
   }
 }
@@ -259,7 +318,7 @@ export  const updateManga = async (req, res) => {
     if(manga) {
      
     } else {
-      res.status(404).json({message: 'El manga no existe'})
+     return res.status(404).json({message: 'El manga no existe'});
     }
     
     res.status(200).json({message: 'Manga Actualizado con Exito'});

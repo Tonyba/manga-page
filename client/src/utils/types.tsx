@@ -13,8 +13,10 @@ export type ContentType = {
   genres: string[];
   status: string;
   Episodes: ChapterItemType[];
+  numEpisodes: number;
   banner: string;
   lastChapter?: number;
+  checked?: boolean;
 };
 
 export type User = {
@@ -116,7 +118,6 @@ export type FiltersResponseType = {
 
 export type ContentResponseType = {
   manga: ContentType;
-  numEpisodes: number;
 };
 
 export type ChapterItemType = {
@@ -127,6 +128,7 @@ export type ChapterItemType = {
   mangaId: number;
   Manga?: ContentType;
   image: ImageType[];
+  checked?: boolean;
 };
 
 export type ImageType = {
