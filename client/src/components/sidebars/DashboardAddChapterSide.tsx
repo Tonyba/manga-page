@@ -29,7 +29,7 @@ const DashboardAddChapterSide: FC<Props> = ({ content }) => {
       <div className="divide-y divider-dark">
         <div className="flex items-center justify-between py-3">
           <span>Capitulos</span>
-          <span>{content?.numEpisodes}</span>
+          <span>{content?.manga.numEpisodes}</span>
         </div>
         <div className="flex items-center justify-between py-3">
           <span>Tipo</span>

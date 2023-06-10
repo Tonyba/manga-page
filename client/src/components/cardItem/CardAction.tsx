@@ -33,6 +33,7 @@ const CardAction: FC<Props> = ({ action, contentId }) => {
           genres: [],
           Episodes: [],
           status: resp.data.status,
+          numEpisodes: 0
         },
         ...favorites,
       ]);
