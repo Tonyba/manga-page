@@ -62,9 +62,9 @@ const ChapterContent = ({ images, manga }: GetChapterResponse) => {
   return (
     <ChapterContext.Provider
       value={{
-        chapters: manga.Episodes,
+        chapters: manga.episodes,
         contentTitle: manga.title,
-        currentChapter: manga.Episodes.find(
+        currentChapter: manga.episodes.find(
           (v) => v.capNumber === getChapterNumber(chapter as string)
         ),
         images: chapterImages,
