@@ -133,7 +133,7 @@ export const deleteEpisode = async (req, res) => {
     console.log(episode);
 
     if(episode) {
-      await episode.destroy();
+      await episode.destroy(); 
       deleteFolder(episode.path);
     } else {
       return res.status(404).json({message: 'El episodio no existe'})

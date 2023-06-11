@@ -4,11 +4,10 @@ import { Episodes } from "../../models/episodes/episodes.model.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import sequelize from "../../database/database.js";
-import { Images } from "../../models/images/images.model.js";
 import { deleteFolderAndImageFromManga } from "../../Helpers/Filter/deleteImages.js";
 
 import { v4 as uuidv4 } from 'uuid';
-import { Sequelize } from "sequelize";
+import { QueryTypes } from "sequelize";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -183,52 +182,60 @@ export const getMangaById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const manga = await Mangas.findOne({
-      group: ['Mangas.id', 'Episodes.id'],
-      attributes: [
-        'id',
-        'title',
-        'type',
-        'demography',
-        'description',
-        'genres',
-        'image',
-        'banner',
-        'status', 
-        [Sequelize.fn('COUNT', Sequelize.col('Episodes.id')), 'numEpisodes']
-      ],
-      where: { 
-        id,
-      },
-      include: [
-        {
-          model: Episodes,        
-          order: ['mangaId'],
-          include: [
-            {
-              model: Images,
-              order: [['position', 'ASC']],
-              limit: 1,
-              as: 'image'
-            }
-           
-          ]
-        
-        },
-      ],
-    });
+    const manga = await sequelize.query(`
+    SELECT 
+    Ma."id" AS id,
+    Ma."title" AS title,
+    Ma."demography" AS demography,
+    Ma."description" AS description,
+    Ma."image" AS image,
+    Ma."banner" AS banner,
+    Ma."type" AS type,
+    Ma."genres" AS genres,
+    Ma."status" AS status,
+    COUNT(Episodes_join.id)::int AS "numEpisodes",
+    COALESCE(
+      json_agg(
+        json_build_object(
+        'id', Episodes_join."id",
+        'title', Episodes_join."title",
+        'capNumber', Episodes_join."capNumber",
+        'mangaId', Episodes_join."mangaId",
+        'image', (
+          SELECT Img."url" FROM "Images" AS Img 
+          WHERE Img."episodeId" = Episodes_join."id" 
+          LIMIT 1
+        )
+        )
+      ) 
+      FILTER (WHERE Episodes_join."id" is not null),
+      '[]'
+    ) AS episodes
+    FROM "Mangas" Ma
+    LEFT JOIN (
+    SELECT id, Ep."mangaId", Ep."title", Ep."capNumber" 
+      FROM "Episodes" AS Ep 
+      ORDER BY Ep."capNumber" ASC
+    ) AS Episodes_join ON Episodes_join."mangaId" = Ma."id"
+    WHERE Ma."id" = :id
+    GROUP BY Ma."id"
+    `, { 
+      type: QueryTypes.SELECT,
+      model: Mangas,
+      mapToModel: true,
+      plain: true,
+      replacements: {
+        id
+      }
+     });
 
- 
     if (!manga)
-      res.status(500).json({
+      return res.status(500).json({
         message: "No se encontro ningun manga por el id: " + id,
       });
 
-    const numEpisodes = parseInt(manga.Episodes.length);
 
-
-
-    res.status(200).json({ manga, numEpisodes });
+    res.status(200).json({ manga });
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -308,15 +315,25 @@ export  const updateManga = async (req, res) => {
     
     const { id } = req.params;
     const { title, description, type, demography } = req.body;
+    let genres = req.body["genres[]"];
+    const { image, banner } = req.files;
 
     if(!id) res.status(404).json({message: 'El id es requerido'});
+
+    if (!Array.isArray(genres)) genres = [genres];
 
     const manga = await Mangas.findOne({
       where: { id}
     });
 
     if(manga) {
-     
+      await manga.update({
+        title,
+        description,
+        type,
+        demography,
+        genres
+     })
     } else {
      return res.status(404).json({message: 'El manga no existe'});
     }
