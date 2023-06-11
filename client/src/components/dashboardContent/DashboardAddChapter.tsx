@@ -11,6 +11,7 @@ import { API_URL } from "@/utils/constants";
 import ViewChapterFilterContext, { ActionsChapterFilterContext } from "@/utils/context/ChapterFilterContext";
 import Filter from "../filter/Filter";
 import ChapterList from "../mangaComponents/ChapterList";
+import { LoadingWrapper } from "../shared/LoadingWrapper";
 
 const DashboardAddChapter = () => {
   const router = useRouter();
@@ -18,14 +19,15 @@ const DashboardAddChapter = () => {
   const { contentId } = router.query;
   const [modalOpen, setModalOpen] = useState(false);
   const [filteredCaps, setFilteredCaps] = useState<ChapterItemType[]>(
-    content?.manga.Episodes || []
+    content?.manga.episodes || []
   );
+  const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
     if (!contentId) return;
     const resp = await getManga(parseInt(contentId as string));
     const contentResp = resp.data;
-    const resultEps = resp.data.manga.Episodes.map( (ep) => ({...ep, checked: false}));
+    const resultEps = resp.data.manga.episodes.map( (ep) => ({...ep, checked: false}));
 
     setContent(contentResp);
     setFilteredCaps(resultEps);
@@ -50,24 +52,27 @@ const DashboardAddChapter = () => {
           </button>
 
           
-          <ViewChapterFilterContext.Provider value={{ chapters: filteredCaps}}>
-              <ActionsChapterFilterContext.Provider value={{ setChapters: setFilteredCaps }} >
-              <div className="mb-3 border-b border-primary  pb-3">
-                <Filter type="chapters" />
-              </div>
+          <ViewChapterFilterContext.Provider value={{ chapters: filteredCaps, loading}}>
+              <ActionsChapterFilterContext.Provider value={{ setChapters: setFilteredCaps, setContent, setLoading }} >
+                <LoadingWrapper loading={loading} >
+                   <div className="mb-3 border-b border-primary  pb-3">
+                      <Filter type="chapters" />
+                    </div>
 
-              {content?.manga.numEpisodes === 0 && (
-              <h2 className="text-2xl font-medium">Capitulos</h2> 
-            )}
+                    {content?.manga.numEpisodes === 0 && (
+                    <h2 className="text-2xl font-medium">Capitulos</h2> 
+                  )}
 
-            {content?.manga.numEpisodes === 0 ? (
-              <div className="flex flex-col items-center gap-5">
-                <FaRegSadCry className="text-dark" size={120} />
-                <p className="font-semibold text-xl">No hay Capitulos</p>
-              </div>
-            ) : <ChapterList  totalEpisodes={content?.manga.numEpisodes || 0} />}
+                  {content?.manga.numEpisodes === 0 ? (
+                    <div className="flex flex-col items-center gap-5">
+                      <FaRegSadCry className="text-dark" size={120} />
+                      <p className="font-semibold text-xl">No hay Capitulos</p>
+                    </div>
+                  ) : <ChapterList  totalEpisodes={content?.manga.numEpisodes || 0} />}
 
         
+                </LoadingWrapper>
+    
             </ActionsChapterFilterContext.Provider>
            
        

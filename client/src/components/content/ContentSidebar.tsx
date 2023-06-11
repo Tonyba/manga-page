@@ -1,4 +1,3 @@
-import { ContentType } from "@/utils/types";
 import React, { FC } from "react";
 import ContentPill from "./ContentPill";
 import GenreItem from "./GenreItem";

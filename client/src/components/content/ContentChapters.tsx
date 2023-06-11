@@ -19,12 +19,14 @@ const ContentChapters: FC<ChapterItemType> = ({
 }) => {
 
   const { user } = useAppContext();
-  const { setChapters } = useContext(ActionsChapterFilterContext);
+  const { setLoading, setContent } = useContext(ActionsChapterFilterContext);
 
   const onDelete = async () => {
+    setLoading!(true);
     await deleteChapter(id);
     const resp = await getManga(mangaId);
-    setChapters(resp.data.manga.Episodes);
+    setContent!(resp.data);
+    setLoading!(false);
     await revalidate(`${NEXT_API_URL}/content/${mangaId}`);
   }
 
@@ -36,7 +38,7 @@ const ContentChapters: FC<ChapterItemType> = ({
           <Image
             alt={title}
             className="object-cover rounded-lg h-20"
-            src={`${ image[0] ? image[0].url : 'https://picsum.photos/200/150'}`}
+            src={`${ image ? image : 'https://picsum.photos/200/150'}`}
             width={200}
             height={150}
           />

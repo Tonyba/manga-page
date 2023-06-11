@@ -104,7 +104,7 @@ const DashboardAddChapterModal: FC<Props> = ({
         opacity: isOpen ? 1 : 0,
         visibility: isOpen ? "visible" : "hidden",
       }}
-      className="w-full bg-primary-dark rounded-md p-5 min-h-full absolute top-0 left-0"
+      className="w-full bg-primary-dark rounded-md p-5 min-h-full absolute top-0 left-0 z-10"
     >
       <div className="flex justify-end">
         <button
@@ -127,6 +127,7 @@ const DashboardAddChapterModal: FC<Props> = ({
           data={chapter}
           setData={setChapter}
           clearForm={clearForm}
+          setClearForm={setClearForm}
         />
       </div>
     </motion.div>

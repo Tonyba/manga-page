@@ -17,6 +17,7 @@ type Props = {
   errMsg?: string;
   isMulti?: boolean;
   clearForm?: boolean;
+  setClearForm?: (clear: boolean) => void;
   previews?: string[] | File[];
 };
 
@@ -29,6 +30,7 @@ const DragAndDrop: FC<Props> = ({
   isMulti = false,
   clearForm = false,
   previews = [],
+  setClearForm
 }) => {
   const [filesItem, setFilesItems] = useState<DragImageItemType[]>([]);
   const [prevs, setPreview] = useState<string[] | File[]>([]);
@@ -82,7 +84,10 @@ const DragAndDrop: FC<Props> = ({
   }, [filesItem]);
 
   useEffect(() => {
-    if (clearForm) setFilesItems([]);
+    if (clearForm) { 
+      setFilesItems([])
+      setClearForm!(false);
+    };
   }, [clearForm]);
 
   return (

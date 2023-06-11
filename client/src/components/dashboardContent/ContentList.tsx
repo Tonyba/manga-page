@@ -87,7 +87,7 @@ const ContentList = () => {
           checkedAll: checkboxAll
         }} >
 
-        <LoadingWrapper>
+        <LoadingWrapper loading={loading}>
         <FilterContent filters={filters} setFilters={setFilters} />
       
       <div className="my-4" > 

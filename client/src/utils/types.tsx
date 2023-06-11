@@ -12,7 +12,7 @@ export type ContentType = {
   demography: string;
   genres: string[];
   status: string;
-  Episodes: ChapterItemType[];
+  episodes: ChapterItemType[];
   numEpisodes: number;
   banner: string;
   lastChapter?: number;
@@ -127,7 +127,7 @@ export type ChapterItemType = {
   capNumber: number;
   mangaId: number;
   Manga?: ContentType;
-  image: ImageType[];
+  image?: string;
   checked?: boolean;
 };
 

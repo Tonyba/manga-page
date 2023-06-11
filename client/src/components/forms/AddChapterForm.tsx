@@ -12,6 +12,7 @@ type Props = {
   errors?: ChapterValidationType;
   loading: boolean;
   clearForm?: boolean;
+  setClearForm?: (clear: boolean) => void
 };
 
 const AddChapterForm: FC<Props> = ({
@@ -20,7 +21,8 @@ const AddChapterForm: FC<Props> = ({
   setData,
   data,
   loading,
-  clearForm = false,
+  clearForm,
+  setClearForm,
 }) => {
   const handleFileChange = (files: File[]) => {
     setData({ ...data, images: files });
@@ -42,6 +44,7 @@ const AddChapterForm: FC<Props> = ({
         isMulti={true}
         errMsg={errors?.images}
         clearForm={clearForm}
+        setClearForm={setClearForm}
       />
       <div className="mb-10">
         <SubmitButton loading={loading} text="Subir Capitulo" />

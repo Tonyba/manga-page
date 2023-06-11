@@ -1,10 +1,11 @@
 import React, {FC, PropsWithChildren, useContext} from 'react'
 import LoadingSpinner from '../chapter/LoadingSpinner'
-import { ContentListContext } from '@/utils/context/ContentListContext';
 
-export const LoadingWrapper: FC<PropsWithChildren> = ({children}) => {
-  
-  const {loading} = useContext(ContentListContext);
+type Props = {
+  loading: boolean
+}
+
+export const LoadingWrapper: FC<PropsWithChildren & Props> = ({children, loading}) => {
   
   return (
     <div className='relative' >

@@ -24,8 +24,10 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
   const [isMobile] = useIsMobile();
   const [related, setRelated] = useState<ContentType[]>([]);
   const [filteredCaps, setFilteredCaps] = useState<ChapterItemType[]>(
-    content?.manga.Episodes || []
+    content?.manga.episodes || []
   );
+
+  console.log(content)
 
   const { manga } = content as ContentResponseType;
 
@@ -53,7 +55,7 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
         image: "https://picsum.photos/225/300",
         genres: [],
         status: faker.word.noun(),
-        Episodes: [],
+        episodes: [],
         banner: "",
         numEpisodes: 0
       });

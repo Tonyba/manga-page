@@ -31,7 +31,7 @@ const CardAction: FC<Props> = ({ action, contentId }) => {
           image: resp.data.image,
           banner: "",
           genres: [],
-          Episodes: [],
+          episodes: [],
           status: resp.data.status,
           numEpisodes: 0
         },

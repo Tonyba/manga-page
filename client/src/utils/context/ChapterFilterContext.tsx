@@ -1,20 +1,27 @@
 import { createContext } from 'react';
-import { ChapterItemType } from '../types';
+import { ChapterItemType, ContentResponseType, ContentType } from '../types';
 
 type ChapterFilterContextType = {
-    chapters: ChapterItemType[]
+    chapters: ChapterItemType[],
+    loading?: boolean,
+    content?: ContentType
 }
 
 type Actions = {
-    setChapters: (chapters: ChapterItemType[]) => void
+    setChapters: (chapters: ChapterItemType[]) => void,
+    setLoading?: (loading: boolean) => void,
+    setContent?: (content: ContentResponseType) => void
 }
 
 const ViewChapterFilterContext = createContext<ChapterFilterContextType>({
-    chapters: []
+    chapters: [],
+    loading: true
 })
 
 export const ActionsChapterFilterContext = createContext<Actions>({
-    setChapters: () => {}
+    setChapters: () => {},
+    setLoading: () => {},
+    setContent: () => {}
 })
 
 
