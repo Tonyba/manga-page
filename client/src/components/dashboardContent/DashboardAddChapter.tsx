@@ -68,7 +68,7 @@ const DashboardAddChapter = () => {
                       <FaRegSadCry className="text-dark" size={120} />
                       <p className="font-semibold text-xl">No hay Capitulos</p>
                     </div>
-                  ) : <ChapterList  totalEpisodes={content?.manga.numEpisodes || 0} />}
+                  ) : <ChapterList showActions={true}  totalEpisodes={content?.manga.numEpisodes || 0} />}
 
         
                 </LoadingWrapper>

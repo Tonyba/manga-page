@@ -16,19 +16,19 @@ export const HomeSidebar = () => {
       ...INIT_FILTER_STATE,
       type: "Manga",
       limit: 6,
-      page: 1,
+      page: 0,
     });
     const manwhaRes = await filterExp({
       ...INIT_FILTER_STATE,
       type: "Manhwa",
       limit: 6,
-      page: 1,
+      page: 0,
     });
     const manhuaRes = await filterExp({
       ...INIT_FILTER_STATE,
       type: "Manhua",
       limit: 6,
-      page: 1,
+      page: 0,
     });
 
     const mangas = mangasRes.data.result;

@@ -10,12 +10,18 @@ import { deleteChapter, getManga } from "@/utils/axios/contentType";
 import { revalidate } from "@/utils/axios/revalidate";
 import { NEXT_API_URL } from "@/utils/constants";
 
-const ContentChapters: FC<ChapterItemType> = ({
+
+type Props = {
+  showActions?: boolean
+}
+
+const ContentChapters: FC<ChapterItemType & Props> = ({
   title,
   mangaId,
   capNumber,
   image,
-  id
+  id,
+  showActions = false
 }) => {
 
   const { user } = useAppContext();
@@ -51,7 +57,7 @@ const ContentChapters: FC<ChapterItemType> = ({
           >
             {title}
           </Link>
-        { user?.role === 'Admin' &&  <div className="gap-3 flex mt-3"> 
+        { (user?.role === 'Admin' && showActions ) &&  <div className="gap-3 flex mt-3"> 
             <DashboardHoverItem onClick={onDelete} textHover="Borrar">
                   <FaTrash size={18} />
             </DashboardHoverItem>

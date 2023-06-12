@@ -4,7 +4,7 @@ import { Episodes } from "../../models/episodes/episodes.model.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import sequelize from "../../database/database.js";
-import { deleteFolderAndImageFromManga } from "../../Helpers/Filter/deleteImages.js";
+import { deleteFolderAndImageFromManga, deleteImage } from "../../Helpers/Filter/deleteImages.js";
 
 import { v4 as uuidv4 } from 'uuid';
 import { QueryTypes } from "sequelize";
@@ -157,7 +157,7 @@ export const getMangas = async (req, res) => {
         "type",
         "demography",
         [
-          sequelize.fn("max", sequelize.col("Episodes.capNumber")),
+          sequelize.fn("max", sequelize.col("episodes.capNumber")),
           "lastChapter",
         ],
       ],
@@ -166,6 +166,7 @@ export const getMangas = async (req, res) => {
           duplicating: false,
           model: Episodes,
           attributes: [],
+          as: 'episodes'
         },
       ],
     });
@@ -299,7 +300,7 @@ export const bulkDeleteManga = async (req, res) => {
 
     res.status(200).json({
       message: 'Mangas Borrados con Exito',
-      notDeletedMsg: `${notFound.length ? `Los siguientes mangas con los ids ${ notFound.reduce((prev, current) => prev + ', ' + current , '') } no fueron borrados`  : 'Todos fueron borrados'}`
+      notDeletedMsg: `${notFound.length ? `Los siguientes mangas con los ids ${ notFound.reduce((prev, current) => prev + ', ' + current , '') } no fueron borrados porque probablemente no existen o surgio un error`  : 'Todos fueron borrados'}`
     })
 
   } catch (error) {
@@ -314,9 +315,17 @@ export  const updateManga = async (req, res) => {
   try {
     
     const { id } = req.params;
-    const { title, description, type, demography } = req.body;
     let genres = req.body["genres[]"];
-    const { image, banner } = req.files;
+    let files = {};
+    let url = `${process.env.API_URL}/mangas/`;
+
+    if(req.files) {
+      const { image, banner } = req.files;
+      files = {image, banner};
+    }
+
+
+ 
 
     if(!id) res.status(404).json({message: 'El id es requerido'});
 
@@ -326,19 +335,36 @@ export  const updateManga = async (req, res) => {
       where: { id}
     });
 
+    
+    if(files.image) {
+      const imageHash = uuidv4() + '_image_';
+      deleteImage(manga.image);
+      const path = __dirname + "/../../public/mangas/" + imageHash + files.image?.name;
+      files.image?.mv(path, function (err, data) {
+        if (err) throw err;
+        console.log(data);
+      });
+      req.body.image = `${url}${imageHash}${files.image?.name}`;
+    }
+
+    if(files.banner) {
+      const bannerHash = uuidv4() + '_banner_';
+      deleteImage(manga.banner);
+      const path = __dirname + "/../../public/mangas/" + bannerHash + files.banner?.name;
+      files.banner?.mv(path, function (err, data) {
+        if (err) throw err;
+        console.log(data);
+      });
+      req.body.banner = `${url}${bannerHash}${files.banner?.name}`;
+    }
+
     if(manga) {
-      await manga.update({
-        title,
-        description,
-        type,
-        demography,
-        genres
-     })
+      await manga.update(req.body);
     } else {
      return res.status(404).json({message: 'El manga no existe'});
     }
     
-    res.status(200).json({message: 'Manga Actualizado con Exito'});
+    res.status(200).json({message: 'Manga fue Actualizado con Exito'});
     
   } catch (error) {
     console.log(error);

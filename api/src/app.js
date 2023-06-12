@@ -57,7 +57,7 @@ app.use((req, res, next) => {
   ! Relacionamiento Manga y Episodes
 */
 Episodes.belongsTo(Mangas, { foreignKey: "mangaId"});
-Mangas.hasMany(Episodes, { foreignKey: "mangaId",  onDelete: 'CASCADE', hooks: true });
+Mangas.hasMany(Episodes, { foreignKey: "mangaId",  onDelete: 'CASCADE', hooks: true,  as: 'episodes' });
 
 /*  
   ! Relacionamiento Images y Episodes

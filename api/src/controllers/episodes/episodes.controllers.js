@@ -15,6 +15,15 @@ export const createEpisode = async (req, res) => {
   if (!Array.isArray(imagesArr)) imagesArr = [imagesArr];
 
   try {
+
+    let exist = await Episodes.findOne({
+      where: {
+        capNumber
+      }
+    })
+
+    if(exist) return res.status(400).json({ message: 'Ya existe un capitulo con ese numero'})
+
     let manga = await Mangas.findOne({
       where: {
         id: mangaId,
@@ -67,7 +76,7 @@ export const createEpisode = async (req, res) => {
 
 export const getImages = async (req, res) => {
   try {
-    const { episode, mangaId } = req.query;
+    const { mangaId, capNumber } = req.query;
 
     const manga = await Mangas.findOne({
       attributes: ["id", "title"],
@@ -77,41 +86,29 @@ export const getImages = async (req, res) => {
       include: [
         {
           model: Episodes,
+          as: 'episodes'
         },
       ],
     });
 
-    let pathTitle = manga.title
-      .toLowerCase()
-      .replace(/ /g, "_")
-      .replace(/\-/g, "_")
-      .replace(/[^\w-]+/g, "");
-
-    let pathEpisode = episode
-      .toLowerCase()
-      .replace(/ /g, "_")
-      .replace(/\-/g, "_")
-      .replace(/[^\w-]+/g, "");
-
-    const directoryPath = `./src/public/episodes/${pathTitle}/${pathEpisode}`;
-
-    fs.readdir(directoryPath, function (err, files) {
-      //handling error
-      if (err) {
-        return console.log("Unable to scan directory: " + err);
-      }
-      let imagesPath = [];
-      files.forEach(function (file) {
-        imagesPath.push(
-          `http://localhost:3000/episodes/${pathTitle}/${pathEpisode}/${file}`
-        );
-      });
-
-      res.status(200).json({
-        images: imagesPath,
-        manga,
-      });
+    const Episode = await Episodes.findOne({
+      where: {
+        mangaId,
+        capNumber
+      },
+      include: [
+        {
+          model: Images,
+          as: 'image'
+        }
+      ]
     });
+
+    res.status(200).json({
+      images: Episode.image,
+      manga,
+    });
+   
   } catch (err) {
     console.log(err);
     res.status(500).json({

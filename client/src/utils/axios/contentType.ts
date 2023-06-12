@@ -29,9 +29,9 @@ export const addChapter = (params: CreateChapterParams) =>
 
 export const deleteChapter = (id: number) => axiosInstance.delete(`/episode/${id}`);
 
-export const getChapterImages = (episode: string, mangaId: string) =>
+export const getChapterImages = (episodeId: number, mangaId: string) =>
   axiosInstance.get<GetChapterResponse>(
-    `/episode/images?episode=${episode}&mangaId=${mangaId}`
+    `/episode/images?capNumber=${episodeId}&mangaId=${mangaId}`
   );
 
 export const getDashboardData = () =>

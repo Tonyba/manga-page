@@ -175,6 +175,6 @@ export type DashboardData = {
 };
 
 export type GetChapterResponse = {
-  images: string[];
+  images: ImageType[];
   manga: ContentType;
 };

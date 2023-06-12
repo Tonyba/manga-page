@@ -7,11 +7,12 @@ import Pagination from '../pagination/Pagination';
 
 type Props = {
     totalEpisodes: number;
+    showActions?: boolean
 }
 
 const itemsPerPage = 12;
 
-const ChapterList:FC<Props> = ({ totalEpisodes }) => {
+const ChapterList:FC<Props> = ({ totalEpisodes, showActions = false }) => {
 
   const { chapters } = useContext(ViewChapterFilterContext);
   const [currentPage, setCurrentPage] = useState(0);
@@ -55,7 +56,7 @@ const ChapterList:FC<Props> = ({ totalEpisodes }) => {
 
   return <>
    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 mt-4">
-    {paginatedCaps[currentPage] && paginatedCaps[currentPage].map((ch, index) =><ContentChapters key={index} {...ch} />) }
+    {paginatedCaps[currentPage] && paginatedCaps[currentPage].map((ch, index) =><ContentChapters showActions={showActions} key={index} {...ch} />) }
     
     </div>
      <div className="mt-10">

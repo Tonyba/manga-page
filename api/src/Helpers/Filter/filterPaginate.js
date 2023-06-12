@@ -18,16 +18,17 @@ export const filterAndPaginateContent = async (_, filters, page, limit) => {
         'status',
         "demography",
         [
-          sequelize.fn("max", sequelize.col("Episodes.capNumber")),
+          sequelize.fn("max", sequelize.col("episodes.capNumber")),
           "lastChapter",
         ],
-        [sequelize.fn('COUNT', sequelize.col('Episodes.id')), 'numEpisodes']
+        [sequelize.fn('COUNT', sequelize.col('episodes.id')), 'numEpisodes']
       ],
       include: [
         {
           duplicating: false,
           model: Episodes,
           attributes: [],
+          as: 'episodes'
         },
       ],
       offset: page * limit,

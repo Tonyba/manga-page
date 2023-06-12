@@ -15,6 +15,9 @@ import React, { useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 
 const ChapterContent = ({ images, manga }: GetChapterResponse) => {
+
+  console.log(manga)
+
   const router = useRouter();
   const { id, chapter } = router.query;
   const [chapterImages, setImages] = useState<string[]>([]);
@@ -56,7 +59,7 @@ const ChapterContent = ({ images, manga }: GetChapterResponse) => {
   useEffect(() => {
     setCurrentImage(0);
 
-    setImages(images);
+    setImages(images.map(img => img.url));
   }, [chapter, currentChapter]);
 
   return (
@@ -64,7 +67,7 @@ const ChapterContent = ({ images, manga }: GetChapterResponse) => {
       value={{
         chapters: manga.episodes,
         contentTitle: manga.title,
-        currentChapter: manga.episodes.find(
+        currentChapter: manga.episodes?.find(
           (v) => v.capNumber === getChapterNumber(chapter as string)
         ),
         images: chapterImages,
@@ -132,7 +135,9 @@ export const getStaticProps: GetStaticProps = async (
 
   if (!id || !chapter) Router.reload();
 
-  const chapterRequest = await getChapterImages(chapter as string, id);
+  const capNumber = chapter.split('-')[1];
+
+  const chapterRequest = await getChapterImages(parseInt(capNumber), id);
   const chapterResp = chapterRequest.data;
 
   return {
