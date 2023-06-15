@@ -32,8 +32,10 @@ const DragAndDrop: FC<Props> = ({
   previews = [],
   setClearForm
 }) => {
+
+  console.log(previews)
   const [filesItem, setFilesItems] = useState<DragImageItemType[]>([]);
-  const [prevs, setPreview] = useState<string[] | File[]>([]);
+  const [prevs, setPreview] = useState<string[] | File[]>(previews);
 
   const handlePreview = (files: File[] | File) => {
     if (!Array.isArray(files) && files instanceof Blob) files = [files];
@@ -73,8 +75,8 @@ const DragAndDrop: FC<Props> = ({
   };
 
   useEffect(() => {
-    setPreview(previews);
-  }, []);
+    if(previews.length > 0) setPreview(previews);
+  }, [previews.length]);
 
   useEffect(() => {
     onChange(filesItem.map((f) => f.file));
@@ -102,7 +104,7 @@ const DragAndDrop: FC<Props> = ({
           >
             <input {...getInputProps()} />
             {filesItem.length > 0 && !isMulti ? (
-              filesItem.map((prev, i) => <img key={i} src={prev.imgSrc} />)
+              filesItem.map((prev, i) => (<img key={i} src={prev.imgSrc} />))
             ) : (
               <>
                 {previews.length > 0 ? (

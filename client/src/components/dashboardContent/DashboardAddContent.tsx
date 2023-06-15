@@ -1,25 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import AddContentForm from "../forms/AddContentForm";
 import { ContentValidationType, AddContentParams } from "@/utils/types";
-import { demography, status, types } from "@/utils/valoresParaSelect";
+import { demography, status, types, genres } from "@/utils/valoresParaSelect";
 
 import { ValidateContent } from "@/utils/validations/ContentAddValidation";
 import Swal from "sweetalert2";
-import { addContent } from "@/utils/axios/contentType";
+import { addContent, getManga, updateContent } from "@/utils/axios/contentType";
 import DashboardTitle from "./DashboardTitle";
+import { useSearchParams } from 'next/navigation';
 
 const initState: AddContentParams = {
   banner: "",
-  demography: demography[0].label,
+  demography: demography[0],
   description: "",
   genres: [],
-  status: status[0].label,
+  status: status[0],
   title: "",
-  type: types[0].label,
+  type: types[0],
   image: "",
 };
 
 const DashboardAddContent = () => {
+
+  const searchParams = useSearchParams();
+
+  const id = searchParams.get('contentId');  
+
   const [data, setData] = useState<AddContentParams>(initState);
   const [errors, setErrors] = useState<ContentValidationType>();
   const [submitting, setSubmitting] = useState(false);
@@ -30,19 +36,60 @@ const DashboardAddContent = () => {
     setErrors(ValidateContent(data));
   };
 
+  const editContent = () => {
+    console.log('edita')
+    updateContent(data, parseInt(id!))
+      .then((res) => {
+        console.log(res);
+        setSubmitting(false);
+        Swal.fire(`${data.type?.label} actualizado`, "", "success");
+      })
+      .catch((err) => {
+        console.log(err);
+        Swal.fire(`Error al actualizar ${data.type?.label}`, "", "error");
+        setSubmitting(false);
+      });
+  };
+
   const saveContent = () => {
     addContent(data)
       .then((res) => {
         console.log(res);
         setSubmitting(false);
-        Swal.fire(`${data.type} creado`, "", "success");
+        Swal.fire(`${data.type?.label} creado`, "", "success");
       })
       .catch((err) => {
         console.log(err);
-        Swal.fire(`Error al crear ${data.type}`, "", "error");
+        Swal.fire(`Error al crear ${data.type?.label}`, "", "error");
         setSubmitting(false);
       });
   };
+
+  const fetchData = useCallback( async () => {
+    const resp = await getManga( parseInt(id!) );
+    const data = resp.data;
+
+    const parsed = {
+      ...data.manga,
+      image: data.manga.image as string,
+      banner: data.manga.banner as string,
+      type: types.find( (v) => v.label ===  data.manga.type),
+      demography: demography.find((d) => d.label === data.manga.demography),
+      status: status.find((s) => s.label === data.manga.status),
+      genres: genres.filter((s) => data.manga.genres.includes(s.label)  )
+    }
+
+
+
+    setData(parsed);
+
+  }, [id]);
+
+  useEffect(() => {
+    if(id) {
+      fetchData();  
+    }
+  }, [id]);
 
   useEffect(() => {
     if (errors && submitting) {
@@ -51,10 +98,12 @@ const DashboardAddContent = () => {
         Swal.fire("Hay errores en el formulario", "", "error");
         setSubmitting(false);
       } else {
-        saveContent();
+        
+       id ? editContent() : saveContent();
+
       }
     }
-  }, [JSON.stringify(errors), submitting]);
+  }, [JSON.stringify(errors), submitting, id]);
   return (
     <>
       <DashboardTitle text="Agregar Contenido" />
@@ -66,6 +115,7 @@ const DashboardAddContent = () => {
           onSubmit={handleSubmit}
           errors={errors}
           loading={submitting}
+          editing={id ? true : false}
         />
       </div>
     </>

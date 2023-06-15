@@ -327,38 +327,40 @@ export  const updateManga = async (req, res) => {
 
  
 
-    if(!id) res.status(404).json({message: 'El id es requerido'});
+    if(!id) return res.status(404).json({message: 'El id es requerido'});
 
     if (!Array.isArray(genres)) genres = [genres];
 
     const manga = await Mangas.findOne({
       where: { id}
     });
-
     
-    if(files.image) {
-      const imageHash = uuidv4() + '_image_';
-      deleteImage(manga.image);
-      const path = __dirname + "/../../public/mangas/" + imageHash + files.image?.name;
-      files.image?.mv(path, function (err, data) {
-        if (err) throw err;
-        console.log(data);
-      });
-      req.body.image = `${url}${imageHash}${files.image?.name}`;
-    }
-
-    if(files.banner) {
-      const bannerHash = uuidv4() + '_banner_';
-      deleteImage(manga.banner);
-      const path = __dirname + "/../../public/mangas/" + bannerHash + files.banner?.name;
-      files.banner?.mv(path, function (err, data) {
-        if (err) throw err;
-        console.log(data);
-      });
-      req.body.banner = `${url}${bannerHash}${files.banner?.name}`;
-    }
+    
 
     if(manga) {
+
+      if(files.image) {
+        const imageHash = uuidv4() + '_image_';
+        deleteImage(manga.image);
+        const path = __dirname + "/../../public/mangas/" + imageHash + files.image?.name;
+        files.image?.mv(path, function (err, data) {
+          if (err) throw err;
+          console.log(data);
+        });
+        req.body.image = `${url}${imageHash}${files.image?.name}`;
+      }
+  
+      if(files.banner) {
+        const bannerHash = uuidv4() + '_banner_';
+        deleteImage(manga.banner);
+        const path = __dirname + "/../../public/mangas/" + bannerHash + files.banner?.name;
+        files.banner?.mv(path, function (err, data) {
+          if (err) throw err;
+          console.log(data);
+        });
+        req.body.banner = `${url}${bannerHash}${files.banner?.name}`;
+      }
+      
       await manga.update(req.body);
     } else {
      return res.status(404).json({message: 'El manga no existe'});

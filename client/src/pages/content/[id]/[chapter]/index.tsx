@@ -16,8 +16,6 @@ import { useSwipeable } from "react-swipeable";
 
 const ChapterContent = ({ images, manga }: GetChapterResponse) => {
 
-  console.log(manga)
-
   const router = useRouter();
   const { id, chapter } = router.query;
   const [chapterImages, setImages] = useState<string[]>([]);

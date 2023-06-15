@@ -6,7 +6,7 @@ import type { AppProps } from "next/app";
 export type ContentType = {
   id: number;
   title: string;
-  image: string | ImageModule;
+  image: string | ImageModule | File;
   description: string;
   type: "Manga" | "Manhwa" | "Manhua";
   demography: string;
@@ -85,10 +85,10 @@ export type TabItemType = {
 export type AddContentParams = {
   title: string;
   description: string;
-  type: string;
-  demography: string;
-  genres: any[];
-  status: string;
+  type?: OptionType;
+  demography?: OptionType;
+  genres: OptionType[] ;
+  status?: OptionType;
   banner: File | string;
   image: File | string;
 };
@@ -98,7 +98,7 @@ export type ContentValidationType = Partial<{
   description: string;
   type: string;
   demography: string;
-  genres: string[] | string;
+  genres: any[];
   status: string;
   banner: File | string;
   image: File | string;

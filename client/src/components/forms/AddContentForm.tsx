@@ -19,6 +19,7 @@ type Props = {
   onSubmit: (e: React.FormEvent) => void;
   errors?: ContentValidationType;
   loading: boolean;
+  editing?: boolean
 };
 
 const AddContentForm: FC<Props> = ({
@@ -27,6 +28,7 @@ const AddContentForm: FC<Props> = ({
   onSubmit,
   errors,
   loading,
+  editing
 }) => {
   const handleBannerChange = (file: File, imageType: "banner" | "image") => {
     setData({ ...data, [imageType]: file });
@@ -41,6 +43,8 @@ const AddContentForm: FC<Props> = ({
     setData({ ...data, [type]: values });
   };
 
+  console.log(data)
+
   return (
     <form
       onSubmit={(e) => onSubmit(e)}
@@ -52,8 +56,8 @@ const AddContentForm: FC<Props> = ({
           onChange={(f) => handleBannerChange(f[0], "banner")}
           label="Banner"
           errMsg={errors?.banner as string}
+          previews={ data.image ? [data.banner as string] : [] }
         />
-        <div className="mt-10"></div>
         <Input
           label="Titulo"
           placeholder="Escriba un titulo"
@@ -73,18 +77,18 @@ const AddContentForm: FC<Props> = ({
             <FormSelect
               placeholder="Seleccione un Tipo"
               label="Tipo"
-              onChange={(opt) => setData({ ...data, type: opt.label })}
+              onChange={(opt) => setData({ ...data, type: opt })}
               options={types}
-              defaultValue={types[0]}
+              defaultValue={data.type as OptionType}
             />
           </div>
           <div className="w-1/3">
             <FormSelect
               placeholder="Seleccione una Demografia"
               label="Demografia"
-              onChange={(opt) => setData({ ...data, demography: opt.label })}
+              onChange={(opt) => setData({ ...data, demography: opt })}
               options={demography}
-              defaultValue={demography[0]}
+              defaultValue={data.demography as OptionType}
             />
           </div>
 
@@ -92,9 +96,9 @@ const AddContentForm: FC<Props> = ({
             <FormSelect
               placeholder="Seleccione un Estado"
               label="Estado"
-              onChange={(opt) => setData({ ...data, status: opt.label })}
+              onChange={(opt) => setData({ ...data, status: opt })}
               options={status}
-              defaultValue={status[0]}
+              defaultValue={ data.status as OptionType}
             />
           </div>
         </div>
@@ -103,14 +107,14 @@ const AddContentForm: FC<Props> = ({
             placeholder="Seleccione Generos"
             label="Generos"
             isMulti={true}
-            onChange={(opt) => handlePush(opt, "genres")}
+            onChange={(opt) => setData({...data, genres: opt})}
             options={genres}
-            defaultValue={data.genres}
+            defaultValue={data.genres as OptionType[]}
             errMsg={errors?.genres as any[]}
           />
         </div>
 
-        <SubmitButton text="crear" loading={loading} />
+        <SubmitButton text={`${ editing ? 'Actualizar' : 'Crear' }`} loading={loading} />
       </div>
 
       <div className="w-full xl:w-1/4 xl:pl-7">
@@ -119,6 +123,7 @@ const AddContentForm: FC<Props> = ({
           onChange={(f) => handleBannerChange(f[0], "image")}
           label="Imagen"
           errMsg={errors?.image as string}
+          previews={ data.image ? [data.image as string] : []}
         />
       </div>
     </form>

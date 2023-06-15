@@ -35,6 +35,10 @@ const DashboardAction: NextPageWithLayout = () => {
       case "add":
         setContent(<DashboardAddContent />);
         break;
+      
+      case "edit":
+        setContent(<DashboardAddContent />);
+      break;
 
       case "add-chapter":
         setContent(<DashboardAddChapter />);

@@ -41,7 +41,29 @@ export const addContent = (content: AddContentParams) =>
   axios({
     method: "POST",
     url: `${API_URL}/mangas`,
-    data: content,
+    data: {
+      ...content,
+      genres: content.genres.map((g) => g.label),
+      demography: content.demography?.label,
+      type: content.type?.label,
+      status: content.status?.label
+    },
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+});
+
+export const updateContent = (content: AddContentParams, id: number) =>
+  axios({
+    method: "PUT",
+    url: `${API_URL}/manga/${id}`,
+    data: {
+      ...content,
+      genres: content.genres.map((g) => g.label),
+      demography: content.demography?.label,
+      type: content.type?.label,
+      status: content.status?.label
+    },
     headers: {
       "Content-Type": "multipart/form-data",
     },
