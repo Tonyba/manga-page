@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from "react";
-import Popup from "../shared/Popup";
 import AddChapterForm from "../forms/AddChapterForm";
 import { motion } from "framer-motion";
 import { FaTimes } from "react-icons/fa";
@@ -8,7 +7,7 @@ import { validateChapter } from "@/utils/validations/ChapterAddValidation";
 import Swal from "sweetalert2";
 import { addChapter } from "@/utils/axios/contentType";
 import { useRouter } from "next/router";
-import { revalidate } from "@/utils/axios/revalidate";
+import { revalidateManga } from "@/utils/axios/revalidate";
 
 type Props = {
   isOpen: boolean;
@@ -78,7 +77,7 @@ const DashboardAddChapterModal: FC<Props> = ({
     })
       .then(async (res) => {
         console.log(res);
-        await revalidate(`content/${contentId}`);
+        await revalidateManga(contentId as string);
         Swal.fire("Capitulo creado", "", "success");
         setSubmitting(false);
         updateCaps();

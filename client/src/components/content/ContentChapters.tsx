@@ -7,8 +7,7 @@ import DashboardHoverItem from "../dashboardContent/DashboardHoverItem";
 import { useAppContext } from "@/utils/context/AppContext";
 import { ActionsChapterFilterContext } from "@/utils/context/ChapterFilterContext";
 import { deleteChapter, getManga } from "@/utils/axios/contentType";
-import { revalidate } from "@/utils/axios/revalidate";
-import { NEXT_API_URL } from "@/utils/constants";
+import { revalidateManga } from "@/utils/axios/revalidate";
 
 
 type Props = {
@@ -33,7 +32,7 @@ const ContentChapters: FC<ChapterItemType & Props> = ({
     const resp = await getManga(mangaId);
     setContent!(resp.data);
     setLoading!(false);
-    await revalidate(`${NEXT_API_URL}/content/${mangaId}`);
+    await revalidateManga(mangaId.toString());
   }
 
   return (
