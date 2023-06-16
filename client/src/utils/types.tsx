@@ -98,7 +98,7 @@ export type ContentValidationType = Partial<{
   description: string;
   type: string;
   demography: string;
-  genres: any[];
+  genres: string;
   status: string;
   banner: File | string;
   image: File | string;
