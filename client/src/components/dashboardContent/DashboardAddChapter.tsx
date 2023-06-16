@@ -6,8 +6,7 @@ import DashboardTitle from "./DashboardTitle";
 import DashboardAddChapterSide from "../sidebars/DashboardAddChapterSide";
 import { FaPlus, FaRegSadCry} from "react-icons/fa";
 import DashboardAddChapterModal from "./DashboardAddChapterModal";
-import { revalidate } from "@/utils/axios/revalidate";
-import { API_URL } from "@/utils/constants";
+import { revalidateManga } from "@/utils/axios/revalidate";
 import ViewChapterFilterContext, { ActionsChapterFilterContext } from "@/utils/context/ChapterFilterContext";
 import Filter from "../filter/Filter";
 import ChapterList from "../mangaComponents/ChapterList";
@@ -31,7 +30,7 @@ const DashboardAddChapter = () => {
 
     setContent(contentResp);
     setFilteredCaps(resultEps);
-    await revalidate(`${API_URL}/content/${contentId}`);
+    await revalidateManga(contentId as string);
   };
 
   useEffect(() => {

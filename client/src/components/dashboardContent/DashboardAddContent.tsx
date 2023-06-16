@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import { addContent, getManga, updateContent } from "@/utils/axios/contentType";
 import DashboardTitle from "./DashboardTitle";
 import { useSearchParams } from 'next/navigation';
+import { revalidateManga } from "@/utils/axios/revalidate";
 
 const initState: AddContentParams = {
   banner: "",
@@ -37,10 +38,10 @@ const DashboardAddContent = () => {
   };
 
   const editContent = () => {
-    console.log('edita')
     updateContent(data, parseInt(id!))
-      .then((res) => {
+      .then(async (res) => {
         console.log(res);
+        await revalidateManga(id as string);
         setSubmitting(false);
         Swal.fire(`${data.type?.label} actualizado`, "", "success");
       })

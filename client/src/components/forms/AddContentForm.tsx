@@ -110,7 +110,7 @@ const AddContentForm: FC<Props> = ({
             onChange={(opt) => setData({...data, genres: opt})}
             options={genres}
             defaultValue={data.genres as OptionType[]}
-            errMsg={errors?.genres as any[]}
+            errMsg={errors?.genres}
           />
         </div>
 
