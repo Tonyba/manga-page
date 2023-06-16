@@ -361,7 +361,7 @@ export  const updateManga = async (req, res) => {
         req.body.banner = `${url}${bannerHash}${files.banner?.name}`;
       }
       
-      await manga.update(req.body);
+      await manga.update({...req.body, genres});
     } else {
      return res.status(404).json({message: 'El manga no existe'});
     }
