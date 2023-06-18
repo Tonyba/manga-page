@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   AddContentParams,
+  ChapterItemType,
   ContentResponseType,
   ContentType,
   CreateChapterParams,
@@ -26,6 +27,18 @@ export const addChapter = (params: CreateChapterParams) =>
     },
   });
 
+export const getChapter = (id: number) => axiosInstance.get<ChapterItemType>(`/episode/${id}`);
+
+export const updateChapter = (params : any) => {
+  axios({
+    method: 'PUT',
+    url: `${API_URL}/episode/${params.id}`,
+    data: params,
+    headers: {
+      "Content-Type" : "multipart/form-data"
+    }
+  });
+}
 
 export const deleteChapter = (id: number) => axiosInstance.delete(`/episode/${id}`);
 
