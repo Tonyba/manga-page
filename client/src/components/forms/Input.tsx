@@ -11,6 +11,7 @@ type Props = {
   name?: string;
   errMsg?: string;
   focusAnimationsLabel?: boolean;
+  readOnly?:boolean
 };
 
 const labelAnimationStyles = {
@@ -39,6 +40,7 @@ const Input: FC<Props> = ({
   value,
   errMsg,
   focusAnimationsLabel = false,
+  readOnly = false
 }) => {
   return (
     <div className="relative">
@@ -59,6 +61,7 @@ const Input: FC<Props> = ({
         min={type === "number" ? 1 : ""}
         placeholder={focusAnimationsLabel && placeholder ? " " : placeholder}
         onChange={(e) => onChange(e.target.value)}
+        readOnly={readOnly}
       />
 
       {label && focusAnimationsLabel && (
