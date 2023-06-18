@@ -23,6 +23,8 @@ export const findFavorite = (id: number, favorites: ContentType[]) => {
   return false;
 };
 
+export const isType = <Type>(thing: unknown): thing is Type => true;
+
 export const toSlug = (str: string) => {
   return str
     .normalize("NFD")
