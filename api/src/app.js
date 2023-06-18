@@ -62,7 +62,7 @@ Mangas.hasMany(Episodes, { foreignKey: "mangaId",  onDelete: 'CASCADE', hooks: t
 /*  
   ! Relacionamiento Images y Episodes
 */
-Episodes.hasMany(Images, { foreignKey: "episodeId", as: 'image', onDelete: 'CASCADE', onUpdate: 'CASCADE',  hooks: true})
+Episodes.hasMany(Images, { foreignKey: "episodeId", as: 'images', onDelete: 'CASCADE', onUpdate: 'CASCADE',  hooks: true})
 Images.belongsTo(Episodes, { foreignKey: "episodeId"});
  
  

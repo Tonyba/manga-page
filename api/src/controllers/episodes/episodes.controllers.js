@@ -18,7 +18,8 @@ export const createEpisode = async (req, res) => {
 
     let exist = await Episodes.findOne({
       where: {
-        capNumber
+        capNumber,
+        mangaId
       }
     })
 
@@ -65,7 +66,7 @@ export const createEpisode = async (req, res) => {
         })
     });
 
-    res.status(200).json("Capitulo creado con exito");
+    res.status(200).json({message: "Capitulo creado con exito"});
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -77,6 +78,24 @@ export const createEpisode = async (req, res) => {
 export const getImages = async (req, res) => {
   try {
     const { mangaId, capNumber } = req.query;
+
+    const Episode = await Episodes.findOne({
+      where: {
+        mangaId,
+        capNumber
+      },
+      include: [
+        {
+          model: Images,
+          as: 'images'
+        }
+      ],
+      order: [
+        [{model: Images, as: 'images'}, 'position', 'asc']
+      ]
+    });
+
+    if(!Episode) return res.status(404).json({message: 'El episodio no existe'});
 
     const manga = await Mangas.findOne({
       attributes: ["id", "title"],
@@ -91,24 +110,12 @@ export const getImages = async (req, res) => {
       ],
     });
 
-    const Episode = await Episodes.findOne({
-      where: {
-        mangaId,
-        capNumber
-      },
-      include: [
-        {
-          model: Images,
-          as: 'image'
-        }
-      ]
-    });
-
     res.status(200).json({
-      images: Episode.image,
-      manga,
+        images: Episode.images,
+        manga,
     });
-   
+     
+
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -144,4 +151,64 @@ export const deleteEpisode = async (req, res) => {
       message: "Error al crear borrar el episodio",
     });
   }
+}
+
+export const updateEpisode = async (req ,res) => {
+  const { id } = req.params;
+  try {
+
+    const episode = await Episodes.findByPk(id);
+
+    if(!episode) return res.status(404).json({ message: 'El Capitulo no Existe' });
+
+    await episode.update({...req.body});
+
+    res.status(202).json({
+      message: 'Capitulo Actualizado'
+    })
+    
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      message: 'Ocurrio un problema al actualizar el capitulo'
+    })
+  }
+
+
+
+
+
+}
+
+export const getEpisode = async(req, res) => {
+
+  try {
+    const { id } = req.params;
+
+    const episode = await Episodes.findOne({
+      where: {
+        id
+      },
+      include: [
+        {
+          model: Images,
+          as: 'images',
+        }
+      ],
+      order: [
+        [{model: Images, as: 'images'}, 'position', 'asc']
+      ]
+    });
+
+    if(!episode) return res.status(404).json({message: 'El episodio no se encontro'});
+
+    res.json(episode);
+    
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      message: 'Ocurrio un problema al obtener el capitulo'
+    })
+  }
+
 }
