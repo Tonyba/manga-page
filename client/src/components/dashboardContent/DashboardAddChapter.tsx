@@ -6,7 +6,6 @@ import DashboardTitle from "./DashboardTitle";
 import DashboardAddChapterSide from "../sidebars/DashboardAddChapterSide";
 import { FaPlus, FaRegSadCry} from "react-icons/fa";
 import DashboardAddChapterModal from "./DashboardAddChapterModal";
-import { revalidateManga } from "@/utils/axios/revalidate";
 import ViewChapterFilterContext, { ActionsChapterFilterContext } from "@/utils/context/ChapterFilterContext";
 import Filter from "../filter/Filter";
 import ChapterList from "../mangaComponents/ChapterList";
@@ -22,6 +21,8 @@ const DashboardAddChapter = () => {
   );
   const [loading, setLoading] = useState(false);
 
+  const [editingChapter, setEditingChapter] = useState<ChapterItemType>();
+
   const fetchData = async () => {
     if (!contentId) return;
     const resp = await getManga(parseInt(contentId as string));
@@ -30,7 +31,6 @@ const DashboardAddChapter = () => {
 
     setContent(contentResp);
     setFilteredCaps(resultEps);
-    await revalidateManga(contentId as string);
   };
 
   useEffect(() => {
@@ -51,8 +51,8 @@ const DashboardAddChapter = () => {
           </button>
 
           
-          <ViewChapterFilterContext.Provider value={{ chapters: filteredCaps, loading}}>
-              <ActionsChapterFilterContext.Provider value={{ setChapters: setFilteredCaps, setContent, setLoading }} >
+          <ViewChapterFilterContext.Provider value={{ chapters: filteredCaps, loading, editingChapter}}>
+              <ActionsChapterFilterContext.Provider value={{ setChapters: setFilteredCaps, setContent, setLoading, setModalOpen, setEditingChapter}} >
                 <LoadingWrapper loading={loading} >
                    <div className="mb-3 border-b border-primary  pb-3">
                       <Filter type="chapters" />
@@ -69,6 +69,22 @@ const DashboardAddChapter = () => {
                     </div>
                   ) : <ChapterList showActions={true}  totalEpisodes={content?.manga.numEpisodes || 0} />}
 
+
+
+                  {content?.manga.numEpisodes != null && content?.manga.numEpisodes != undefined && (
+                          <>
+                          <DashboardAddChapterModal
+                            isOpen={modalOpen}
+                            chaptersTotal={content?.manga.numEpisodes}
+                            onModalClose={() => {
+                              setModalOpen(false);
+                              setEditingChapter(undefined);
+                            }}
+                            updateCaps={fetchData}
+                          />
+                          </>
+                    )}
+
         
                 </LoadingWrapper>
     
@@ -78,22 +94,7 @@ const DashboardAddChapter = () => {
           </ViewChapterFilterContext.Provider>
          
 
-          {content?.manga.numEpisodes != null && content?.manga.numEpisodes != undefined && (
-            <>
-            
-            <DashboardAddChapterModal
-              isOpen={modalOpen}
-              chaptersTotal={content?.manga.numEpisodes}
-              onModalClose={() => setModalOpen(false)}
-              updateCaps={fetchData}
-            />
-
-      
-            </>
-          
-
-            
-          )}
+        
         </div>
         <aside className="w-full lg:w-1/4 xl:pl-5 xl:sticky top-5 mb-5">
           {content && <DashboardAddChapterSide content={content} />}
