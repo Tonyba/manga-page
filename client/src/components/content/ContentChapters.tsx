@@ -6,7 +6,7 @@ import { FaTrash, FaPencilAlt } from "react-icons/fa";
 import DashboardHoverItem from "../dashboardContent/DashboardHoverItem";
 import { useAppContext } from "@/utils/context/AppContext";
 import { ActionsChapterFilterContext } from "@/utils/context/ChapterFilterContext";
-import { deleteChapter, getManga } from "@/utils/axios/contentType";
+import { deleteChapter, getChapter, getManga } from "@/utils/axios/contentType";
 import { revalidateManga } from "@/utils/axios/revalidate";
 
 
@@ -24,7 +24,7 @@ const ContentChapters: FC<ChapterItemType & Props> = ({
 }) => {
 
   const { user } = useAppContext();
-  const { setLoading, setContent } = useContext(ActionsChapterFilterContext);
+  const { setLoading, setContent, setModalOpen, setEditingChapter } = useContext(ActionsChapterFilterContext);
 
   const onDelete = async () => {
     setLoading!(true);
@@ -33,6 +33,18 @@ const ContentChapters: FC<ChapterItemType & Props> = ({
     setContent!(resp.data);
     setLoading!(false);
     await revalidateManga(mangaId.toString());
+  }
+
+  const onUpdate = async () => {
+      setLoading!(true);
+      
+      const resp = await getChapter(id);
+      const data = resp.data;
+      setEditingChapter!(data);
+
+      setLoading!(false);
+
+      setModalOpen!(true);
   }
 
   return (
@@ -57,6 +69,9 @@ const ContentChapters: FC<ChapterItemType & Props> = ({
             {title}
           </Link>
         { (user?.role === 'Admin' && showActions ) &&  <div className="gap-3 flex mt-3"> 
+            <DashboardHoverItem onClick={onUpdate} textHover="Editar">
+              <FaPencilAlt size={18} />
+            </DashboardHoverItem>
             <DashboardHoverItem onClick={onDelete} textHover="Borrar">
                   <FaTrash size={18} />
             </DashboardHoverItem>
