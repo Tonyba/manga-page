@@ -1,5 +1,5 @@
 import { AddChapterContext } from "@/utils/context/AddChapterContext";
-import { DragImageItemType } from "@/utils/types";
+import { ImageType } from "@/utils/types";
 import { motion } from "framer-motion";
 import React, { FC, useContext, useEffect } from "react";
 import { useDrag, useDrop } from "react-dnd";
@@ -7,9 +7,9 @@ import { FaTrash } from "react-icons/fa";
 import { FiMove } from "react-icons/fi";
 
 type Props = {
-  getContainerId: (item: DragImageItemType) => void;
-  item: DragImageItemType;
-  onItemDrag: (item: DragImageItemType) => void;
+  getContainerId: (item: ImageType) => void;
+  item: ImageType;
+  onItemDrag: (item: ImageType) => void;
 };
 
 const DashboardChapterImageItem: FC<Props> = ({
@@ -18,7 +18,7 @@ const DashboardChapterImageItem: FC<Props> = ({
   onItemDrag,
 }) => {
   const { onRemoveImage } = useContext(AddChapterContext);
-  const { pag, imgSrc, file } = item;
+  const { position, url, file } = item;
 
   const [{ isDragging }, dragRef] = useDrag(() => ({
     type: "image",
@@ -33,7 +33,7 @@ const DashboardChapterImageItem: FC<Props> = ({
 
   const [{ isOver }, dropRef] = useDrop(() => ({
     accept: "image",
-    drop: (dragItem: DragImageItemType, monitor) => {
+    drop: (dragItem: ImageType, monitor) => {
       getContainerId(item);
     },
     collect: (monitor) => ({
@@ -58,12 +58,12 @@ const DashboardChapterImageItem: FC<Props> = ({
         >
           <span className="inline-flex items-center gap-1">
             <FiMove size={18} />
-            <p className="text-sm font-semibold">Pag: {pag + 1}</p>
+            <p className="text-sm font-semibold">Pag: {position + 1}</p>
           </span>
 
           <button
             type="button"
-            onClick={() => onRemoveImage(pag)}
+            onClick={() => onRemoveImage(position)}
             className={"bg-hover p-1 top-0 right-5 text-red-500 rounded-full"}
           >
             <FaTrash size={16} />
@@ -71,7 +71,7 @@ const DashboardChapterImageItem: FC<Props> = ({
         </div>
 
         <img
-          src={imgSrc}
+          src={url}
           width={300}
           height={240}
           draggable={false}
@@ -82,7 +82,7 @@ const DashboardChapterImageItem: FC<Props> = ({
             isOver ? "bg-important" : "bg-primary"
           } px-2 text-sm py-[3px] line-clamp-1 text-ellipsis`}
         >
-          {file.name}
+          {file?.name}
         </p>
       </div>
     </motion.div>

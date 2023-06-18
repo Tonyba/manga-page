@@ -63,18 +63,12 @@ export type FiltersType = {
   page: number;
 };
 
-export type DragImageItemType = {
-  id: string;
-  file: File;
-  imgSrc: string;
-  pag: number;
-};
 
 export type CreateChapterParams = {
   episode: string;
   mangaId: number;
   capNumber: number;
-  images: File[];
+  images: File[] | ImageType[];
 };
 
 export type TabItemType = {
@@ -129,13 +123,15 @@ export type ChapterItemType = {
   Manga?: ContentType;
   image?: string;
   checked?: boolean;
+  images?: string[] | File[]
 };
 
 export type ImageType = {
-  id: number;
+  id: number | string;
   name: string;
   position: number;
   url: string;
+  file?: File
 }
 
 export type LoginRegisterValidation = Partial<{

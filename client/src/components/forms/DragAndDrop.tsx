@@ -4,10 +4,11 @@ import ValidationError from "./ValidationError";
 import ChapterImagesPreviews from "../dashboardContent/ChapterImagesPreviews";
 import { AddChapterContext } from "@/utils/context/AddChapterContext";
 import Dropzone from "react-dropzone";
-import { DragImageItemType } from "@/utils/types";
+import { ImageType } from "@/utils/types";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { FILE_TYPES } from "@/utils/constants";
+import { isType } from "@/utils/helpers";
 
 type Props = {
   onChange: (file: File[]) => void;
@@ -18,7 +19,7 @@ type Props = {
   isMulti?: boolean;
   clearForm?: boolean;
   setClearForm?: (clear: boolean) => void;
-  previews?: string[] | File[];
+  previews?: string[] | ImageType[];
 };
 
 const DragAndDrop: FC<Props> = ({
@@ -33,20 +34,20 @@ const DragAndDrop: FC<Props> = ({
   setClearForm
 }) => {
 
-  console.log(previews)
-  const [filesItem, setFilesItems] = useState<DragImageItemType[]>([]);
-  const [prevs, setPreview] = useState<string[] | File[]>(previews);
+  const [filesItem, setFilesItems] = useState<ImageType[]>([]);
+  const [prevs, setPreview] = useState<string[] | ImageType[]>(previews);
 
   const handlePreview = (files: File[] | File) => {
     if (!Array.isArray(files) && files instanceof Blob) files = [files];
 
     let selectedFilesArray = Array.from(files);
-    let fileItemArr: DragImageItemType[] = selectedFilesArray.map(
+    let fileItemArr: ImageType[] = selectedFilesArray.map(
       (selected, i) => ({
         id: "img-" + (filesItem.length + i),
+        name: "img-" + (filesItem.length + i),
         file: selected,
-        imgSrc: URL.createObjectURL(selected),
-        pag: filesItem.length + i,
+        url: URL.createObjectURL(selected),
+        position: filesItem.length + i,
       })
     );
 
@@ -57,14 +58,15 @@ const DragAndDrop: FC<Props> = ({
     setFilesItems(fileItemArr);
   };
 
-  const onRemoveImage = (index: number) => {
-    const newImages = filesItem.filter((prev, i) => i !== index ?? prev);
+  const onRemoveImage = (position: number) => {
+    const newImages = filesItem.filter((prev) => prev.position !== position ?? prev);
 
-    let fileItemArr: DragImageItemType[] = newImages.map((selected, i) => ({
+    let fileItemArr: ImageType[] = newImages.map((selected, i) => ({
       id: "img-" + i,
+      name: "img-" + i,
       file: selected.file,
-      imgSrc: URL.createObjectURL(selected.file),
-      pag: i,
+      url: URL.createObjectURL(selected.file!),
+      position: i,
     }));
 
     setFilesItems(fileItemArr);
@@ -74,15 +76,17 @@ const DragAndDrop: FC<Props> = ({
     handlePreview(acceptedFiles);
   };
 
+
   useEffect(() => {
-    if(previews.length > 0) setPreview(previews);
+    if(previews.length > 0 && !isType<ImageType[]>(previews) ) setPreview(previews)
+    if(previews.length > 0 && isType<ImageType[]>(previews) ) setFilesItems(previews as ImageType[])    
   }, [previews.length]);
 
   useEffect(() => {
-    onChange(filesItem.map((f) => f.file));
-
+    onChange(filesItem.map((f) => f.file!));
+    
     return () =>
-      filesItem.forEach((preview) => URL.revokeObjectURL(preview.imgSrc));
+      filesItem.forEach((preview) => URL.revokeObjectURL(preview.url));
   }, [filesItem]);
 
   useEffect(() => {
@@ -103,29 +107,18 @@ const DragAndDrop: FC<Props> = ({
             {...getRootProps()}
           >
             <input {...getInputProps()} />
-            {filesItem.length > 0 && !isMulti ? (
-              filesItem.map((prev, i) => (<img key={i} src={prev.imgSrc} />))
-            ) : (
-              <>
-                {previews.length > 0 ? (
-                  <>
-                    {prevs.map(
-                      (previewF, i) =>
-                        typeof previewF === "string" && (
-                          <img key={i} src={previewF} />
-                        )
-                    )}
-                  </>
-                ) : (
-                  <div className="flex items-center flex-col py-4 h-full w-full">
-                    <RiImageAddFill className="mb-3" size={50} />
-                    <span className="font-semibold text-sm xl:text-lg 2xl:text-2xl">
-                      Arrasta una imagen aca!
-                    </span>
-                  </div>
-                )}
-              </>
-            )}
+            {
+              filesItem.length === 1 && !isMulti  
+                ? (
+                filesItem.map((prev, i) => (<img key={i} src={ typeof prev === 'string' ? prev : prev.url as string} />))
+                )
+                : ( <div className="flex items-center flex-col py-4 h-full w-full">
+                <RiImageAddFill className="mb-3" size={50} />
+                <span className="font-semibold text-sm xl:text-lg 2xl:text-2xl">
+                  Arrasta una imagen aca!
+                </span>
+              </div>) 
+            }                 
           </div>
         )}
       </Dropzone>

@@ -1,13 +1,15 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import AddChapterForm from "../forms/AddChapterForm";
 import { motion } from "framer-motion";
 import { FaTimes } from "react-icons/fa";
-import { ChapterValidationType, CreateChapterParams } from "@/utils/types";
+import { ChapterValidationType, CreateChapterParams, ImageType } from "@/utils/types";
 import { validateChapter } from "@/utils/validations/ChapterAddValidation";
 import Swal from "sweetalert2";
 import { addChapter } from "@/utils/axios/contentType";
 import { useRouter } from "next/router";
 import { revalidateManga } from "@/utils/axios/revalidate";
+import ViewChapterFilterContext from "@/utils/context/ChapterFilterContext";
+import { isType } from "@/utils/helpers";
 
 type Props = {
   isOpen: boolean;
@@ -29,6 +31,7 @@ const DashboardAddChapterModal: FC<Props> = ({
   updateCaps,
   chaptersTotal,
 }) => {
+  const { editingChapter } = useContext(ViewChapterFilterContext);
   const [chapter, setChapter] = useState<CreateChapterParams>({
     ...initState,
     capNumber: chaptersTotal + 1,
@@ -46,6 +49,14 @@ const DashboardAddChapterModal: FC<Props> = ({
   };
 
   useEffect(() => {
+    if(editingChapter) setChapter({
+      ...editingChapter, 
+        episode: `capitulo-${editingChapter.capNumber}`, 
+        images: isType<ImageType[]>(editingChapter.images) ? editingChapter.images : [] 
+    });
+  }, [editingChapter]);
+
+  useEffect(() => {
     if (errors && submitting) {
       if (Object.keys(errors).length !== 0) {
         Swal.fire("Hay errores en el formulario", "", "error");
@@ -56,14 +67,18 @@ const DashboardAddChapterModal: FC<Props> = ({
   }, [submitting, JSON.stringify(errors)]);
 
   const saveContent = () => {
-    const numberedImages = chapter.images.map((img, i) => {
-      const newImg = img.slice(0, img.size, img.type);
-      const ext =
-        img.name.substring(img.name.lastIndexOf(".") + 1, img.name.length) ||
-        img.name;
+    const numberedImages = chapter.images.flatMap((img , i) => {
+      if(typeof img === 'string' ) return [];
+      const image = img as ImageType;
+      
+      const newImg = image.file?.slice(0, image.file.size, image.file.type);
 
-      const newFile = new File([newImg], `${i + 1}.${ext}`, {
-        type: newImg.type,
+      const ext =
+      image.file?.name.substring(image.file?.name.lastIndexOf(".") + 1, image.file?.name.length) ||
+      image.file?.name;
+
+      const newFile = new File([newImg!], `${i + 1}.${ext}`, {
+        type: newImg?.type,
       });
 
       return newFile;
@@ -86,7 +101,7 @@ const DashboardAddChapterModal: FC<Props> = ({
       .catch((err) => {
         console.log(err);
         setSubmitting(false);
-        Swal.fire("Error inesperado", "algo salio mal", "error");
+        Swal.fire("Error inesperado", err.response.data.message, "error");
       });
   };
 
@@ -108,7 +123,10 @@ const DashboardAddChapterModal: FC<Props> = ({
       <div className="flex justify-end">
         <button
           className="bg-primary p-3 rounded-full bg-hover"
-          onClick={onModalClose}
+          onClick={() => {
+            onModalClose();
+            setClearForm(true);
+          }}
         >
           <FaTimes size={20} />
         </button>
@@ -127,6 +145,7 @@ const DashboardAddChapterModal: FC<Props> = ({
           setData={setChapter}
           clearForm={clearForm}
           setClearForm={setClearForm}
+          editing={editingChapter ? true : false}
         />
       </div>
     </motion.div>
