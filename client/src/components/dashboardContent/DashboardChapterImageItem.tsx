@@ -3,19 +3,21 @@ import { ImageType } from "@/utils/types";
 import { motion } from "framer-motion";
 import React, { FC, useContext, useEffect } from "react";
 import { useDrag, useDrop } from "react-dnd";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaEdit } from "react-icons/fa";
 import { FiMove } from "react-icons/fi";
 
 type Props = {
   getContainerId: (item: ImageType) => void;
   item: ImageType;
   onItemDrag: (item: ImageType) => void;
+  onImageReplace: (position: number) => void
 };
 
 const DashboardChapterImageItem: FC<Props> = ({
   item,
   getContainerId,
   onItemDrag,
+  onImageReplace
 }) => {
   const { onRemoveImage } = useContext(AddChapterContext);
   const { position, url, file } = item;
@@ -60,14 +62,23 @@ const DashboardChapterImageItem: FC<Props> = ({
             <FiMove size={18} />
             <p className="text-sm font-semibold">Pag: {position + 1}</p>
           </span>
-
+          <div>
           <button
-            type="button"
-            onClick={() => onRemoveImage(position)}
-            className={"bg-hover p-1 top-0 right-5 text-red-500 rounded-full"}
-          >
-            <FaTrash size={16} />
-          </button>
+              type="button"
+              onClick={() => onImageReplace(position)}
+              className={"bg-hover p-1 top-0 right-5 rounded-full"}
+            >
+              <FaEdit size={16} />
+            </button>
+            <button
+              type="button"
+              onClick={() => onRemoveImage(position)}
+              className={"bg-hover p-1 top-0 right-5 text-red-500 rounded-full"}
+            >
+              <FaTrash size={16} />
+            </button>
+          </div>
+        
         </div>
 
         <img

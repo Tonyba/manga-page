@@ -61,21 +61,24 @@ const DashboardAddChapterModal: FC<Props> = ({
       if (Object.keys(errors).length !== 0) {
         Swal.fire("Hay errores en el formulario", "", "error");
       } else {
-        saveContent();
+        editingChapter ? editChapter() : saveChapter();
       }
     }
   }, [submitting, JSON.stringify(errors)]);
 
-  const saveContent = () => {
+  const saveChapter = () => {
     const numberedImages = chapter.images.flatMap((img , i) => {
       if(typeof img === 'string' ) return [];
-      const image = img as ImageType;
       
-      const newImg = image.file?.slice(0, image.file.size, image.file.type);
+      const image = img as ImageType;
+
+      console.log(image)
+      
+      const newImg = image.file?.slice(0,image.file?.size,image.file?.type);
 
       const ext =
-      image.file?.name.substring(image.file?.name.lastIndexOf(".") + 1, image.file?.name.length) ||
-      image.file?.name;
+     image.file?.name.substring(image.file?.name.lastIndexOf(".")! + 1,image.file?.name.length) ||
+     image.file?.name;
 
       const newFile = new File([newImg!], `${i + 1}.${ext}`, {
         type: newImg?.type,
@@ -104,6 +107,11 @@ const DashboardAddChapterModal: FC<Props> = ({
         Swal.fire("Error inesperado", err.response.data.message, "error");
       });
   };
+
+  const editChapter = () => {
+    console.log(chapter);
+    setSubmitting(false);
+  }
 
   const cleanForm = () => {
     setChapter(initState);
@@ -134,7 +142,7 @@ const DashboardAddChapterModal: FC<Props> = ({
 
       <div className="h-full">
         <h2 className="text-xl font-semibold mb-5">
-          Agrega las imagenes del capitulo
+          {`${editingChapter ? 'Agrega o Edita' : 'Agrega'}`} las imagenes del capitulo
         </h2>
 
         <AddChapterForm
