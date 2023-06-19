@@ -8,6 +8,7 @@ import {
   ContentValidationType,
   AddContentParams,
   OptionType,
+  ImageType,
 } from "@/utils/types";
 import { genres } from "@/utils/valoresParaSelect";
 import DragAndDrop from "./DragAndDrop";
@@ -30,8 +31,8 @@ const AddContentForm: FC<Props> = ({
   loading,
   editing
 }) => {
-  const handleBannerChange = (file: File, imageType: "banner" | "image") => {
-    setData({ ...data, [imageType]: file });
+  const handleImageChange = (img: ImageType, imageType: "banner" | "image") => {
+      if(img) setData({ ...data, [imageType]: img });
   };
 
   const handlePush = (elems: OptionType[], type: string) => {
@@ -53,7 +54,7 @@ const AddContentForm: FC<Props> = ({
       <div className="w-full xl:w-3/4 flex-col flex gap-3 ">
         <DragAndDrop
           name="banner"
-          onChange={(f) => handleBannerChange(f[0], "banner")}
+          onChange={(f) => handleImageChange(f[0], "banner")}
           label="Banner"
           errMsg={errors?.banner as string}
           previews={ data.image ? [data.banner as string] : [] }
@@ -120,7 +121,7 @@ const AddContentForm: FC<Props> = ({
       <div className="w-full xl:w-1/4 xl:pl-7">
         <DragAndDrop
           name="Image"
-          onChange={(f) => handleBannerChange(f[0], "image")}
+          onChange={(f) => handleImageChange(f[0], "image")}
           label="Imagen"
           errMsg={errors?.image as string}
           previews={ data.image ? [data.image as string] : []}

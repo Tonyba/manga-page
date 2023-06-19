@@ -83,8 +83,8 @@ export type AddContentParams = {
   demography?: OptionType;
   genres: OptionType[] ;
   status?: OptionType;
-  banner: File | string;
-  image: File | string;
+  banner: File | string | ImageType;
+  image: File | string | ImageType;
 };
 
 export type ContentValidationType = Partial<{
@@ -152,7 +152,7 @@ export type OptionType = {
 };
 
 export type UserEditParams = {
-  avatar?: File | string;
+  avatar?: File | string | ImageType;
   userName: string;
   email: string;
 };

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import AddContentForm from "../forms/AddContentForm";
-import { ContentValidationType, AddContentParams } from "@/utils/types";
+import { ContentValidationType, AddContentParams, ImageType } from "@/utils/types";
 import { demography, status, types, genres } from "@/utils/valoresParaSelect";
 
 import { ValidateContent } from "@/utils/validations/ContentAddValidation";
@@ -9,6 +9,7 @@ import { addContent, getManga, updateContent } from "@/utils/axios/contentType";
 import DashboardTitle from "./DashboardTitle";
 import { useSearchParams } from 'next/navigation';
 import { revalidateManga } from "@/utils/axios/revalidate";
+import { isType } from "@/utils/helpers";
 
 const initState: AddContentParams = {
   banner: "",
@@ -53,7 +54,11 @@ const DashboardAddContent = () => {
   };
 
   const saveContent = () => {
-    addContent(data)
+    addContent({
+      ...data,
+      banner: isType<ImageType>(data.banner) ? data.banner.file! : data.banner as File,
+      image: isType<ImageType>(data.image) ? data.image.file! : data.image as File,
+    })
       .then((res) => {
         console.log(res);
         setSubmitting(false);

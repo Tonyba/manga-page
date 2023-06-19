@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { EditUserForm } from "../forms/EditUserForm";
 import { useAppContext } from "@/utils/context/AppContext";
-import { UserEditParams } from "@/utils/types";
+import { ImageType, UserEditParams } from "@/utils/types";
 import { UserEditValidation } from "@/utils/types";
 import { validateUserEdit } from "@/utils/validations/UserEditValidation";
 import { updateUser } from "@/utils/axios/user";
+import { isType } from "@/utils/helpers";
 
 const Settings = () => {
   const { user, setUser } = useAppContext();
@@ -25,7 +26,7 @@ const Settings = () => {
   const editUser = async () => {
     console.log(data);
     try {
-      const newUser = await updateUser(user?.id!, data);
+      const newUser = await updateUser(user?.id!, {...data, avatar: isType<ImageType>(data.avatar) ? data.avatar.file : data.avatar});
       setUser({ ...newUser.data });
       setSubmitting(false);
     } catch (error) {

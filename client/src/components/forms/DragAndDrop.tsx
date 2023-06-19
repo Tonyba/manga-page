@@ -83,6 +83,7 @@ const DragAndDrop: FC<Props> = ({
   }, [previews.length]);
 
   useEffect(() => {
+    console.log(filesItem)
     onChange(filesItem);
     
     return () =>
