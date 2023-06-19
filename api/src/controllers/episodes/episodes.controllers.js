@@ -161,7 +161,9 @@ export const updateEpisode = async (req ,res) => {
 
     if(!episode) return res.status(404).json({ message: 'El Capitulo no Existe' });
 
-    await episode.update({...req.body});
+    console.log(req.body);
+
+    // await episode.update({...req.body});
 
     res.status(202).json({
       message: 'Capitulo Actualizado'
