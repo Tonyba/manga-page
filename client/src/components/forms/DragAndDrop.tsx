@@ -11,7 +11,7 @@ import { FILE_TYPES } from "@/utils/constants";
 import { isType } from "@/utils/helpers";
 
 type Props = {
-  onChange: (file: File[]) => void;
+  onChange: (file: ImageType[]) => void;
   name: string;
   required?: boolean;
   label?: string;
@@ -83,10 +83,10 @@ const DragAndDrop: FC<Props> = ({
   }, [previews.length]);
 
   useEffect(() => {
-    onChange(filesItem.map((f) => f.file!));
+    onChange(filesItem);
     
     return () =>
-      filesItem.forEach((preview) => URL.revokeObjectURL(preview.url));
+      filesItem.forEach((preview) => preview.url.startsWith('blob') && URL.revokeObjectURL(preview.url));
   }, [filesItem]);
 
   useEffect(() => {

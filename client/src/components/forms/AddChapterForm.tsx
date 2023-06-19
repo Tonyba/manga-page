@@ -27,7 +27,7 @@ const AddChapterForm: FC<Props> = ({
   setClearForm,
   editing
 }) => {
-  const handleFileChange = (files: File[]) => {
+  const handleFileChange = (files: ImageType[]) => {
     setData({ ...data, images: files });
   };
 
@@ -53,7 +53,7 @@ const AddChapterForm: FC<Props> = ({
         previews={ editing ? data.images as ImageType[] : []}
       />
       <div className="mb-10">
-        <SubmitButton loading={loading} text="Subir Capitulo" />
+        <SubmitButton loading={loading} text={`${editing ? 'Actualizar' : 'Subir'} Capitulo`} />
       </div>
     </form>
   );
