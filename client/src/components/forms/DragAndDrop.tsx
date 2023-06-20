@@ -83,11 +83,11 @@ const DragAndDrop: FC<Props> = ({
   }, [previews.length]);
 
   useEffect(() => {
-    console.log(filesItem)
     onChange(filesItem);
     
     return () =>
-      filesItem.forEach((preview) => preview.url.startsWith('blob') && URL.revokeObjectURL(preview.url));
+      filesItem.forEach((preview) => 
+      preview.url.startsWith('blob') && URL.revokeObjectURL(preview.url));
   }, [filesItem]);
 
   useEffect(() => {

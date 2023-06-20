@@ -9,24 +9,24 @@ import { isType } from "@/utils/helpers";
 
 const Settings = () => {
   const { user, setUser } = useAppContext();
-  const [data, setData] = useState<UserEditParams>({
-    email: user?.email!,
-    userName: user?.userName!,
-    avatar: user?.avatar && user?.avatar != "https" ? user.avatar : "",
-  });
+  const [data, setData] = useState<UserEditParams>();
   const [errors, setErrors] = useState<UserEditValidation>();
   const [submitting, setSubmitting] = useState(false);
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-    setErrors(validateUserEdit(data));
+    setErrors(validateUserEdit(data!));
   };
 
   const editUser = async () => {
     console.log(data);
     try {
-      const newUser = await updateUser(user?.id!, {...data, avatar: isType<ImageType>(data.avatar) ? data.avatar.file : data.avatar});
+      if(!data) return;
+      const newUser = await updateUser(user?.id!, {
+          ...data, 
+          avatar: isType<ImageType>(data.avatar) ? data.avatar.file : data.avatar
+      });
       setUser({ ...newUser.data });
       setSubmitting(false);
     } catch (error) {
@@ -36,8 +36,14 @@ const Settings = () => {
   };
 
   useEffect(() => {
-    setData({ ...data, avatar: user?.avatar });
-  }, [user?.avatar]);
+    if(user) {
+      setData({
+        ...user,
+        avatar: user?.avatar && user?.avatar != "https" ? user.avatar : "",
+      });
+    }
+    
+  }, [JSON.stringify(user)]);
 
   useEffect(() => {
     if (errors && submitting) {
@@ -57,7 +63,7 @@ const Settings = () => {
           data={{
             email: data?.email!,
             userName: data?.userName!,
-            avatar: data.avatar,
+            avatar: data?.avatar,
           }}
           onChange={setData}
           onSubmit={onSubmit}

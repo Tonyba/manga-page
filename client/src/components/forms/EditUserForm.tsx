@@ -20,7 +20,12 @@ export const EditUserForm: FC<Props> = ({
   errors,
 }) => {
   const prev =
-    data.avatar && typeof data.avatar === "string" ? [data.avatar] : [];
+    data.avatar && typeof data.avatar === "string" ?  [{
+        id: 1,
+        name: 'avatar',
+        position: 0,
+        url:  data.avatar
+    }] : [];
 
   return (
     <form onSubmit={onSubmit}>
