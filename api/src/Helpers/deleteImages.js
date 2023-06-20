@@ -11,8 +11,8 @@ const deleteFolderAndImageFromManga = async (folder, images) => {
     });
 }
 
-const deleteImage = (image) => {
-    const mangaImagesPath = path.resolve( __basedir + '/public/mangas');
+const deleteImage = (image, folder) => {
+    const mangaImagesPath = path.resolve( __basedir + `/public/${folder}`);
     const filename = image.substring(image.lastIndexOf('/')+1);
     const imagePath = path.resolve(mangaImagesPath + '/' + filename);
     const imageExist = fs.existsSync(imagePath);

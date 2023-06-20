@@ -4,7 +4,7 @@ import { Episodes } from "../../models/episodes/episodes.model.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import sequelize from "../../database/database.js";
-import { deleteFolderAndImageFromManga, deleteImage } from "../../Helpers/Filter/deleteImages.js";
+import { deleteFolderAndImageFromManga, deleteImage } from "../../Helpers/deleteImages.js";
 
 import { v4 as uuidv4 } from 'uuid';
 import { QueryTypes } from "sequelize";
@@ -306,7 +306,7 @@ export const bulkDeleteManga = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: "Error al borrar manga",
+      message: "Error al borrar contenido",
     });
   }
 }
@@ -341,7 +341,7 @@ export  const updateManga = async (req, res) => {
 
       if(files.image) {
         const imageHash = uuidv4() + '_image_';
-        deleteImage(manga.image);
+        deleteImage(manga.image, 'mangas');
         const path = __dirname + "/../../public/mangas/" + imageHash + files.image?.name;
         files.image?.mv(path, function (err, data) {
           if (err) throw err;
@@ -352,7 +352,7 @@ export  const updateManga = async (req, res) => {
   
       if(files.banner) {
         const bannerHash = uuidv4() + '_banner_';
-        deleteImage(manga.banner);
+        deleteImage(manga.banner, 'mangas');
         const path = __dirname + "/../../public/mangas/" + bannerHash + files.banner?.name;
         files.banner?.mv(path, function (err, data) {
           if (err) throw err;

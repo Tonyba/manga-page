@@ -4,7 +4,7 @@ import { Images } from "../../models/images/images.model.js";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import { deleteFolder } from "../../Helpers/Filter/deleteImages.js";
+import { deleteFolder } from "../../Helpers/deleteImages.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
