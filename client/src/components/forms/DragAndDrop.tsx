@@ -44,7 +44,7 @@ const DragAndDrop: FC<Props> = ({
     let fileItemArr: ImageType[] = selectedFilesArray.map(
       (selected, i) => ({
         id: "img-" + (filesItem.length + i),
-        name: "img-" + (filesItem.length + i),
+        name: (filesItem.length + i) + '.' +selected.name.split('.').pop()!,
         file: selected,
         url: URL.createObjectURL(selected),
         position: filesItem.length + i,
@@ -62,8 +62,8 @@ const DragAndDrop: FC<Props> = ({
     const newImages = filesItem.filter((prev) => prev.position !== position ?? prev);
 
     let fileItemArr: ImageType[] = newImages.map((selected, i) => ({
-      id: "img-" + i,
-      name: "img-" + i,
+      id: selected.id ? selected.id : "img-" + i,
+      name: (i + 1) + '.' + selected.url.split('.').pop()!,
       file: selected.file,
       url: selected.file ? URL.createObjectURL(selected.file) : selected.url,
       position: i,
@@ -87,7 +87,7 @@ const DragAndDrop: FC<Props> = ({
     
     return () =>
       filesItem.forEach((preview) => 
-      preview.url.startsWith('blob') && URL.revokeObjectURL(preview.url));
+      preview?.url?.startsWith('blob') && URL.revokeObjectURL(preview.url));
   }, [filesItem]);
 
   useEffect(() => {

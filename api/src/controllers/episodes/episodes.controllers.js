@@ -4,7 +4,8 @@ import { Images } from "../../models/images/images.model.js";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import { deleteFolder, renameImages } from "../../Helpers/deleteImages.js";
+import { deleteFolder, deleteImage, renameImages } from "../../Helpers/deleteImages.js";
+import {resolve} from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -153,6 +154,10 @@ export const deleteEpisode = async (req, res) => {
   }
 }
 
+function getFilename(fullPath) {
+  return fullPath.replace(/^.*[\\\/]/, '');
+}
+
 export const updateEpisode = async (req ,res) => {
   const { id } = req.params;
   try {
@@ -161,12 +166,13 @@ export const updateEpisode = async (req ,res) => {
 
     if(!episode) return res.status(404).json({ message: 'El Capitulo no Existe' });
 
+    const manga = await Mangas.findByPk(episode.mangaId);
+
     req.body.images = JSON.parse(req.body.images);
     let imagesArr = req.files ? req.files['imagesFiles[]'] : [];
 
     if (!Array.isArray(imagesArr)) imagesArr = [imagesArr];
 
-    console.log('==================')
     const imagesFromEpisode = await Images.findAll({
       where: {
         episodeId: episode.id 
@@ -175,44 +181,82 @@ export const updateEpisode = async (req ,res) => {
       raw: true
     })
 
-    console.log('==================');
 
 
-    const changedImgs = imagesFromEpisode.flatMap(img => {
+    const changedPositionImgs = imagesFromEpisode.flatMap(img => {
       const changed = req.body.images.find(bodyImg => bodyImg.id == img.id && bodyImg.position != img.position);
       if(changed) return changed;
       return [];
     });
 
+    const deletedImgs = imagesFromEpisode.filter(x => !req.body.images.some(y => x.id == y.id && !y.file));
 
-    await changedImgs.forEach(async (img, i) => {
-      
-      const folderManga =  img.url.split('/')[4];
-      const folderEpisode = img.url.split('/')[5];
-      
-      const fileExt = img.url.split('.').pop();
-      const filename = `${img.position}.${fileExt}`;
+    let newImages = req.body.images.filter(img => img.file);
 
-      const path = process.env.API_URL + `/episodes/${folderManga}/${folderEpisode}/${filename}`;
+    
 
-      const savedImage = await Images.update(
-       {
-        position: img.position,
-        name: `${parseInt(img.position) + 1}.${fileExt}`,
-        url: path
-       },
-       {
-        where: {
-          id: img.id,
-          position: img.position
-        }
-       }
-      )
-    })
+    newImages = newImages.map(img =>  (
+      {...img, 
+        file: imagesArr.find(f => f.name.split('.')[0] == img.position + 1)
+      }))
 
-    renameImages(changedImgs);
+
+    const changedImgs = changedPositionImgs.concat(newImages);
 
     console.log('==================');
+
+    const folderEpisode = changedPositionImgs[0]?.url?.split('/')[5] || deletedImgs[0]?.url?.split('/')[5];
+    const folderManga =  changedPositionImgs[0]?.url?.split('/')[4] || deletedImgs[0]?.url?.split('/')[4];
+
+  //  await deletedImgs.forEach(async (img, i) => {
+
+  //     deleteImage(img.url, `episodes/${folderManga}/${folderEpisode}`);
+
+  //     await Images.destroy({
+  //       where: {
+  //         id: img.id,
+  //         position: img.position
+  //       }
+  //     })
+
+  //     if(i === deletedImgs.length - 1) console.log('termina borrado');
+
+  //   })
+
+  //console.log(imagesArr)
+
+      renameImages(changedPositionImgs);
+
+      await changedImgs.forEach(async (img, i) => {
+        if(i === 0) console.log('empieza actualizar')
+        const fileExt = img.file ? img.file.name.split('.').pop() : img.url.split('.').pop();
+        const imgName = `${(img.position + 1) + '.' + fileExt}`;
+        const path = process.env.API_URL + `${manga.path.replace('./src/public', '')}/capitulo_${episode.capNumber}/${imgName}`;
+
+        if(img.file) {
+         const publicPath = resolve(manga.path + `/capitulo_${episode.capNumber}/${imgName}`);
+         img.file.mv(publicPath);
+          console.log(path, 'file')
+        } else {
+          console.log(path, 'change po')
+        }
+        
+        const savedImage = await Images.upsert(
+         {
+          position: img.position,
+          name: `${parseInt(img.position) + 1}.${fileExt}`,
+          url: path,
+          episodeId: id
+         },
+         {
+          where: {
+            id: img.id,
+            position: img.position
+          }
+         }
+        )
+      })
+  
 
     res.status(202).json({
       message: 'Capitulo Actualizado'

@@ -60,6 +60,7 @@ const DashboardAddChapterModal: FC<Props> = ({
     if (errors && submitting) {
       if (Object.keys(errors).length !== 0) {
         Swal.fire("Hay errores en el formulario", "", "error");
+        setSubmitting(false);
       } else {
         editingChapter ? editChapter() : saveChapter();
       }
@@ -80,7 +81,7 @@ const DashboardAddChapterModal: FC<Props> = ({
      image.file?.name.substring(image.file?.name.lastIndexOf(".")! + 1,image.file?.name.length) ||
      image.file?.name;
 
-      const newFile = new File([newImg!], `${i + 1}.${ext}`, {
+      const newFile = new File([newImg!], `${image.position + 1}.${ext}`, {
         type: newImg?.type,
       });
 
@@ -119,18 +120,25 @@ const DashboardAddChapterModal: FC<Props> = ({
       
       const newImg = image.file?.slice(0,image.file?.size,image.file?.type);
 
+      console.log(image)
+
       const ext =
      image.file?.name.substring(image.file?.name.lastIndexOf(".")! + 1,image.file?.name.length) ||
      image.file?.name;
 
-      const newFile = new File([newImg!], `${i + 1}.${ext}`, {
+      const newFile = new File([newImg!], `${image.position + 1}.${ext}`, {
         type: newImg?.type,
       });
 
       image.file = newFile;
+      image.name = `${image.position + 1}.${ext}`;
 
       return image;
     });
+
+    console.log({...chapter,
+      images: numberedImages
+    })
 
     updateChapter(
       editingChapter?.id!,

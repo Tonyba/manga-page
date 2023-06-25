@@ -33,7 +33,7 @@ const deleteFolder = async (folder) => {
    
 }
 
-export const renameImages = async (images) => {
+const renameImages = async (images) => {
      const tempPaths = images.map((img) => {
         const filename = img.url.substring(img.url.lastIndexOf('/')+1);
         const folderManga =  img.url.split('/')[4];
@@ -57,5 +57,6 @@ export const renameImages = async (images) => {
 export {
     deleteFolderAndImageFromManga,
     deleteFolder,
-    deleteImage
+    deleteImage,
+    renameImages
 };
