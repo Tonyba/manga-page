@@ -1,10 +1,10 @@
 import React, { createContext } from "react";
-import { DragImageItemType } from "../types";
+import { ImageType } from "../types";
 
 type AddChapterContextType = {
   onRemoveImage: (index: number) => void;
-  setFileItems: (items: DragImageItemType[]) => void;
-  fileItems: DragImageItemType[];
+  setFileItems: (items: ImageType[]) => void;
+  fileItems: ImageType[];
 };
 
 export const AddChapterContext = createContext<AddChapterContextType>({

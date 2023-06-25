@@ -1,27 +1,34 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect, useRef, useState } from "react";
 
 import { FaSortNumericDown } from "react-icons/fa";
 import HeaderSearch from "../shared/HeaderSearch";
+import ViewChapterFilterContext, { ActionsChapterFilterContext } from "@/utils/context/ChapterFilterContext";
 
 type filterProps = {
   order?: "asc" | "desc";
   search?: string;
-  data: any[];
   type?: "chapters" | "mangas";
-  onChange?: (data: any[]) => void;
 };
 
-const Filter: FC<filterProps> = ({ type, data, onChange = () => {} }) => {
+const Filter: FC<filterProps> = ({ type }) => {
+  
+  const { chapters } = useContext(ViewChapterFilterContext);
+  const { setChapters } = useContext(ActionsChapterFilterContext);
+
   const [filter, setFilters] = useState<filterProps>({
     order: "desc",
     search: "",
-    data: [],
     type,
   });
 
-  useEffect(() => {
-    onChange(filter.data);
-  }, [Object.values(filter)]);
+  const isMounted = useRef(false);
+
+  const handleChange = (val: "asc" | "desc") => {
+    const reversed = [...chapters].reverse().map(elem => elem);
+
+    setChapters(reversed);
+    setFilters({ ...filter, order: val})
+  }
 
   return (
     <div className="flex items-center justify-between">
@@ -30,20 +37,18 @@ const Filter: FC<filterProps> = ({ type, data, onChange = () => {} }) => {
         <select
           defaultValue={filter.order}
           className="w-20 rounded-lg bg-slate-600 p-1 outline-none"
-          onChange={(val) =>
-            setFilters({ ...filter, search: val.target.value })
-          }
+          onChange={(val) => handleChange(val.target.value as "asc" | "desc") }
         >
-          <option>asc</option>
-          <option>desc</option>
+          <option>ASC</option>
+          <option>DESC</option>
         </select>
       </div>
 
       <HeaderSearch
         placeholder="Busca un capitulo..."
-        onChange={(src) => setFilters({ ...filter, data: src })}
+        onChange={(src) => {}}
         type={type}
-        data={data}
+        data={chapters}
       />
     </div>
   );

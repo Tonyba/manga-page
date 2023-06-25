@@ -4,10 +4,9 @@ import ChapterOptions from "@/components/chapter/ChapterOptions";
 import ChapterUpButton from "@/components/chapter/ChapterUpButton";
 import ImagesReader from "@/components/content/ImageReader";
 import { getChapterImages } from "@/utils/axios/contentType";
-import { getManga } from "@/utils/axios/contentType";
 import { ChapterContext } from "@/utils/context/ChapterContext";
 import { getChapterNumber } from "@/utils/helpers";
-import { ChapterPageParamsType, readStyleEnum } from "@/utils/types";
+import { GetChapterResponse, readStyleEnum } from "@/utils/types";
 import { motion, useScroll } from "framer-motion";
 import { GetStaticPaths, GetStaticProps, GetStaticPropsResult } from "next";
 import Link from "next/link";
@@ -15,13 +14,11 @@ import Router, { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 
-const ChapterContent = ({
-  content,
-  currentChapterImgs,
-}: ChapterPageParamsType) => {
+const ChapterContent = ({ images, manga }: GetChapterResponse) => {
+
   const router = useRouter();
   const { id, chapter } = router.query;
-  const [images, setImages] = useState<string[]>([]);
+  const [chapterImages, setImages] = useState<string[]>([]);
   const [readingStyle, setReadingStyle] = useState<readStyleEnum>(
     readStyleEnum.page
   );
@@ -60,18 +57,18 @@ const ChapterContent = ({
   useEffect(() => {
     setCurrentImage(0);
 
-    setImages(currentChapterImgs);
+    setImages(images.map(img => img.url));
   }, [chapter, currentChapter]);
 
   return (
     <ChapterContext.Provider
       value={{
-        chapters: content.manga.Episodes,
-        contentTitle: content.manga.title,
-        currentChapter: content.manga.Episodes.find(
+        chapters: manga.episodes,
+        contentTitle: manga.title,
+        currentChapter: manga.episodes?.find(
           (v) => v.capNumber === getChapterNumber(chapter as string)
         ),
-        images,
+        images: chapterImages,
         setCurrentChapter,
         setCurrentImage,
         currentImage,
@@ -96,7 +93,7 @@ const ChapterContent = ({
             className="text-important-hover uppercase"
             href={`/content/${id}`}
           >
-            {content.manga.title}
+            {manga.title}
           </Link>
           - Capitulo {getChapterNumber(chapter as string)}
         </h1>
@@ -131,25 +128,18 @@ export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
 
 export const getStaticProps: GetStaticProps = async (
   ctx
-): Promise<GetStaticPropsResult<ChapterPageParamsType>> => {
+): Promise<GetStaticPropsResult<GetChapterResponse>> => {
   const { id, chapter } = ctx.params as { id: string; chapter: string };
 
   if (!id || !chapter) Router.reload();
 
-  const resp = await getManga(id as string);
-  const contentResp = resp.data;
+  const capNumber = chapter.split('-')[1];
 
-  const chapters = await getChapterImages(
-    contentResp.manga.title,
-    chapter as string
-  );
-  const chapterResp = chapters.data;
+  const chapterRequest = await getChapterImages(parseInt(capNumber), id);
+  const chapterResp = chapterRequest.data;
 
   return {
-    props: {
-      content: contentResp,
-      currentChapterImgs: chapterResp,
-    },
+    props: chapterResp,
   };
 };
 

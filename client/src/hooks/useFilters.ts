@@ -7,38 +7,31 @@ const useFilters = (filtersOptions: {
   currentPag: number;
   filters: FiltersType;
 }): [
-  FiltersType,
-  Dispatch<SetStateAction<FiltersType>>,
   (pag: number) => ContentType[],
   number,
   Dispatch<SetStateAction<number>>
 ] => {
   let { filters, items, currentPag, itemsPerPage } = filtersOptions;
 
-  const [filtered, setFilters] = useState<FiltersType>(filters);
   const [currentPage, setCurrentPage] = useState(currentPag);
 
   useEffect(() => {
     filterItems(currentPage);
-  }, [Object.values(filtered), currentPage]);
+  }, [Object.values(filters), currentPage]);
 
   const filterItems = (pag = 0) => {
+    console.log(filters);
     const filtersConditions = {
       type: (item: ContentType) =>
-        !filters.type ? true : filters.type == item.type,
+        !filters.type ? true : filters.type === item.type,
       demography: (item: ContentType) =>
-        !filters.demography
-          ? true
-          : filters.demography == item.demography.toLowerCase(),
+        !filters.demography ? true : filters.demography === item.demography,
       status: (item: ContentType) =>
-        !filters.status
-          ? true
-          : filters.status == item.status?.toLowerCase() ||
-            item.status == "Emision",
+        !filters.status ? true : filters.status === item.status,
       genres: (item: ContentType) =>
-        filters.genres?.length == 0
+        filters.genres?.length === 0
           ? true
-          : filters.genres?.every((g: any) => item?.genres?.includes(g.label)),
+          : filters.genres?.every((g: any) => item?.genres?.includes(g)),
     };
 
     const selectedT = [
@@ -65,7 +58,7 @@ const useFilters = (filtersOptions: {
     return paginated;
   };
 
-  return [filtered, setFilters, filterItems, currentPage, setCurrentPage];
+  return [filterItems, currentPage, setCurrentPage];
 };
 
 export default useFilters;

@@ -6,14 +6,17 @@ import type { AppProps } from "next/app";
 export type ContentType = {
   id: number;
   title: string;
-  image: string | ImageModule;
+  image: string | ImageModule | File;
   description: string;
-  type: string;
+  type: "Manga" | "Manhwa" | "Manhua";
   demography: string;
   genres: string[];
   status: string;
-  Episodes: ChapterItemType[];
+  episodes: ChapterItemType[];
+  numEpisodes: number;
   banner: string;
+  lastChapter?: number;
+  checked?: boolean;
 };
 
 export type User = {
@@ -60,18 +63,12 @@ export type FiltersType = {
   page: number;
 };
 
-export type DragImageItemType = {
-  id: string;
-  file: File;
-  imgSrc: string;
-  pag: number;
-};
 
 export type CreateChapterParams = {
   episode: string;
   mangaId: number;
   capNumber: number;
-  images: File[];
+  images: File[] | ImageType[];
 };
 
 export type TabItemType = {
@@ -82,12 +79,12 @@ export type TabItemType = {
 export type AddContentParams = {
   title: string;
   description: string;
-  type: string;
-  demography: string;
-  genres: any[];
-  status: string;
-  banner: File | string;
-  image: File | string;
+  type?: OptionType;
+  demography?: OptionType;
+  genres: OptionType[] ;
+  status?: OptionType;
+  banner: File | string | ImageType;
+  image: File | string | ImageType;
 };
 
 export type ContentValidationType = Partial<{
@@ -95,7 +92,7 @@ export type ContentValidationType = Partial<{
   description: string;
   type: string;
   demography: string;
-  genres: string[] | string;
+  genres: string;
   status: string;
   banner: File | string;
   image: File | string;
@@ -115,17 +112,27 @@ export type FiltersResponseType = {
 
 export type ContentResponseType = {
   manga: ContentType;
-  numEpisodes: number;
 };
 
 export type ChapterItemType = {
-  image: string;
   title: string;
   id: number;
   path: string;
   capNumber: number;
   mangaId: number;
+  Manga?: ContentType;
+  image?: string;
+  checked?: boolean;
+  images?: string[] | File[]
 };
+
+export type ImageType = {
+  id: number | string;
+  name: string;
+  position: number;
+  url: string;
+  file?: File
+}
 
 export type LoginRegisterValidation = Partial<{
   userName: string;
@@ -144,7 +151,26 @@ export type OptionType = {
   label: string;
 };
 
-export type ChapterPageParamsType = {
-  content: ContentResponseType;
-  currentChapterImgs: string[];
+export type UserEditParams = {
+  avatar?: File | string | ImageType;
+  userName: string;
+  email: string;
+};
+
+export type UserEditValidation = Partial<{
+  userName: string;
+  email: string;
+}>;
+
+export type DashboardData = {
+  mangasCount: number;
+  manhuasCount: number;
+  manhwasCount: number;
+  lastAddedChapters: ChapterItemType[];
+  lastAddedMangas: ContentType[];
+};
+
+export type GetChapterResponse = {
+  images: ImageType[];
+  manga: ContentType;
 };

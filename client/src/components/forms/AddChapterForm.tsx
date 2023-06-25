@@ -1,6 +1,7 @@
+
 import React, { FC } from "react";
 import DragAndDrop from "./DragAndDrop";
-import { CreateChapterParams } from "@/utils/types";
+import { CreateChapterParams, ImageType } from "@/utils/types";
 import Input from "./Input";
 import { ChapterValidationType } from "@/utils/types";
 import SubmitButton from "./SubmitButton";
@@ -12,6 +13,8 @@ type Props = {
   errors?: ChapterValidationType;
   loading: boolean;
   clearForm?: boolean;
+  setClearForm?: (clear: boolean) => void;
+  editing: boolean
 };
 
 const AddChapterForm: FC<Props> = ({
@@ -20,9 +23,11 @@ const AddChapterForm: FC<Props> = ({
   setData,
   data,
   loading,
-  clearForm = false,
+  clearForm,
+  setClearForm,
+  editing
 }) => {
-  const handleFileChange = (files: File[]) => {
+  const handleFileChange = (files: ImageType[]) => {
     setData({ ...data, images: files });
   };
 
@@ -35,16 +40,20 @@ const AddChapterForm: FC<Props> = ({
         placeholder="Escriba el numero del capitulo"
         value={data.capNumber}
         errMsg={errors?.capNumber}
+        readOnly={editing}
       />
+
       <DragAndDrop
         name="imagenes-capitulo"
         onChange={handleFileChange}
         isMulti={true}
         errMsg={errors?.images}
         clearForm={clearForm}
+        setClearForm={setClearForm}
+        previews={ editing ? data.images as ImageType[] : []}
       />
       <div className="mb-10">
-        <SubmitButton loading={loading} text="Subir Capitulo" />
+        <SubmitButton loading={loading} text={`${editing ? 'Actualizar' : 'Subir'} Capitulo`} />
       </div>
     </form>
   );

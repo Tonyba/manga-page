@@ -1,15 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import DashboardChapterImageItem from "./DashboardChapterImageItem";
 import { AddChapterContext } from "@/utils/context/AddChapterContext";
 import { motion } from "framer-motion";
-import { DragImageItemType } from "@/utils/types";
+import { ImageType } from "@/utils/types";
 
 const ChapterImagesPreviews = () => {
   const { fileItems, setFileItems } = useContext(AddChapterContext);
-  const [sourceItem, setSource] = useState<DragImageItemType>();
-  const [targetItem, setTarget] = useState<DragImageItemType>();
+  const [sourceItem, setSource] = useState<ImageType>();
+  const [targetItem, setTarget] = useState<ImageType>();
+  const hiddenInput = useRef<HTMLInputElement>(null);
 
-  const getContainerId = (index: DragImageItemType) => {
+  const getContainerId = (index: ImageType) => {
     setSource(index);
   };
 
@@ -20,14 +21,16 @@ const ChapterImagesPreviews = () => {
   }, [targetItem?.id, sourceItem?.id]);
 
   const swapItems = (
-    sourceItemParam: DragImageItemType,
-    targetItemParam: DragImageItemType
+    sourceItemParam: ImageType,
+    targetItemParam: ImageType
   ) => {
     if (sourceItemParam.id == targetItemParam.id) return;
     let newOrder = [...fileItems];
 
     const sourceIndex = newOrder.findIndex((i) => i.id === sourceItemParam.id);
     const targetIndex = newOrder.findIndex((i) => i.id === targetItemParam.id);
+
+
 
     [newOrder[targetIndex], newOrder[sourceIndex]] = [
       newOrder[sourceIndex],
@@ -36,8 +39,8 @@ const ChapterImagesPreviews = () => {
 
     newOrder = newOrder.map((item, i) => ({
       ...item,
-      imgSrc: URL.createObjectURL(item.file),
-      pag: i,
+      url: item.file ? URL.createObjectURL(item.file!) : item.url,
+      position: i,
     }));
 
     setFileItems(newOrder);
@@ -45,9 +48,14 @@ const ChapterImagesPreviews = () => {
     setTarget(undefined);
   };
 
-  const onItemDrag = (item: DragImageItemType) => {
+  const onItemDrag = (item: ImageType) => {
     setTarget(item);
   };
+
+  const onImageReplace = (itemPosition: number) => {
+    hiddenInput.current?.click();
+    console.log(itemPosition)
+  }
 
   return (
     <motion.div layout className="mt-5 grid grid-cols-6 gap-5">
@@ -57,8 +65,10 @@ const ChapterImagesPreviews = () => {
           item={cont}
           getContainerId={getContainerId}
           onItemDrag={onItemDrag}
+          onImageReplace={onImageReplace}
         />
       ))}
+      <input ref={hiddenInput} type="file" style={{display: 'none'}}/>
     </motion.div>
   );
 };

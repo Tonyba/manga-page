@@ -16,7 +16,8 @@ type Props = {
 };
 
 const CardItem: FC<Props> = ({ content, showHover = true, action = "add" }) => {
-  const { type, id, title, demography, description, image } = content;
+  const { type, id, title, demography, description, image, lastChapter } =
+    content;
   const { user } = useAppContext();
 
   return (
@@ -45,20 +46,12 @@ const CardItem: FC<Props> = ({ content, showHover = true, action = "add" }) => {
           w-full
           cursor-pointer hover:scale-110
           duration-300
-          h-80
+          h-60  md:h-80
           hover:brightness-110"
             alt={title}
             width={250}
             height={330}
           />
-
-          <button
-            className="absolute z-10 right-2 bottom-14 rounded-md
-        px-2
-        p-1 text-sm bg-[#475569da] block xl:hidden"
-          >
-            Cap 23
-          </button>
 
           <div
             className="text-white absolute 
@@ -70,6 +63,17 @@ const CardItem: FC<Props> = ({ content, showHover = true, action = "add" }) => {
           </div>
         </div>
       </Link>
+
+      <Link
+        href={`/content/${id}/${lastChapter ? `capitulo-${lastChapter}` : `` }`}
+        role="button"
+        className="absolute z-10 right-2 top-1/2 rounded-md
+        px-2
+        p-1 text-sm bg-[#475569da] block xl:hidden"
+      >
+         {lastChapter ? `Cap ${lastChapter}` : `No Caps` }
+      </Link>
+
       <Link href={`/content/${id}`}>
         <h3 className="text-xl font-medium line-clamp-2 mt-1 break-words">
           {title}
@@ -77,7 +81,13 @@ const CardItem: FC<Props> = ({ content, showHover = true, action = "add" }) => {
       </Link>
 
       {showHover && (
-        <CardItemHover id={id} title={title} desc={description} type={type} />
+        <CardItemHover
+          id={id}
+          title={title}
+          desc={description}
+          type={type}
+          lastChapter={lastChapter}
+        />
       )}
     </motion.div>
   );

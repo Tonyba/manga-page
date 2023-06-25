@@ -3,7 +3,6 @@ import { useAppContext } from "@/utils/context/AppContext";
 import { findFavorite } from "@/utils/helpers";
 import React, { FC } from "react";
 import heart from "react-useanimations/lib/heart";
-import trash from "react-useanimations/lib/trash2";
 import UseAnimations from "react-useanimations";
 import { BsTrashFill } from "react-icons/bs";
 
@@ -32,8 +31,9 @@ const CardAction: FC<Props> = ({ action, contentId }) => {
           image: resp.data.image,
           banner: "",
           genres: [],
-          Episodes: [],
+          episodes: [],
           status: resp.data.status,
+          numEpisodes: 0
         },
         ...favorites,
       ]);
@@ -43,33 +43,30 @@ const CardAction: FC<Props> = ({ action, contentId }) => {
     const deleted = await removeFavorite(contentId, user?.id!);
 
     if (deleted?.status === 200) {
-      const favCopy = [...favorites];
-      const favIndex = favCopy.findIndex((fav) => fav.id == contentId);
-      favCopy.splice(favIndex, 1);
+      const favCopy = [...favorites].filter((fav) => fav.id !== contentId);
 
       setFavorites(favCopy);
     }
   };
 
   return action === "add" ? (
-    <UseAnimations
-      reverse={isAdded}
-      size={32}
-      animation={heart}
-      color="#fff"
-      fillColor="#fff"
-      onClick={() => (isAdded ? removeFromFavorites() : addToFavorites())}
-      className="absolute top-2 right-2 z-20 cursor-pointer bg-primary rounded-full p-1"
-      strokeColor={"#fff"}
-    />
+    <>
+      <UseAnimations
+        reverse={isAdded}
+        size={32}
+        animation={heart}
+        onClick={() => (isAdded ? removeFromFavorites() : addToFavorites())}
+        className="absolute top-2 right-2 z-10 cursor-pointer bg-primary rounded-full p-1"
+        fillColor="#fff"
+        strokeColor={"#fff"}
+      />
+    </>
   ) : (
-    <UseAnimations
-      size={32}
-      animation={trash}
+    <BsTrashFill
+      size={25}
       color="#fff"
       onClick={() => removeFromFavorites()}
-      className="absolute top-2 right-2 z-20 cursor-pointer bg-primary rounded-full p-1"
-      strokeColor={"#fff"}
+      className="absolute top-2 right-2 z-10 cursor-pointer bg-primary rounded-full p-1"
     />
   );
 };

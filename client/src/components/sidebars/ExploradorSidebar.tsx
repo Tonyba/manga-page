@@ -1,5 +1,6 @@
 import { ExploradorContext } from "@/utils/context/ExploradorContext";
-import { selectStyles } from "@/utils/helpers";
+import { SELECT_STYLES } from "@/utils/constants";
+
 import { FiltersType } from "@/utils/types";
 import { demography, genres, status, types } from "@/utils/valoresParaSelect";
 import React, { useContext, useEffect, useRef, useState } from "react";
@@ -63,7 +64,7 @@ const ExploradorSidebar = () => {
           components={animatedComponents}
           options={types}
           defaultValue={types[0]}
-          styles={selectStyles}
+          styles={SELECT_STYLES}
           onChange={(value: any) =>
             setFilters({ ...filtersTyped, type: value.label })
           }
@@ -80,7 +81,7 @@ const ExploradorSidebar = () => {
           components={animatedComponents}
           options={demography}
           defaultValue={demography[0]}
-          styles={selectStyles}
+          styles={SELECT_STYLES}
           onChange={(value: any) =>
             setFilters({ ...filtersTyped, demography: value.label })
           }
@@ -97,7 +98,7 @@ const ExploradorSidebar = () => {
           components={animatedComponents}
           options={status}
           defaultValue={status[0]}
-          styles={selectStyles}
+          styles={SELECT_STYLES}
           onChange={(value: any) =>
             setFilters({ ...filtersTyped, status: value.label })
           }

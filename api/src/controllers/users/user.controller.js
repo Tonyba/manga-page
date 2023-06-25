@@ -7,6 +7,8 @@ const __dirname = dirname(__filename);
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
+import { deleteImage } from '../../Helpers/deleteImages.js';
+import { v4 as uuidv4 } from 'uuid';
 
 dotenv.config();
 
@@ -144,6 +146,7 @@ export const getUser = async (req, res) => {
         "demography",
         "genres",
         "status",
+        "type",
       ],
     });
 
@@ -184,8 +187,7 @@ export const deleteFavorite = async (req, res) => {
 export const updateUserData = async (req, res) => {
   const { userName, paypal } = req?.body;
 
-  const img = req?.files?.image;
-
+  const img = req?.files?.avatar;
   const { id } = req?.params;
 
   const userFind = await Users.findByPk(id);
@@ -194,24 +196,34 @@ export const updateUserData = async (req, res) => {
     return res.status(400).json({ error: "Usuario Inexistente" });
   }
 
-  let pathImage = __dirname + "/../../public/users/" + img?.name;
-  img?.mv(pathImage);
-  let url = "http://localhost:3000/users/" + img?.name;
+  const newUser = {
+    userName,
+    paypal
+  }
 
-  if (!img) url = userFind.avatar;
+  if (!img) {
+    newUser.avatar = userFind.avatar;
+  } else {
+    const hash = uuidv4() + '_';
+    deleteImage(userFind.avatar, 'users');
+    let pathImage = __dirname + "/../../public/users/"+ hash + img?.name;
+    img?.mv(pathImage);
+    newUser.avatar = `${process.env.API_URL}/users/` +  hash + img?.name;
+  }
 
   const updateData = await Users.update(
-    {
-      userName: userName,
-      paypal: paypal,
-      avatar: url,
-    },
+    newUser,
     {
       where: {
         id: id,
       },
+      returning: true,
+      plain: true,
     }
   );
 
-  res.json(updateData);
+  delete updateData[1].dataValues.password;
+  delete updateData[1].dataValues.paypal;
+
+  res.json(updateData[1].dataValues);
 };

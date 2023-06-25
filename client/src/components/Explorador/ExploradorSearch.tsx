@@ -1,12 +1,19 @@
-import useSearchContent from "@/hooks/useSearchContent";
-import { searchByTitle } from "@/utils/axios/filters";
-import { ExploradorContext } from "@/utils/context/ExploradorContext";
-import React, { useContext, useEffect, useState } from "react";
+import { filterExp, searchByTitle } from "@/utils/axios/filters";
+import { FiltersType } from "@/utils/types";
+import { ContentType } from "@/utils/types";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 
-const ExploradorSearch = () => {
-  const { setContent, setCount } = useContext(ExploradorContext);
+type Props = {
+  setContent: (data: ContentType[]) => void;
+  setCount: (count: number) => void;
+  filters: FiltersType;
+}
+
+const ExploradorSearch: FC<Props> = ({ setContent, setCount, filters }) => {
   const [searchInputVal, setInputVal] = useState("");
+
+  const isMounted = useRef(false);
 
   const fetchSearch = async () => {
     if (searchInputVal.length > 2) {
@@ -14,8 +21,23 @@ const ExploradorSearch = () => {
       console.log(res, "from search");
       setCount(res.data.count);
       setContent(res.data.result);
-    }
+    } 
   };
+
+  useEffect(() => {
+
+    if(!isMounted.current) isMounted.current = true;
+
+    const fetchData = async () => {
+      const res = await filterExp(filters);
+      setCount(res.data.count);
+      setContent(res.data.result);
+    }
+
+    if(!searchInputVal && isMounted) {
+      fetchData()
+    }
+  }, [searchInputVal]);
 
   return (
     <div className="flex">

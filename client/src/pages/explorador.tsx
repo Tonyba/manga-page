@@ -6,13 +6,13 @@ import CardLoop from "@/components/cardLoop/cardLoop";
 import Pagination from "@/components/pagination/Pagination";
 import ExploradorSearch from "@/components/Explorador/ExploradorSearch";
 import { filterExp } from "@/utils/axios/filters";
-import { initFilterState } from "@/utils/helpers";
+import { INIT_FILTER_STATE } from "@/utils/constants";
 
 const Explorador = () => {
   const [content, setContent] = useState<ContentType[]>([]);
   const [loading, setLoading] = useState(true);
   const [count, setCount] = useState(0);
-  const [filters, setFilters] = useState<FiltersType>(initFilterState);
+  const [filters, setFilters] = useState<FiltersType>(INIT_FILTER_STATE);
 
   const handlePageChange = (selected: number) => {
     let page = selected + 1;
@@ -22,6 +22,7 @@ const Explorador = () => {
   const fetchData = async () => {
     setLoading(false);
     const res = await filterExp(filters);
+    console.log(res.data)
     setCount(res.data.count);
     setContent(res.data.result);
     setLoading(true);
@@ -45,7 +46,7 @@ const Explorador = () => {
     >
       <main className="max-w-7xl mx-auto px-5 xl:px-0 mt-5">
         <section className="w-full">
-          <ExploradorSearch />
+          <ExploradorSearch setContent={setContent} setCount={setCount}  filters={filters}/>
         </section>
         <section className="flex py-10 flex-col xl:flex-row flex-wrap">
           <aside className="w-full mb-10 xl:mb-0 xl:w-1/4">

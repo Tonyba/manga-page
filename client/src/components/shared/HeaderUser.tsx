@@ -35,17 +35,7 @@ const HeaderUser = () => {
         {user ? (
           <>
             <Link role="button" className={buttonStyles} href={iconLink}>
-              {user?.avatar && user?.avatar !== "https" ? (
-                <Image
-                  src={user.avatar}
-                  alt="avatar"
-                  width={18}
-                  height={18}
-                  className="rounded-full"
-                />
-              ) : (
-                <FaUserAlt size={16} />
-              )}
+              <FaUserAlt size={16} />
             </Link>
             <UserDropdown />
           </>

@@ -1,9 +1,10 @@
-import React, { FC, useEffect } from "react";
-import { selectStyles } from "@/utils/helpers";
+import React, { FC, useEffect, useRef, useState } from "react";
 import makeAnimated from "react-select/animated";
 import { default as ReactSelect } from "react-select";
 import { OptionType } from "@/utils/types";
 import ValidationError from "./ValidationError";
+import { SELECT_STYLES } from "@/utils/constants";
+import { useSearchParams } from "next/navigation";
 
 const animatedComponents = makeAnimated();
 
@@ -26,6 +27,7 @@ const FormSelect: FC<Props> = ({
   defaultValue,
   placeholder,
 }) => {
+
   return (
     <>
       <label className="mb-2 block" htmlFor="type">
@@ -38,8 +40,8 @@ const FormSelect: FC<Props> = ({
         options={options}
         placeholder={placeholder}
         isMulti={isMulti}
-        defaultValue={defaultValue}
-        styles={selectStyles}
+        value={defaultValue}
+        styles={SELECT_STYLES}
         onChange={(value: any) => onChange(value)}
       />
       {errMsg && <ValidationError errorMessage={errMsg as string} />}

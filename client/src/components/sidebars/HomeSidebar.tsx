@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import AdComponent from "../Ad/AdComponent";
 import Tabs from "../Tabs/Tabs";
-import { ContentType, TabItemType } from "@/utils/types";
-import { faker } from "@faker-js/faker";
+import { TabItemType } from "@/utils/types";
+//import { faker } from "@faker-js/faker";
 import CardLoop from "../cardLoop/cardLoop";
 import { filterExp } from "@/utils/axios/filters";
-import { initFilterState } from "@/utils/helpers";
+import { INIT_FILTER_STATE } from "@/utils/constants";
 
 export const HomeSidebar = () => {
   const [tabs, setTabs] = useState<TabItemType[]>([]);
@@ -13,22 +13,22 @@ export const HomeSidebar = () => {
 
   const fetchTabsData = async () => {
     const mangasRes = await filterExp({
-      ...initFilterState,
+      ...INIT_FILTER_STATE,
       type: "Manga",
       limit: 6,
-      page: 1,
+      page: 0,
     });
     const manwhaRes = await filterExp({
-      ...initFilterState,
+      ...INIT_FILTER_STATE,
       type: "Manhwa",
       limit: 6,
-      page: 1,
+      page: 0,
     });
     const manhuaRes = await filterExp({
-      ...initFilterState,
+      ...INIT_FILTER_STATE,
       type: "Manhua",
       limit: 6,
-      page: 1,
+      page: 0,
     });
 
     const mangas = mangasRes.data.result;
