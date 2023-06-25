@@ -5,7 +5,8 @@ type ChapterFilterContextType = {
     chapters: ChapterItemType[],
     loading?: boolean,
     content?: ContentType,
-    editingChapter?: ChapterItemType
+    editingChapter?: ChapterItemType,
+    viewActions: boolean
 }
 
 type Actions = {
@@ -19,6 +20,7 @@ type Actions = {
 const ViewChapterFilterContext = createContext<ChapterFilterContextType>({
     chapters: [],
     loading: true,
+    viewActions: false
 })
 
 export const ActionsChapterFilterContext = createContext<Actions>({

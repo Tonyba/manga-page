@@ -1,4 +1,4 @@
-import { getManga } from "@/utils/axios/contentType";
+import { getChapter, getManga } from "@/utils/axios/contentType";
 import { ChapterItemType, ContentResponseType } from "@/utils/types";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -23,7 +23,7 @@ const DashboardAddChapter = () => {
 
   const [editingChapter, setEditingChapter] = useState<ChapterItemType>();
 
-  const fetchData = async () => {
+  const fetchData = async (chapterId?: number) => {
     if (!contentId) return;
     const resp = await getManga(parseInt(contentId as string));
     const contentResp = resp.data;
@@ -31,6 +31,12 @@ const DashboardAddChapter = () => {
 
     setContent(contentResp);
     setFilteredCaps(resultEps);
+
+    if(chapterId) {
+      const capRes = await getChapter(chapterId);
+      return capRes.data.images; 
+    }
+
   };
 
   useEffect(() => {
@@ -51,8 +57,14 @@ const DashboardAddChapter = () => {
           </button>
 
           
-          <ViewChapterFilterContext.Provider value={{ chapters: filteredCaps, loading, editingChapter}}>
-              <ActionsChapterFilterContext.Provider value={{ setChapters: setFilteredCaps, setContent, setLoading, setModalOpen, setEditingChapter}} >
+          <ViewChapterFilterContext.Provider value={{ chapters: filteredCaps, loading, editingChapter, viewActions:true}}>
+              <ActionsChapterFilterContext.Provider value={{ 
+                setChapters: setFilteredCaps, 
+                setContent, 
+                setLoading, 
+                setModalOpen, 
+                setEditingChapter
+                }} >
                 <LoadingWrapper loading={loading} >
                    <div className="mb-3 border-b border-primary  pb-3">
                       <Filter type="chapters" />

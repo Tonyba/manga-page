@@ -19,7 +19,7 @@ export const getManga = (id: number) =>
   axiosInstance.get<ContentResponseType>(`/manga/${id}`);
 
 export const addChapter = (params: CreateChapterParams) =>
-  axios({
+  axios<{id: number}>({
     method: "POST",
     url: `${API_URL}/episodes`,
     data: params,

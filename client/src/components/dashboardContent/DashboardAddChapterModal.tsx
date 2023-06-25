@@ -2,7 +2,7 @@ import React, { FC, useContext, useEffect, useState } from "react";
 import AddChapterForm from "../forms/AddChapterForm";
 import { motion } from "framer-motion";
 import { FaTimes } from "react-icons/fa";
-import { ChapterValidationType, CreateChapterParams, ImageType } from "@/utils/types";
+import { ChapterItemType, ChapterValidationType, CreateChapterParams, ImageType } from "@/utils/types";
 import { validateChapter } from "@/utils/validations/ChapterAddValidation";
 import Swal from "sweetalert2";
 import { addChapter, updateChapter } from "@/utils/axios/contentType";
@@ -14,7 +14,7 @@ import { isType } from "@/utils/helpers";
 type Props = {
   isOpen: boolean;
   onModalClose: () => void;
-  updateCaps: () => void;
+  updateCaps: (id?: number) => Promise<string[] | ImageType[] | undefined>;
   chaptersTotal: number;
 };
 
@@ -98,9 +98,8 @@ const DashboardAddChapterModal: FC<Props> = ({
         console.log(res);
         await revalidateManga(contentId as string);
         Swal.fire("Capitulo creado", "", "success");
-        setSubmitting(false);
-        await revalidateChapter(chapter.mangaId, chapter.capNumber);
         updateCaps();
+        setSubmitting(false);        
         cleanForm();
       })
       .catch((err) => {
@@ -151,7 +150,10 @@ const DashboardAddChapterModal: FC<Props> = ({
         await revalidateChapter( parseInt(contentId as string), chapter.capNumber);
         Swal.fire("Exito", `Capitulo ${chapter.capNumber} Actualizado`, "success");
         setSubmitting(false);
-        updateCaps(); 
+        const imgs = await updateCaps(editingChapter?.id); 
+        console.log(imgs)
+        setChapter( (prev) => ({...prev, images: imgs as ImageType[] }) );
+      
       })
       .catch((err) => {
         console.log(err);
@@ -159,6 +161,10 @@ const DashboardAddChapterModal: FC<Props> = ({
         Swal.fire("Error inesperado", err.response.data.message, "error");
       });
   }
+
+  useEffect(() => {
+    console.log(chapter)
+  }, [Object.values(chapter)])
 
   const cleanForm = () => {
     setChapter(initState);
@@ -173,7 +179,7 @@ const DashboardAddChapterModal: FC<Props> = ({
         opacity: isOpen ? 1 : 0,
         visibility: isOpen ? "visible" : "hidden",
       }}
-      className="w-full bg-primary-dark rounded-md p-5 min-h-full absolute top-0 left-0 z-10"
+      className="w-full bg-primary-dark rounded-md p-5 min-h-full absolute top-0 left-0 z-20"
     >
       <div className="flex justify-end">
         <button

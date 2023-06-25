@@ -123,7 +123,7 @@ export type ChapterItemType = {
   Manga?: ContentType;
   image?: string;
   checked?: boolean;
-  images?: string[] | File[]
+  images?: string[] | ImageType[];
 };
 
 export type ImageType = {

@@ -67,7 +67,10 @@ export const createEpisode = async (req, res) => {
         })
     });
 
-    res.status(200).json({message: "Capitulo creado con exito"});
+    res.status(200).json({
+      message: "Capitulo creado con exito",
+      id: episodeDb.id
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -154,10 +157,6 @@ export const deleteEpisode = async (req, res) => {
   }
 }
 
-function getFilename(fullPath) {
-  return fullPath.replace(/^.*[\\\/]/, '');
-}
-
 export const updateEpisode = async (req ,res) => {
   const { id } = req.params;
   try {
@@ -193,41 +192,34 @@ export const updateEpisode = async (req ,res) => {
 
     let newImages = req.body.images.filter(img => img.file);
 
-    
-
     newImages = newImages.map(img =>  (
       {...img, 
         file: imagesArr.find(f => f.name.split('.')[0] == img.position + 1)
       }))
 
-
-    const changedImgs = changedPositionImgs.concat(newImages);
-
-    console.log('==================');
-
     const folderEpisode = changedPositionImgs[0]?.url?.split('/')[5] || deletedImgs[0]?.url?.split('/')[5];
     const folderManga =  changedPositionImgs[0]?.url?.split('/')[4] || deletedImgs[0]?.url?.split('/')[4];
 
-  //  await deletedImgs.forEach(async (img, i) => {
+     await deletedImgs.forEach(async (img, i) => {
 
-  //     deleteImage(img.url, `episodes/${folderManga}/${folderEpisode}`);
+        deleteImage(img.url, `episodes/${folderManga}/${folderEpisode}`);
 
-  //     await Images.destroy({
-  //       where: {
-  //         id: img.id,
-  //         position: img.position
-  //       }
-  //     })
+        await Images.destroy({
+          where: {
+            id: img.id,
+            position: img.position
+          }
+        })
 
-  //     if(i === deletedImgs.length - 1) console.log('termina borrado');
+        if(i === deletedImgs.length - 1) console.log('termina borrado');
 
-  //   })
+      })
 
   //console.log(imagesArr)
 
       renameImages(changedPositionImgs);
 
-      await changedImgs.forEach(async (img, i) => {
+      await changedPositionImgs.forEach(async (img, i) => {
         if(i === 0) console.log('empieza actualizar')
         const fileExt = img.file ? img.file.name.split('.').pop() : img.url.split('.').pop();
         const imgName = `${(img.position + 1) + '.' + fileExt}`;
@@ -241,21 +233,42 @@ export const updateEpisode = async (req ,res) => {
           console.log(path, 'change po')
         }
         
-        const savedImage = await Images.upsert(
+        const savedImage = await Images.update(
          {
           position: img.position,
           name: `${parseInt(img.position) + 1}.${fileExt}`,
-          url: path,
-          episodeId: id
+          url: path
          },
          {
           where: {
-            id: img.id,
-            position: img.position
+            id: img.id
           }
          }
         )
       })
+
+      await newImages.forEach(async (img, i) => {
+        const fileExt = img.file ? img.file.name.split('.').pop() : img.url.split('.').pop();
+        const imgName = `${(img.position + 1) + '.' + fileExt}`;
+        const path = process.env.API_URL + `${manga.path.replace('./src/public', '')}/capitulo_${episode.capNumber}/${imgName}`;
+
+        const publicPath = resolve(manga.path + `/capitulo_${episode.capNumber}/${imgName}`);
+        img.file.mv(publicPath);
+
+        const savedImage = await Images.create(
+          {
+           position: img.position,
+           name: `${parseInt(img.position) + 1}.${fileExt}`,
+           url: path,
+           episodeId: id
+          },
+         )
+
+      })
+
+
+      console.log(newImages);
+      console.log(changedPositionImgs);
   
 
     res.status(202).json({
