@@ -33,6 +33,27 @@ const deleteFolder = async (folder) => {
    
 }
 
+export const renameImages = async (images) => {
+     const tempPaths = images.map((img) => {
+        const filename = img.url.substring(img.url.lastIndexOf('/')+1);
+        const folderManga =  img.url.split('/')[4];
+        const folderEpisode = img.url.split('/')[5];
+        const fileExt = filename.split('.').pop();
+
+        const oldPath = path.resolve( __basedir + `/public/episodes/${folderManga}/${folderEpisode}/${filename}`);
+        const newPathTemp = path.resolve(__basedir + `/public/episodes/${folderManga}/${folderEpisode}/${parseInt(img.position) + 1}-temp.${fileExt}`);
+        const newPath = path.resolve(__basedir + `/public/episodes/${folderManga}/${folderEpisode}/${parseInt(img.position) + 1}.${fileExt}`);
+
+        
+        fs.renameSync(oldPath, newPathTemp); // renombra todas las imagenes con posicion cambiada con temp al final primero
+        return {oldPath: newPathTemp, newPath};
+    });
+
+    tempPaths.forEach(({oldPath, newPath}) => {
+        fs.renameSync(oldPath, newPath); // renombra las imagenes con la posicion cambiada con el path nuevo a lo ultimo
+    });
+}
+
 export {
     deleteFolderAndImageFromManga,
     deleteFolder,

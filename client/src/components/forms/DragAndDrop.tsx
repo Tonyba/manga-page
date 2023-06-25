@@ -65,7 +65,7 @@ const DragAndDrop: FC<Props> = ({
       id: "img-" + i,
       name: "img-" + i,
       file: selected.file,
-      url: URL.createObjectURL(selected.file!),
+      url: selected.file ? URL.createObjectURL(selected.file) : selected.url,
       position: i,
     }));
 

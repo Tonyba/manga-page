@@ -8,6 +8,6 @@ export const revalidateManga = (id: string) => {
 }
 
 export const revalidateChapter = (mangaId: number, capNumber: number) => {
-  const path = encodeURIComponent(`content/${mangaId}/${capNumber}`);
+  const path = encodeURIComponent(`content/${mangaId}/capitulo-${capNumber}`);
   return axios.get(`${NEXT_API_URL}/api/revalidate?path=${path}?secret=${process.env.NEXT_PUBLIC_REVALIDATION_TOKEN}`);
 }

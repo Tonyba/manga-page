@@ -7,6 +7,7 @@ import {
   CreateChapterParams,
   DashboardData,
   GetChapterResponse,
+  ImageType,
 } from "../types";
 import { axiosInstance } from "./axiosGlobal";
 
@@ -29,16 +30,24 @@ export const addChapter = (params: CreateChapterParams) =>
 
 export const getChapter = (id: number) => axiosInstance.get<ChapterItemType>(`/episode/${id}`);
 
-export const updateChapter = (params : any) => {
-  axios({
-    method: 'PUT',
-    url: `${API_URL}/episode/${params.id}`,
-    data: params,
-    headers: {
-      "Content-Type" : "multipart/form-data"
-    }
+export const updateChapter = (id:number, params : CreateChapterParams) => {
+
+  const formData = new FormData();
+
+  params.images.forEach((img) => {
+    let image = img as ImageType;
+    if(!image.file) return;
+    formData.append('imagesFiles[]', image.file);
   });
+
+  formData.append('capNumber', params.capNumber.toString());
+  formData.append('mangaId', params.mangaId.toString());
+  formData.append('episode', params.episode);
+  formData.append('images', JSON.stringify(params.images));
+ 
+  return axiosInstance.put(`/episode/${id}`, formData);
 }
+
 
 export const deleteChapter = (id: number) => axiosInstance.delete(`/episode/${id}`);
 

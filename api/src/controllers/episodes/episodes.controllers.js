@@ -4,7 +4,7 @@ import { Images } from "../../models/images/images.model.js";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import { deleteFolder } from "../../Helpers/deleteImages.js";
+import { deleteFolder, renameImages } from "../../Helpers/deleteImages.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -161,9 +161,58 @@ export const updateEpisode = async (req ,res) => {
 
     if(!episode) return res.status(404).json({ message: 'El Capitulo no Existe' });
 
-    console.log(req.body);
+    req.body.images = JSON.parse(req.body.images);
+    let imagesArr = req.files ? req.files['imagesFiles[]'] : [];
 
-    // await episode.update({...req.body});
+    if (!Array.isArray(imagesArr)) imagesArr = [imagesArr];
+
+    console.log('==================')
+    const imagesFromEpisode = await Images.findAll({
+      where: {
+        episodeId: episode.id 
+      },
+      order: [['position', 'asc']],
+      raw: true
+    })
+
+    console.log('==================');
+
+
+    const changedImgs = imagesFromEpisode.flatMap(img => {
+      const changed = req.body.images.find(bodyImg => bodyImg.id == img.id && bodyImg.position != img.position);
+      if(changed) return changed;
+      return [];
+    });
+
+
+    await changedImgs.forEach(async (img, i) => {
+      
+      const folderManga =  img.url.split('/')[4];
+      const folderEpisode = img.url.split('/')[5];
+      
+      const fileExt = img.url.split('.').pop();
+      const filename = `${img.position}.${fileExt}`;
+
+      const path = process.env.API_URL + `/episodes/${folderManga}/${folderEpisode}/${filename}`;
+
+      const savedImage = await Images.update(
+       {
+        position: img.position,
+        name: `${parseInt(img.position) + 1}.${fileExt}`,
+        url: path
+       },
+       {
+        where: {
+          id: img.id,
+          position: img.position
+        }
+       }
+      )
+    })
+
+    renameImages(changedImgs);
+
+    console.log('==================');
 
     res.status(202).json({
       message: 'Capitulo Actualizado'
@@ -175,11 +224,6 @@ export const updateEpisode = async (req ,res) => {
       message: 'Ocurrio un problema al actualizar el capitulo'
     })
   }
-
-
-
-
-
 }
 
 export const getEpisode = async(req, res) => {

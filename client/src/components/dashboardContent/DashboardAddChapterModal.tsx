@@ -5,9 +5,9 @@ import { FaTimes } from "react-icons/fa";
 import { ChapterValidationType, CreateChapterParams, ImageType } from "@/utils/types";
 import { validateChapter } from "@/utils/validations/ChapterAddValidation";
 import Swal from "sweetalert2";
-import { addChapter } from "@/utils/axios/contentType";
+import { addChapter, updateChapter } from "@/utils/axios/contentType";
 import { useRouter } from "next/router";
-import { revalidateManga } from "@/utils/axios/revalidate";
+import { revalidateChapter, revalidateManga } from "@/utils/axios/revalidate";
 import ViewChapterFilterContext from "@/utils/context/ChapterFilterContext";
 import { isType } from "@/utils/helpers";
 
@@ -98,6 +98,7 @@ const DashboardAddChapterModal: FC<Props> = ({
         await revalidateManga(contentId as string);
         Swal.fire("Capitulo creado", "", "success");
         setSubmitting(false);
+        await revalidateChapter(chapter.mangaId, chapter.capNumber);
         updateCaps();
         cleanForm();
       })
@@ -109,8 +110,46 @@ const DashboardAddChapterModal: FC<Props> = ({
   };
 
   const editChapter = () => {
-    console.log(chapter);
-    setSubmitting(false);
+    const numberedImages = chapter.images.flatMap((img , i) => {
+      if(typeof img === 'string') return [];
+
+      const image = img as ImageType;
+
+      if(!image.file) return image;
+      
+      const newImg = image.file?.slice(0,image.file?.size,image.file?.type);
+
+      const ext =
+     image.file?.name.substring(image.file?.name.lastIndexOf(".")! + 1,image.file?.name.length) ||
+     image.file?.name;
+
+      const newFile = new File([newImg!], `${i + 1}.${ext}`, {
+        type: newImg?.type,
+      });
+
+      image.file = newFile;
+
+      return image;
+    });
+
+    updateChapter(
+      editingChapter?.id!,
+      {...chapter,
+        images: numberedImages
+      }
+      )
+      .then(async (res) => {
+        console.log(res);
+        await revalidateChapter( parseInt(contentId as string), chapter.capNumber);
+        Swal.fire("Exito", `Capitulo ${chapter.capNumber} Actualizado`, "success");
+        setSubmitting(false);
+        updateCaps(); 
+      })
+      .catch((err) => {
+        console.log(err);
+        setSubmitting(false);
+        Swal.fire("Error inesperado", err.response.data.message, "error");
+      });
   }
 
   const cleanForm = () => {
