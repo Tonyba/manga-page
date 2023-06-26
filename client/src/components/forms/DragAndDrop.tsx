@@ -35,7 +35,6 @@ const DragAndDrop: FC<Props> = ({
 }) => {
 
   const [filesItem, setFilesItems] = useState<ImageType[]>([]);
-  const [prevs, setPreview] = useState<string[] | ImageType[]>(previews);
 
   const handlePreview = (files: File[] | File) => {
     if (!Array.isArray(files) && files instanceof Blob) files = [files];
@@ -43,7 +42,7 @@ const DragAndDrop: FC<Props> = ({
     let selectedFilesArray = Array.from(files);
     let fileItemArr: ImageType[] = selectedFilesArray.map(
       (selected, i) => ({
-        id: "img-" + (filesItem.length + i),
+        id: "img-" + (filesItem.length + (i + 1 )),
         name: (filesItem.length + i) + '.' +selected.name.split('.').pop()!,
         file: selected,
         url: URL.createObjectURL(selected),
@@ -62,7 +61,7 @@ const DragAndDrop: FC<Props> = ({
     const newImages = filesItem.filter((prev) => prev.position !== position ?? prev);
 
     let fileItemArr: ImageType[] = newImages.map((selected, i) => ({
-      id: selected.id ? selected.id : "img-" + i,
+      id: selected.id ? selected.id : "img-" + (i + 1),
       name: (i + 1) + '.' + selected.url.split('.').pop()!,
       file: selected.file,
       url: selected.file ? URL.createObjectURL(selected.file) : selected.url,
@@ -78,7 +77,6 @@ const DragAndDrop: FC<Props> = ({
 
 
   useEffect(() => {
-    if(previews.length > 0 && !isType<ImageType[]>(previews) ) setPreview(previews)
     if(previews.length > 0 && isType<ImageType[]>(previews) ) setFilesItems(previews as ImageType[])    
   }, [previews.length]);
 

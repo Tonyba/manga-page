@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, InputHTMLAttributes, useContext, useEffect, useRef, useState } from "react";
 import DashboardChapterImageItem from "./DashboardChapterImageItem";
 import { AddChapterContext } from "@/utils/context/AddChapterContext";
 import { motion } from "framer-motion";
@@ -6,6 +6,7 @@ import { ImageType } from "@/utils/types";
 
 const ChapterImagesPreviews = () => {
   const { fileItems, setFileItems } = useContext(AddChapterContext);
+  const [currentImageEdited, setEdited] = useState<ImageType>();
   const [sourceItem, setSource] = useState<ImageType>();
   const [targetItem, setTarget] = useState<ImageType>();
   const hiddenInput = useRef<HTMLInputElement>(null);
@@ -52,9 +53,16 @@ const ChapterImagesPreviews = () => {
     setTarget(item);
   };
 
-  const onImageReplace = (itemPosition: number) => {
+  const onClickReplaceImage = (itemPosition: number) => {
     hiddenInput.current?.click();
-    console.log(itemPosition)
+    const found = fileItems.find(fi => fi.position === itemPosition);
+    setEdited( found );
+  }
+
+  const onChangeImage = (e: React.ChangeEvent<HTMLInputElement> ) => {
+    if(!e.target.files?.length) return; 
+    const file = Array.from(e.target.files)[0];
+    setFileItems(fileItems.map(fi => fi.id === currentImageEdited?.id ? {...fi, file, url: URL.createObjectURL(file)} : fi));
   }
 
   return (
@@ -65,10 +73,10 @@ const ChapterImagesPreviews = () => {
           item={cont}
           getContainerId={getContainerId}
           onItemDrag={onItemDrag}
-          onImageReplace={onImageReplace}
+          onImageReplace={onClickReplaceImage}
         />
       ))}
-      <input ref={hiddenInput} type="file" style={{display: 'none'}}/>
+      <input ref={hiddenInput} type="file" style={{display: 'none'}} onChange={onChangeImage} accept="image/*"/>
     </motion.div>
   );
 };
