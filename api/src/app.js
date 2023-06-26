@@ -38,7 +38,10 @@ app.use(
 
 // Cors
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Origin",
+    "https://manga-page-nine.vercel.app"
+  );
   res.header(
     "Access-Control-Allow-Headers",
     "x-auth-token, Origin, X-Requested-With, Content-Type, Accept"
