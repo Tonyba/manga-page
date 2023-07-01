@@ -25,7 +25,7 @@ const Popup: FC<PropsWithChildren & Props> = ({
       id="modal"
       onClick={handleOnModalClose}
       role="dialog"
-      className={`fixed inset-0 flex ${className} z-20`}
+      className={`fixed inset-0 flex ${className} z-50`}
     >
       {children}
     </div>

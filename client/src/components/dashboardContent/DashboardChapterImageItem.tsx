@@ -1,7 +1,7 @@
 import { AddChapterContext } from "@/utils/context/AddChapterContext";
 import { ImageType } from "@/utils/types";
 import { motion } from "framer-motion";
-import React, { FC, useContext, useEffect } from "react";
+import React, { FC, useContext, useEffect, useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import { FiMove } from "react-icons/fi";
@@ -82,7 +82,7 @@ const DashboardChapterImageItem: FC<Props> = ({
         </div>
 
         <img
-          src={url}
+          src={url + `${ !file ? `?dummy=${Date.now()}` : '' }`}
           width={300}
           height={240}
           draggable={false}
@@ -93,7 +93,7 @@ const DashboardChapterImageItem: FC<Props> = ({
             isOver ? "bg-important" : "bg-primary"
           } px-2 text-sm py-[3px] line-clamp-1 text-ellipsis`}
         >
-          {file?.name}
+          {file?.name || item.name}
         </p>
       </div>
     </motion.div>

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import { RiImageAddFill } from "react-icons/ri";
 import ValidationError from "./ValidationError";
 import ChapterImagesPreviews from "../dashboardContent/ChapterImagesPreviews";
@@ -9,6 +9,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { FILE_TYPES } from "@/utils/constants";
 import { isType } from "@/utils/helpers";
+import ViewChapterFilterContext, { ActionsChapterFilterContext } from "@/utils/context/ChapterFilterContext";
 
 type Props = {
   onChange: (file: ImageType[]) => void;
@@ -35,7 +36,9 @@ const DragAndDrop: FC<Props> = ({
 }) => {
 
   const [filesItem, setFilesItems] = useState<ImageType[]>([]);
-  const [prevs, setPreview] = useState<string[] | ImageType[]>(previews);
+
+  const { edited, editingChapter } = useContext(ViewChapterFilterContext);
+  const { setEdited } = useContext(ActionsChapterFilterContext);
 
   const handlePreview = (files: File[] | File) => {
     if (!Array.isArray(files) && files instanceof Blob) files = [files];
@@ -43,7 +46,7 @@ const DragAndDrop: FC<Props> = ({
     let selectedFilesArray = Array.from(files);
     let fileItemArr: ImageType[] = selectedFilesArray.map(
       (selected, i) => ({
-        id: "img-" + (filesItem.length + i),
+        id: "img-" + (filesItem.length + (i + 1 )),
         name: (filesItem.length + i) + '.' +selected.name.split('.').pop()!,
         file: selected,
         url: URL.createObjectURL(selected),
@@ -62,7 +65,7 @@ const DragAndDrop: FC<Props> = ({
     const newImages = filesItem.filter((prev) => prev.position !== position ?? prev);
 
     let fileItemArr: ImageType[] = newImages.map((selected, i) => ({
-      id: selected.id ? selected.id : "img-" + i,
+      id: selected.id ? selected.id : "img-" + (i + 1),
       name: (i + 1) + '.' + selected.url.split('.').pop()!,
       file: selected.file,
       url: selected.file ? URL.createObjectURL(selected.file) : selected.url,
@@ -78,11 +81,11 @@ const DragAndDrop: FC<Props> = ({
 
 
   useEffect(() => {
-    if(previews.length > 0 && !isType<ImageType[]>(previews) ) setPreview(previews)
     if(previews.length > 0 && isType<ImageType[]>(previews) ) setFilesItems(previews as ImageType[])    
   }, [previews.length]);
 
   useEffect(() => {
+    console.log('pasa')
     onChange(filesItem);
     
     return () =>
@@ -96,6 +99,13 @@ const DragAndDrop: FC<Props> = ({
       setClearForm!(false);
     };
   }, [clearForm]);
+
+  useEffect(() => {
+    if(edited) {
+      setFilesItems(editingChapter?.images as ImageType[]);
+      setEdited!(false);
+    }
+  }, [edited])
 
   return (
     <div className="mb-4">

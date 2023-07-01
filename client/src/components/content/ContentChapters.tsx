@@ -5,7 +5,7 @@ import React, { FC, useContext } from "react";
 import { FaTrash, FaPencilAlt } from "react-icons/fa";
 import DashboardHoverItem from "../dashboardContent/DashboardHoverItem";
 import { useAppContext } from "@/utils/context/AppContext";
-import { ActionsChapterFilterContext } from "@/utils/context/ChapterFilterContext";
+import ViewChapterFilterContext, { ActionsChapterFilterContext } from "@/utils/context/ChapterFilterContext";
 import { deleteChapter, getChapter, getManga } from "@/utils/axios/contentType";
 import { revalidateManga } from "@/utils/axios/revalidate";
 
@@ -24,13 +24,15 @@ const ContentChapters: FC<ChapterItemType & Props> = ({
 }) => {
 
   const { user } = useAppContext();
-  const { setLoading, setContent, setModalOpen, setEditingChapter } = useContext(ActionsChapterFilterContext);
+  const { setLoading, setContent, setModalOpen, setEditingChapter, setChapters } = useContext(ActionsChapterFilterContext);
+  const {viewActions} = useContext(ViewChapterFilterContext);
 
   const onDelete = async () => {
     setLoading!(true);
     await deleteChapter(id);
     const resp = await getManga(mangaId);
     setContent!(resp.data);
+    setChapters(resp.data.manga.episodes);
     setLoading!(false);
     await revalidateManga(mangaId.toString());
   }
@@ -68,7 +70,7 @@ const ContentChapters: FC<ChapterItemType & Props> = ({
           >
             {title}
           </Link>
-        { (user?.role === 'Admin' && showActions ) &&  <div className="gap-3 flex mt-3"> 
+        { (user?.role === 'Admin' && viewActions ) &&  <div className="gap-3 flex mt-3"> 
             <DashboardHoverItem onClick={onUpdate} textHover="Editar">
               <FaPencilAlt size={18} />
             </DashboardHoverItem>

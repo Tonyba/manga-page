@@ -123,7 +123,7 @@ export type ChapterItemType = {
   Manga?: ContentType;
   image?: string;
   checked?: boolean;
-  images?: string[] | File[]
+  images?: string[] | ImageType[];
 };
 
 export type ImageType = {
@@ -131,7 +131,8 @@ export type ImageType = {
   name: string;
   position: number;
   url: string;
-  file?: File
+  file?: File;
+  path?: string;
 }
 
 export type LoginRegisterValidation = Partial<{

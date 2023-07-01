@@ -1,10 +1,11 @@
 
-import React, { FC } from "react";
+import React, { FC, useContext } from "react";
 import DragAndDrop from "./DragAndDrop";
 import { CreateChapterParams, ImageType } from "@/utils/types";
 import Input from "./Input";
 import { ChapterValidationType } from "@/utils/types";
 import SubmitButton from "./SubmitButton";
+import ViewChapterFilterContext from "@/utils/context/ChapterFilterContext";
 
 type Props = {
   data: CreateChapterParams;
@@ -31,6 +32,8 @@ const AddChapterForm: FC<Props> = ({
     setData({ ...data, images: files });
   };
 
+  const { editingChapter } = useContext(ViewChapterFilterContext);
+
   return (
     <form onSubmit={(e) => onSubmit(e)}>
       <Input
@@ -50,7 +53,7 @@ const AddChapterForm: FC<Props> = ({
         errMsg={errors?.images}
         clearForm={clearForm}
         setClearForm={setClearForm}
-        previews={ editing ? data.images as ImageType[] : []}
+        previews={ editing ? editingChapter?.images : []}
       />
       <div className="mb-10">
         <SubmitButton loading={loading} text={`${editing ? 'Actualizar' : 'Subir'} Capitulo`} />

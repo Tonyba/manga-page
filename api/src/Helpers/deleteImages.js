@@ -11,11 +11,13 @@ const deleteFolderAndImageFromManga = async (folder, images) => {
     });
 }
 
-const deleteImage = (image, folder) => {
-    const mangaImagesPath = path.resolve( __basedir + `/public/${folder}`);
+const deleteImage = (image, filePath) => {
+    const mangaImagesPath = path.resolve( __basedir + `/public/${filePath}`);
     const filename = image.substring(image.lastIndexOf('/')+1);
     const imagePath = path.resolve(mangaImagesPath + '/' + filename);
     const imageExist = fs.existsSync(imagePath);
+
+    console.log(imagePath);
 
     if(imageExist) fs.unlinkSync(imagePath);
 }
@@ -33,7 +35,7 @@ const deleteFolder = async (folder) => {
    
 }
 
-const renameImages = async (images) => {
+const renameImages = (images) => {
      const tempPaths = images.map((img) => {
         const filename = img.url.substring(img.url.lastIndexOf('/')+1);
         const folderManga =  img.url.split('/')[4];
@@ -44,7 +46,6 @@ const renameImages = async (images) => {
         const newPathTemp = path.resolve(__basedir + `/public/episodes/${folderManga}/${folderEpisode}/${parseInt(img.position) + 1}-temp.${fileExt}`);
         const newPath = path.resolve(__basedir + `/public/episodes/${folderManga}/${folderEpisode}/${parseInt(img.position) + 1}.${fileExt}`);
 
-        
         fs.renameSync(oldPath, newPathTemp); // renombra todas las imagenes con posicion cambiada con temp al final primero
         return {oldPath: newPathTemp, newPath};
     });

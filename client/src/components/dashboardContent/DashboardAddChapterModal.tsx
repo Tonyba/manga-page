@@ -8,13 +8,13 @@ import Swal from "sweetalert2";
 import { addChapter, updateChapter } from "@/utils/axios/contentType";
 import { useRouter } from "next/router";
 import { revalidateChapter, revalidateManga } from "@/utils/axios/revalidate";
-import ViewChapterFilterContext from "@/utils/context/ChapterFilterContext";
+import ViewChapterFilterContext, { ActionsChapterFilterContext } from "@/utils/context/ChapterFilterContext";
 import { isType } from "@/utils/helpers";
 
 type Props = {
   isOpen: boolean;
   onModalClose: () => void;
-  updateCaps: () => void;
+  updateCaps: (id?: number) => Promise<string[] | ImageType[] | undefined>;
   chaptersTotal: number;
 };
 
@@ -32,6 +32,8 @@ const DashboardAddChapterModal: FC<Props> = ({
   chaptersTotal,
 }) => {
   const { editingChapter } = useContext(ViewChapterFilterContext);
+  const { setEditingChapter, setEdited } = useContext(ActionsChapterFilterContext);
+
   const [chapter, setChapter] = useState<CreateChapterParams>({
     ...initState,
     capNumber: chaptersTotal + 1,
@@ -72,8 +74,6 @@ const DashboardAddChapterModal: FC<Props> = ({
       if(typeof img === 'string' ) return [];
       
       const image = img as ImageType;
-
-      console.log(image)
       
       const newImg = image.file?.slice(0,image.file?.size,image.file?.type);
 
@@ -98,9 +98,8 @@ const DashboardAddChapterModal: FC<Props> = ({
         console.log(res);
         await revalidateManga(contentId as string);
         Swal.fire("Capitulo creado", "", "success");
-        setSubmitting(false);
-        await revalidateChapter(chapter.mangaId, chapter.capNumber);
         updateCaps();
+        setSubmitting(false);        
         cleanForm();
       })
       .catch((err) => {
@@ -120,8 +119,6 @@ const DashboardAddChapterModal: FC<Props> = ({
       
       const newImg = image.file?.slice(0,image.file?.size,image.file?.type);
 
-      console.log(image)
-
       const ext =
      image.file?.name.substring(image.file?.name.lastIndexOf(".")! + 1,image.file?.name.length) ||
      image.file?.name;
@@ -136,10 +133,6 @@ const DashboardAddChapterModal: FC<Props> = ({
       return image;
     });
 
-    console.log({...chapter,
-      images: numberedImages
-    })
-
     updateChapter(
       editingChapter?.id!,
       {...chapter,
@@ -151,7 +144,12 @@ const DashboardAddChapterModal: FC<Props> = ({
         await revalidateChapter( parseInt(contentId as string), chapter.capNumber);
         Swal.fire("Exito", `Capitulo ${chapter.capNumber} Actualizado`, "success");
         setSubmitting(false);
-        updateCaps(); 
+        const imgs = await updateCaps(editingChapter?.id);    
+        setEditingChapter!({
+            ...editingChapter!, 
+            images: imgs
+        });
+        setEdited!(true);
       })
       .catch((err) => {
         console.log(err);
@@ -173,7 +171,7 @@ const DashboardAddChapterModal: FC<Props> = ({
         opacity: isOpen ? 1 : 0,
         visibility: isOpen ? "visible" : "hidden",
       }}
-      className="w-full bg-primary-dark rounded-md p-5 min-h-full absolute top-0 left-0 z-10"
+      className="w-full bg-primary-dark rounded-md p-5 min-h-full absolute top-0 left-0 z-20"
     >
       <div className="flex justify-end">
         <button

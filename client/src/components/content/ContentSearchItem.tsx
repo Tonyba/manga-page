@@ -4,6 +4,7 @@ import Link from "next/link";
 import React, { FC } from "react";
 import ContentPill from "./ContentPill";
 
+
 const ContentSearchItem: FC<ContentType> = ({
   id,
   description,
