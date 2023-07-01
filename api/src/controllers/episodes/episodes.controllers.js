@@ -113,6 +113,9 @@ export const getImages = async (req, res) => {
           as: 'episodes'
         },
       ],
+      order: [
+        [{model: Episodes, as: 'episodes'}, 'capNumber', 'asc']
+      ]
     });
 
     res.status(200).json({
