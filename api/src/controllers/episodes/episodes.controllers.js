@@ -197,10 +197,6 @@ export const updateEpisode = async (req ,res) => {
 
     let replacedImages = images.filter(img => img.file && isNumeric(img.id));
 
-    console.log('============== replacedImages ====================')
-    console.log(replacedImages);
-    console.log('==================================')
-
      await deletedImgs.forEach(async (img, i) => {
 
         const capFolder = `capitulo_${episode.capNumber}`;
