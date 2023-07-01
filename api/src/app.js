@@ -39,7 +39,7 @@ app.use(
 
 // Cors
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3001");
+  res.header("Access-Control-Allow-Origin", process.env.FRONTEND_URL);
   res.header(
     "Access-Control-Allow-Headers",
     "x-auth-token, Origin, X-Requested-With, Content-Type, Accept"
