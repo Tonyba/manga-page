@@ -6,7 +6,7 @@ type ChapterFilterContextType = {
     loading?: boolean,
     content?: ContentType,
     editingChapter?: ChapterItemType,
-    viewActions: boolean
+    viewActions?: boolean
 }
 
 type Actions = {
