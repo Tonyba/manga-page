@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import { RiImageAddFill } from "react-icons/ri";
 import ValidationError from "./ValidationError";
 import ChapterImagesPreviews from "../dashboardContent/ChapterImagesPreviews";
@@ -9,6 +9,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { FILE_TYPES } from "@/utils/constants";
 import { isType } from "@/utils/helpers";
+import ViewChapterFilterContext, { ActionsChapterFilterContext } from "@/utils/context/ChapterFilterContext";
 
 type Props = {
   onChange: (file: ImageType[]) => void;
@@ -35,6 +36,9 @@ const DragAndDrop: FC<Props> = ({
 }) => {
 
   const [filesItem, setFilesItems] = useState<ImageType[]>([]);
+
+  const { edited, editingChapter } = useContext(ViewChapterFilterContext);
+  const { setEdited } = useContext(ActionsChapterFilterContext);
 
   const handlePreview = (files: File[] | File) => {
     if (!Array.isArray(files) && files instanceof Blob) files = [files];
@@ -81,6 +85,7 @@ const DragAndDrop: FC<Props> = ({
   }, [previews.length]);
 
   useEffect(() => {
+    console.log('pasa')
     onChange(filesItem);
     
     return () =>
@@ -94,6 +99,13 @@ const DragAndDrop: FC<Props> = ({
       setClearForm!(false);
     };
   }, [clearForm]);
+
+  useEffect(() => {
+    if(edited) {
+      setFilesItems(editingChapter?.images as ImageType[]);
+      setEdited!(false);
+    }
+  }, [edited])
 
   return (
     <div className="mb-4">

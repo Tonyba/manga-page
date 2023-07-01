@@ -131,7 +131,8 @@ export type ImageType = {
   name: string;
   position: number;
   url: string;
-  file?: File
+  file?: File;
+  path?: string;
 }
 
 export type LoginRegisterValidation = Partial<{

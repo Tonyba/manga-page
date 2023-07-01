@@ -6,7 +6,8 @@ type ChapterFilterContextType = {
     loading?: boolean,
     content?: ContentType,
     editingChapter?: ChapterItemType,
-    viewActions?: boolean
+    viewActions?: boolean,
+    edited?: boolean
 }
 
 type Actions = {
@@ -14,13 +15,15 @@ type Actions = {
     setLoading?: (loading: boolean) => void,
     setContent?: (content: ContentResponseType) => void,
     setModalOpen?: (open: boolean) => void,
-    setEditingChapter?: (chap: ChapterItemType) => void
+    setEditingChapter?: (chap: ChapterItemType) => void,
+    setEdited?: (edited: boolean) => void
 }
 
 const ViewChapterFilterContext = createContext<ChapterFilterContextType>({
     chapters: [],
     loading: true,
-    viewActions: false
+    viewActions: false,
+    edited: false
 })
 
 export const ActionsChapterFilterContext = createContext<Actions>({
@@ -28,7 +31,8 @@ export const ActionsChapterFilterContext = createContext<Actions>({
     setLoading: () => {},
     setContent: () => {},
     setModalOpen: () => {},
-    setEditingChapter: () => {}
+    setEditingChapter: () => {},
+    setEdited: () =>{}
 })
 
 

@@ -62,7 +62,7 @@ const ChapterImagesPreviews = () => {
   const onChangeImage = (e: React.ChangeEvent<HTMLInputElement> ) => {
     if(!e.target.files?.length) return; 
     const file = Array.from(e.target.files)[0];
-    setFileItems(fileItems.map(fi => fi.id === currentImageEdited?.id ? {...fi, file, url: URL.createObjectURL(file)} : fi));
+    setFileItems(fileItems.map(fi => fi.id === currentImageEdited?.id ? {...fi, file, url: URL.createObjectURL(file), path: fi.url} : fi));
   }
 
   return (

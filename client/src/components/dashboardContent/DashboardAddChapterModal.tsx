@@ -32,7 +32,7 @@ const DashboardAddChapterModal: FC<Props> = ({
   chaptersTotal,
 }) => {
   const { editingChapter } = useContext(ViewChapterFilterContext);
-  const { setEditingChapter } = useContext(ActionsChapterFilterContext);
+  const { setEditingChapter, setEdited } = useContext(ActionsChapterFilterContext);
 
   const [chapter, setChapter] = useState<CreateChapterParams>({
     ...initState,
@@ -74,8 +74,6 @@ const DashboardAddChapterModal: FC<Props> = ({
       if(typeof img === 'string' ) return [];
       
       const image = img as ImageType;
-
-      console.log(image)
       
       const newImg = image.file?.slice(0,image.file?.size,image.file?.type);
 
@@ -147,13 +145,11 @@ const DashboardAddChapterModal: FC<Props> = ({
         Swal.fire("Exito", `Capitulo ${chapter.capNumber} Actualizado`, "success");
         setSubmitting(false);
         const imgs = await updateCaps(editingChapter?.id);    
-        console.log(imgs)   
-        setChapter( (prev) => ({...prev, images: imgs as ImageType[] }) );
         setEditingChapter!({
             ...editingChapter!, 
-            images: editingChapter?.images as ImageType[] 
-        })
-      
+            images: imgs
+        });
+        setEdited!(true);
       })
       .catch((err) => {
         console.log(err);
@@ -161,10 +157,6 @@ const DashboardAddChapterModal: FC<Props> = ({
         Swal.fire("Error inesperado", err.response.data.message, "error");
       });
   }
-
-  useEffect(() => {
-    console.log(chapter)
-  }, [Object.values(chapter)])
 
   const cleanForm = () => {
     setChapter(initState);

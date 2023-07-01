@@ -13,8 +13,9 @@ import { LoadingWrapper } from "../shared/LoadingWrapper";
 
 const DashboardAddChapter = () => {
   const router = useRouter();
-  const [content, setContent] = useState<ContentResponseType>();
   const { contentId } = router.query;
+
+  const [content, setContent] = useState<ContentResponseType>();
   const [modalOpen, setModalOpen] = useState(false);
   const [filteredCaps, setFilteredCaps] = useState<ChapterItemType[]>(
     content?.manga.episodes || []
@@ -22,6 +23,8 @@ const DashboardAddChapter = () => {
   const [loading, setLoading] = useState(false);
 
   const [editingChapter, setEditingChapter] = useState<ChapterItemType>();
+  
+  const [edited, setEdited] = useState(false);
 
   const fetchData = async (chapterId?: number) => {
     if (!contentId) return;
@@ -57,13 +60,14 @@ const DashboardAddChapter = () => {
           </button>
 
           
-          <ViewChapterFilterContext.Provider value={{ chapters: filteredCaps, loading, editingChapter, viewActions:true}}>
+          <ViewChapterFilterContext.Provider value={{ chapters: filteredCaps, loading, editingChapter, viewActions:true, edited}}>
               <ActionsChapterFilterContext.Provider value={{ 
                 setChapters: setFilteredCaps, 
                 setContent, 
                 setLoading, 
                 setModalOpen, 
-                setEditingChapter
+                setEditingChapter,
+                setEdited
                 }} >
                 <LoadingWrapper loading={loading} >
                    <div className="mb-3 border-b border-primary  pb-3">
