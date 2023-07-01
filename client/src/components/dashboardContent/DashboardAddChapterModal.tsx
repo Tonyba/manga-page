@@ -2,13 +2,13 @@ import React, { FC, useContext, useEffect, useState } from "react";
 import AddChapterForm from "../forms/AddChapterForm";
 import { motion } from "framer-motion";
 import { FaTimes } from "react-icons/fa";
-import { ChapterItemType, ChapterValidationType, CreateChapterParams, ImageType } from "@/utils/types";
+import { ChapterValidationType, CreateChapterParams, ImageType } from "@/utils/types";
 import { validateChapter } from "@/utils/validations/ChapterAddValidation";
 import Swal from "sweetalert2";
 import { addChapter, updateChapter } from "@/utils/axios/contentType";
 import { useRouter } from "next/router";
 import { revalidateChapter, revalidateManga } from "@/utils/axios/revalidate";
-import ViewChapterFilterContext from "@/utils/context/ChapterFilterContext";
+import ViewChapterFilterContext, { ActionsChapterFilterContext } from "@/utils/context/ChapterFilterContext";
 import { isType } from "@/utils/helpers";
 
 type Props = {
@@ -32,6 +32,8 @@ const DashboardAddChapterModal: FC<Props> = ({
   chaptersTotal,
 }) => {
   const { editingChapter } = useContext(ViewChapterFilterContext);
+  const { setEditingChapter } = useContext(ActionsChapterFilterContext);
+
   const [chapter, setChapter] = useState<CreateChapterParams>({
     ...initState,
     capNumber: chaptersTotal + 1,
@@ -119,8 +121,6 @@ const DashboardAddChapterModal: FC<Props> = ({
       
       const newImg = image.file?.slice(0,image.file?.size,image.file?.type);
 
-      console.log(image)
-
       const ext =
      image.file?.name.substring(image.file?.name.lastIndexOf(".")! + 1,image.file?.name.length) ||
      image.file?.name;
@@ -135,10 +135,6 @@ const DashboardAddChapterModal: FC<Props> = ({
       return image;
     });
 
-    console.log({...chapter,
-      images: numberedImages
-    })
-
     updateChapter(
       editingChapter?.id!,
       {...chapter,
@@ -150,9 +146,13 @@ const DashboardAddChapterModal: FC<Props> = ({
         await revalidateChapter( parseInt(contentId as string), chapter.capNumber);
         Swal.fire("Exito", `Capitulo ${chapter.capNumber} Actualizado`, "success");
         setSubmitting(false);
-        const imgs = await updateCaps(editingChapter?.id); 
-        console.log(imgs)
+        const imgs = await updateCaps(editingChapter?.id);    
+        console.log(imgs)   
         setChapter( (prev) => ({...prev, images: imgs as ImageType[] }) );
+        setEditingChapter!({
+            ...editingChapter!, 
+            images: editingChapter?.images as ImageType[] 
+        })
       
       })
       .catch((err) => {

@@ -93,7 +93,7 @@ const DashboardChapterImageItem: FC<Props> = ({
             isOver ? "bg-important" : "bg-primary"
           } px-2 text-sm py-[3px] line-clamp-1 text-ellipsis`}
         >
-          {file?.name}
+          {file?.name || item.name}
         </p>
       </div>
     </motion.div>
