@@ -137,6 +137,8 @@ export const getUser = async (req, res) => {
       attributes: ["id", "email", "role", "avatar", "userName"],
     });
 
+    if (!userFound) return res.status(400).json({ error: "User not found" });
+  
     const mangas = await userFound.getMangas({
       attributes: [
         "id",
@@ -150,9 +152,7 @@ export const getUser = async (req, res) => {
       ],
     });
 
-    if (!userFound) {
-      return res.status(400).json({ error: "User not found" });
-    }
+    
 
     const favorites = [...mangas];
 
