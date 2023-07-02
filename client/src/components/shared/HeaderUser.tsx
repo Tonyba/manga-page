@@ -50,6 +50,7 @@ const HeaderUser = () => {
         onModalClose={handleOpen}
         isOpen={open}
         className="bg-black bg-opacity-30 backdrop-blur-sm justify-center items-center"
+        showCloseBtn={true}
       >
         <LoginRegisterFormModal
           closeModal={() => setOpen(false)}

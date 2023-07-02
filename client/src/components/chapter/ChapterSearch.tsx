@@ -35,6 +35,7 @@ const ChapterSearch: FC<Props> = ({ isOpen = false, onModalClose }) => {
       isOpen={isOpen}
       onModalClose={onModalClose}
       className="bg-black bg-opacity-30 backdrop-blur-sm justify-center items-center"
+      showCloseBtn={true}
     >
       <div className="bg-primary p-5 rounded-lg">
         <div className="px-2">
