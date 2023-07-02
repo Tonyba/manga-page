@@ -1,5 +1,7 @@
 import React, { FC } from "react";
 import ValidationError from "./ValidationError";
+import ShowPass from "./ShowPass";
+
 
 type Props = {
   type?: string;
@@ -11,7 +13,9 @@ type Props = {
   name?: string;
   errMsg?: string;
   focusAnimationsLabel?: boolean;
-  readOnly?:boolean
+  readOnly?:boolean;
+  showPass?: boolean;
+  setShowPass?: (show: boolean) => void;
 };
 
 const labelAnimationStyles = {
@@ -40,8 +44,12 @@ const Input: FC<Props> = ({
   value,
   errMsg,
   focusAnimationsLabel = false,
-  readOnly = false
+  readOnly = false,
+  showPass = false,
+  setShowPass = () => {}
 }) => {
+
+
   return (
     <div className="relative">
       {label && !focusAnimationsLabel && (
@@ -54,7 +62,7 @@ const Input: FC<Props> = ({
         className={`w-full bg-primary ${
           focusAnimationsLabel ? "px-6 pt-6 pb-1" : "p-3"
         } rounded-md  outline-none peer`}
-        type={type}
+        type={ showPass ? 'text' : type}
         id={name}
         name={name}
         value={value}
@@ -63,6 +71,8 @@ const Input: FC<Props> = ({
         onChange={(e) => onChange(e.target.value)}
         readOnly={readOnly}
       />
+
+      { type === 'password' && <ShowPass setShow={setShowPass} showPass={showPass} />}
 
       {label && focusAnimationsLabel && (
         <label className={labelAnimationStyles.animated} htmlFor={name}>
