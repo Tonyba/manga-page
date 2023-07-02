@@ -9,6 +9,7 @@ type Props = {
 };
 
 const CarouselSwiper: FC<Props> = ({ content }) => {
+  console.log(content.length > 4)
   return (
     <Splide
       options={{
@@ -26,6 +27,9 @@ const CarouselSwiper: FC<Props> = ({ content }) => {
           768: {
             perPage: 3,
           },
+          600: {
+            perPage: 2,
+          },
           500: {
             perPage: 1,
           },
@@ -38,7 +42,7 @@ const CarouselSwiper: FC<Props> = ({ content }) => {
       <SplideTrack>
         {content.map((c, index) => (
           <SplideSlide key={index}>
-            <CardItem content={c} index={index} showHover={false} />
+            <CardItem content={c} inCarousel={true} index={index} showHover={false} />
           </SplideSlide>
         ))}
       </SplideTrack>

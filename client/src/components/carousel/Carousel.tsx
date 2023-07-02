@@ -9,6 +9,7 @@ import { useSwipeable } from "react-swipeable";
 import { CarouselDot } from "./CarouselDot";
 import { useDevideWidth } from "../../hooks/useDevideWidth";
 import { ContentType } from "@/utils/types";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 type CarouselOptions = {
   width?: number;
@@ -36,7 +37,8 @@ const Carousel: FC<CarouselOptions> = ({ content }) => {
   let slideInterval: NodeJS.Timer;
   const [auto, setAuto] = useState(false);
   const carousel = useRef<any>();
-  const [_, space, Dwidth] = useDevideWidth(ops.itemSpace!);
+  const [_, space] = useDevideWidth(ops.itemSpace!);
+  const [isMobile, isTablet] = useIsMobile();
 
   const handlers = useSwipeable({
     onSwiped: ({ dir }) => handleSwipe(dir),
@@ -106,11 +108,11 @@ const Carousel: FC<CarouselOptions> = ({ content }) => {
 
   return (
     <div className="relative">
-      <CarouselButton onClickE={onLeft} position="left">
+      <CarouselButton show={!isMobile && !isTablet && content.length ! < 5 ? false : true} onClickE={onLeft} position="left">
         <FaChevronLeft />
       </CarouselButton>
 
-      <CarouselButton onClickE={onRight} position="right">
+      <CarouselButton show={!isMobile && !isTablet && content.length ! < 5 ? false : true} onClickE={onRight} position="right">
         <FaChevronRight />
       </CarouselButton>
 

@@ -89,6 +89,9 @@ input[type="checkbox"] {
   @apply border-slate-600
 }
 
+.border-primary-dark {
+  @apply border-slate-700
+}
 
 .bg-hover:hover,
 .bg-tab-active {

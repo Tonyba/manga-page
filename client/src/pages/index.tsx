@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
 
-import { faker } from "@faker-js/faker";
 import { BiBookmarks } from "react-icons/bi";
 import { ContentType } from "@/utils/types";
 import { useEffect, useState } from "react";

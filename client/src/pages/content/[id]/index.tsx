@@ -19,6 +19,7 @@ import { ContentResponseType } from "@/utils/types";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import ViewChapterFilterContext, { ActionsChapterFilterContext } from "@/utils/context/ChapterFilterContext";
 import ChapterList from "@/components/mangaComponents/ChapterList";
+import CarouselSwiper from "@/components/carousel/CarouselSwiper";
 
 const Content: NextPage<ContentResponseType | undefined> = (content) => {
   const [isMobile] = useIsMobile();
@@ -45,7 +46,7 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
 
   useEffect(() => {
     const rel: ContentType[] = [];
-    for (let index = 0; index < 10; index++) {
+    for (let index = 0; index < 6; index++) {
       rel.push({
         id: parseInt(faker.random.numeric()),
         type: "Manga",
@@ -156,8 +157,8 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
             Recomendaciones
           </h2>
         </div>
-
-        <Carousel content={related} />
+        
+        <CarouselSwiper content={related} />
       </section>
     </>
   );
@@ -179,8 +180,6 @@ export const getStaticProps: GetStaticProps = async (
 
   const resp = await getManga(parseInt(id));
   const contentResp = resp.data;
-
-  console.log(contentResp)
 
   return {
     props: contentResp,

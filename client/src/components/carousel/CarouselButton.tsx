@@ -3,13 +3,17 @@ import React, { FC, PropsWithChildren } from "react";
 type Props = {
   position: "left" | "right";
   onClickE: () => void;
+  show?: boolean
 };
 
 const CarouselButton: FC<PropsWithChildren & Props> = ({
   position,
   onClickE,
   children,
+  show = true
 }) => {
+
+  
   return (
     <button
       className={`text-white 
