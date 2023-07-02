@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import Input from "./Input";
 import { LoginRegisterParams, LoginRegisterValidation } from "@/utils/types";
 import SubmitButton from "./SubmitButton";
@@ -20,6 +20,12 @@ const LoginRegisterForm: FC<Props> = ({
   loading,
   errors,
 }) => {
+
+  const [ showPasswords, setShow ] = useState({
+    showConfirm: false,
+    showPass: false
+  })
+
   return (
     <form className="flex flex-col gap-5" onSubmit={onSubmit}>
       {variant === "register" && (
@@ -54,6 +60,8 @@ const LoginRegisterForm: FC<Props> = ({
         label="Contraseña"
         focusAnimationsLabel={true}
         errMsg={errors?.password}
+        setShowPass={(show) => setShow({...showPasswords, showPass: show}) }
+        showPass={ showPasswords.showPass }
       />
 
       {variant === "register" && (
@@ -66,6 +74,8 @@ const LoginRegisterForm: FC<Props> = ({
           label="Confirmar Contraseña"
           focusAnimationsLabel={true}
           errMsg={errors?.confirmPassword}
+          setShowPass={(show) => setShow({...showPasswords, showConfirm: show})}
+          showPass={ showPasswords.showConfirm }
         />
       )}
 
