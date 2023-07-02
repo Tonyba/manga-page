@@ -77,7 +77,7 @@ export const filterTitle = async (req, res) => {
       "image",
       "type",
       "demography",
-      [sequelize.fn("max", sequelize.col("Episodes.capNumber")), "lastChapter"],
+      [sequelize.fn("max", sequelize.col("episodes.capNumber")), "lastChapter"],
     ],
     where: {
       title: {
@@ -89,6 +89,7 @@ export const filterTitle = async (req, res) => {
         duplicating: false,
         model: Episodes,
         attributes: [],
+        as: 'episodes'
       },
     ],
   });
