@@ -7,8 +7,10 @@ const __dirname = dirname(__filename);
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
-import { deleteImage } from '../../Helpers/deleteImages.js';
-import { v4 as uuidv4 } from 'uuid';
+import { deleteImage } from "../../Helpers/deleteImages.js";
+import { v4 as uuidv4 } from "uuid";
+import { Episodes } from "../../models/episodes/episodes.model.js";
+import sequelize from "../../database/database.js";
 
 dotenv.config();
 
@@ -101,29 +103,55 @@ export const getFavorites = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const userFound = await Users.findByPk(id);
-
-    if (!userFound) {
-      return res.status(400).json({ error: "User not found" });
-    }
-
-    const manga = await userFound.getMangas({
-      attributes: [
-        "id",
-        "title",
-        "description",
-        "image",
-        "banner",
-        "demography",
-        "genres",
-        "status",
-        "type",
+    const userFound = await Users.findOne({
+      attributes: ["id", "email", "role", "avatar", "userName"],
+      order: [["id", "DESC"]],
+      group: [
+        sequelize.col("favorites.id"),
+        sequelize.col("Users.id"),
+        sequelize.col("favorites->manga_fav.UserId"),
+        sequelize.col("favorites->manga_fav.MangaId"),
       ],
+      include: [
+        {
+          duplicating: false,
+          model: Mangas,
+          as: "favorites",
+          group: [sequelize.col("Mangas.id")],
+          attributes: [
+            "id",
+            "title",
+            "description",
+            "image",
+            "type",
+            "demography",
+            [
+              sequelize.fn(
+                "max",
+                sequelize.col("favorites->episodes.capNumber")
+              ),
+              "lastChapter",
+            ],
+          ],
+          include: [
+            {
+              duplicating: false,
+              required: true,
+              model: Episodes,
+              attributes: [],
+              as: "episodes",
+            },
+          ],
+        },
+      ],
+      where: {
+        id,
+      },
     });
 
-    const favorites = [manga];
+    if (!userFound) return res.status(404).json({ error: "User not found" });
 
-    res.status(200).json(favorites);
+    res.status(200).json(userFound.favorites);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Server error" });
@@ -133,30 +161,55 @@ export const getFavorites = async (req, res) => {
 export const getUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const userFound = await Users.findByPk(id, {
+    const userFound = await Users.findOne({
       attributes: ["id", "email", "role", "avatar", "userName"],
+      order: [["id", "DESC"]],
+      group: [
+        sequelize.col("favorites.id"),
+        sequelize.col("Users.id"),
+        sequelize.col("favorites->manga_fav.UserId"),
+        sequelize.col("favorites->manga_fav.MangaId"),
+      ],
+      include: [
+        {
+          duplicating: false,
+          model: Mangas,
+          as: "favorites",
+          group: [sequelize.col("Mangas.id")],
+          attributes: [
+            "id",
+            "title",
+            "description",
+            "image",
+            "type",
+            "demography",
+            [
+              sequelize.fn(
+                "max",
+                sequelize.col("favorites->episodes.capNumber")
+              ),
+              "lastChapter",
+            ],
+          ],
+          include: [
+            {
+              duplicating: false,
+              required: true,
+              model: Episodes,
+              attributes: [],
+              as: "episodes",
+            },
+          ],
+        },
+      ],
+      where: {
+        id,
+      },
     });
 
     if (!userFound) return res.status(400).json({ error: "User not found" });
-  
-    const mangas = await userFound.getMangas({
-      attributes: [
-        "id",
-        "title",
-        "description",
-        "image",
-        "demography",
-        "genres",
-        "status",
-        "type",
-      ],
-    });
 
-    
-
-    const favorites = [...mangas];
-
-    res.status(200).json({ user: userFound, favorites });
+    res.status(200).json({ user: userFound });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Server error" });
@@ -198,29 +251,26 @@ export const updateUserData = async (req, res) => {
 
   const newUser = {
     userName,
-    paypal
-  }
+    paypal,
+  };
 
   if (!img) {
     newUser.avatar = userFind.avatar;
   } else {
-    const hash = uuidv4() + '_';
-    deleteImage(userFind.avatar, 'users');
-    let pathImage = __dirname + "/../../public/users/"+ hash + img?.name;
+    const hash = uuidv4() + "_";
+    deleteImage(userFind.avatar, "users");
+    let pathImage = __dirname + "/../../public/users/" + hash + img?.name;
     img?.mv(pathImage);
-    newUser.avatar = `${process.env.API_URL}/users/` +  hash + img?.name;
+    newUser.avatar = `${process.env.API_URL}/users/` + hash + img?.name;
   }
 
-  const updateData = await Users.update(
-    newUser,
-    {
-      where: {
-        id: id,
-      },
-      returning: true,
-      plain: true,
-    }
-  );
+  const updateData = await Users.update(newUser, {
+    where: {
+      id: id,
+    },
+    returning: true,
+    plain: true,
+  });
 
   delete updateData[1].dataValues.password;
   delete updateData[1].dataValues.paypal;

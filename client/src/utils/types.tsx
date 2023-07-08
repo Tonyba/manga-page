@@ -26,6 +26,7 @@ export type User = {
   role: "Usuario" | "Admin";
   paypal?: string;
   avatar?: string;
+  favorites: ContentType[];
 };
 
 export type GetUserResponseType = {
@@ -63,7 +64,6 @@ export type FiltersType = {
   page: number;
 };
 
-
 export type CreateChapterParams = {
   episode: string;
   mangaId: number;
@@ -81,7 +81,7 @@ export type AddContentParams = {
   description: string;
   type?: OptionType;
   demography?: OptionType;
-  genres: OptionType[] ;
+  genres: OptionType[];
   status?: OptionType;
   banner: File | string | ImageType;
   image: File | string | ImageType;
@@ -133,7 +133,7 @@ export type ImageType = {
   url: string;
   file?: File;
   path?: string;
-}
+};
 
 export type LoginRegisterValidation = Partial<{
   userName: string;

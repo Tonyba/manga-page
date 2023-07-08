@@ -43,10 +43,11 @@ export const useAuth = (): {
       getUserById(decoded.id)
         .then((res) => {
           const data = res.data;
+          console.log(data);
           setCookie("x-token", token);
           setUser(data?.user);
           authContext?.setUser(data?.user!);
-          authContext?.setFavorites(data?.favorites || []);
+          authContext?.setFavorites(data?.user?.favorites);
           setTimeout(() => setLoading(false), 700);
         })
         .catch((err) => {

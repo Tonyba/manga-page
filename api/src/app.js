@@ -80,7 +80,7 @@ Images.belongsTo(Episodes, { foreignKey: "episodeId" });
 */
 
 Mangas.belongsToMany(Users, { through: MangaFav });
-Users.belongsToMany(Mangas, { through: MangaFav });
+Users.belongsToMany(Mangas, { through: MangaFav, as: "favorites" });
 
 // ----------------------------------------------------------------
 app.use(morgan("dev"));
