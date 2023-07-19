@@ -17,8 +17,6 @@ export default function Home() {
       const resp = await getMangas();
       const content = resp.data;
 
-      console.log(resp);
-
       setContent(content);
     };
 
