@@ -20,7 +20,7 @@ const ChapterOptions = () => {
 
   return (
     <>
-      <div className="flex justify-center">
+      <div className="flex justify-center z-10">
         <motion.div
           animate={{
             opacity: scrollDirection === "up" ? 1 : 0,
