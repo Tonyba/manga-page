@@ -2,6 +2,7 @@ import ChapterComments from "@/components/chapter/ChapterComments";
 import ChapterNavigation from "@/components/chapter/ChapterNavigation";
 import ChapterOptions from "@/components/chapter/ChapterOptions";
 import ChapterUpButton from "@/components/chapter/ChapterUpButton";
+import LoadComments from "@/components/chapter/LoadComments";
 import ImagesReader from "@/components/content/ImageReader";
 import { getChapterImages } from "@/utils/axios/contentType";
 import { ChapterContext } from "@/utils/context/ChapterContext";
@@ -15,7 +16,6 @@ import React, { useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 
 const ChapterContent = ({ images, manga }: GetChapterResponse) => {
-
   const router = useRouter();
   const { id, chapter } = router.query;
   const [chapterImages, setImages] = useState<string[]>([]);
@@ -57,7 +57,7 @@ const ChapterContent = ({ images, manga }: GetChapterResponse) => {
   useEffect(() => {
     setCurrentImage(0);
 
-    setImages(images.map(img => img.url));
+    setImages(images.map((img) => img.url));
   }, [chapter, currentChapter]);
 
   return (
@@ -111,9 +111,12 @@ const ChapterContent = ({ images, manga }: GetChapterResponse) => {
 
         <ChapterNavigation />
 
-        <section className="max-w-7xl mx-auto my-10 border border-dashed p-5">
-          <ChapterComments />
-        </section>
+        <LoadComments
+          path={`/content/${id}/${chapter}`}
+          title={`${manga.title} - Capitulo ${getChapterNumber(
+            chapter as string
+          )}`}
+        />
       </main>
     </ChapterContext.Provider>
   );
@@ -133,7 +136,7 @@ export const getStaticProps: GetStaticProps = async (
 
   if (!id || !chapter) Router.reload();
 
-  const capNumber = chapter.split('-')[1];
+  const capNumber = chapter.split("-")[1];
 
   const chapterRequest = await getChapterImages(parseInt(capNumber), id);
   const chapterResp = chapterRequest.data;

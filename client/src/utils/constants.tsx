@@ -79,6 +79,7 @@ export const VALIDATION_MESSAGES = {
 };
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
+export const DISQUS_SHORTNAME = process.env.NEXT_PUBLIC_DISQUS_SHORTNAME;
 export const NEXT_API_URL = globalThis.window?.location.origin;
 
 export const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;

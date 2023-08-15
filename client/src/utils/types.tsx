@@ -19,6 +19,12 @@ export type ContentType = {
   checked?: boolean;
 };
 
+export type DisqusConfigType = {
+  url: string;
+  identifier: string;
+  title: string;
+};
+
 export type User = {
   id: number;
   email: string;
