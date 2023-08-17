@@ -16,9 +16,15 @@ export const handlePush = (elems: OptionType[]): string[] => {
 };
 
 export const findFavorite = (id: number, favorites: ContentType[]) => {
-  const favorite = favorites.find((favorite) => favorite.id === id);
+  const found = favorites.find((favorite) => favorite.id == id);
 
-  if (favorite) return true;
+  return found;
+};
+
+export const isFavorite = (id: number, favorites: ContentType[]) => {
+  const favorite = favorites.find((favorite) => favorite.id == id);
+
+  if (favorite && favorite !== undefined && favorite !== null) return true;
 
   return false;
 };

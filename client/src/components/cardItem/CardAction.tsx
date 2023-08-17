@@ -1,6 +1,6 @@
 import { addFavorite, removeFavorite } from "@/utils/axios/user";
 import { useAppContext } from "@/utils/context/AppContext";
-import { findFavorite } from "@/utils/helpers";
+import { isFavorite } from "@/utils/helpers";
 import React, { FC } from "react";
 import heart from "react-useanimations/lib/heart";
 import UseAnimations from "react-useanimations";
@@ -14,7 +14,7 @@ type Props = {
 const CardAction: FC<Props> = ({ action, contentId }) => {
   const authContext = useAppContext();
   const { setFavorites, favorites, user } = authContext;
-  const isAdded = findFavorite(contentId, favorites);
+  const isAdded = isFavorite(contentId, favorites);
 
   const addToFavorites = async () => {
     const resp = await addFavorite(contentId, user?.id!);
@@ -33,7 +33,7 @@ const CardAction: FC<Props> = ({ action, contentId }) => {
           genres: [],
           episodes: [],
           status: resp.data.status,
-          numEpisodes: 0
+          numEpisodes: 0,
         },
         ...favorites,
       ]);

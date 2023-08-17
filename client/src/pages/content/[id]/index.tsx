@@ -17,9 +17,14 @@ import {
 } from "next";
 import { ContentResponseType } from "@/utils/types";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import ViewChapterFilterContext, { ActionsChapterFilterContext } from "@/utils/context/ChapterFilterContext";
+import ViewChapterFilterContext, {
+  ActionsChapterFilterContext,
+} from "@/utils/context/ChapterFilterContext";
 import ChapterList from "@/components/mangaComponents/ChapterList";
 import CarouselSwiper from "@/components/carousel/CarouselSwiper";
+import AddFavoriteBtn from "@/components/content/addFavoriteBtn";
+import ShareContent from "@/components/content/shareContent";
+import { NEXT_API_URL } from "@/utils/constants";
 
 const Content: NextPage<ContentResponseType | undefined> = (content) => {
   const [isMobile] = useIsMobile();
@@ -27,8 +32,6 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
   const [filteredCaps, setFilteredCaps] = useState<ChapterItemType[]>(
     content?.manga.episodes || []
   );
-
-  console.log(content)
 
   const { manga } = content as ContentResponseType;
 
@@ -41,8 +44,10 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
     status,
     title,
     type,
+    id,
   } = manga;
 
+  const url = NEXT_API_URL + `/content/${id}`;
 
   useEffect(() => {
     const rel: ContentType[] = [];
@@ -58,7 +63,7 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
         status: faker.word.noun(),
         episodes: [],
         banner: "",
-        numEpisodes: 0
+        numEpisodes: 0,
       });
     }
     setRelated(rel);
@@ -111,42 +116,46 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
         </div>
       </section>
 
-      <section className="max-w-7xl flex flex-col xl:flex-row py-10 sm:px-7 2xl:px-0 mx-7 sm:mx-auto">
-        <aside className="w-full xl:w-1/4 bg-primary-dark p-5 rounded-md">
-          <ContentSidebar
-            status={(content && status) || ""}
-            contentType={(content && type) || ""}
-            genres={genres || []}
-            demography={demography}
-          />
+      <section className="max-w-7xl mx-auto px-7 2xl:px-0 mt-5">
+        <ShareContent type={type} title={title} desc={description} />
+      </section>
+
+      <section className="max-w-7xl flex flex-col xl:flex-row py-10 pt-7 sm:px-7 2xl:pt-10 2xl:px-0 mx-7 sm:mx-auto">
+        <aside className="w-full xl:w-1/4 ">
+          <AddFavoriteBtn contentId={id} />
+          <div className="bg-primary-dark p-5 rounded-md">
+            <ContentSidebar
+              status={(content && status) || ""}
+              contentType={(content && type) || ""}
+              genres={genres || []}
+              demography={demography}
+            />
+          </div>
         </aside>
 
         <div className="w-full xl:w-3/4  xl:pl-10 mt-10 xl:mt-0">
-          <ViewChapterFilterContext.Provider value={{ chapters: filteredCaps}}>
-              <ActionsChapterFilterContext.Provider value={{ setChapters: setFilteredCaps }} >
+          <ViewChapterFilterContext.Provider value={{ chapters: filteredCaps }}>
+            <ActionsChapterFilterContext.Provider
+              value={{ setChapters: setFilteredCaps }}
+            >
               <div className="mb-3 border-b border-primary pb-3">
-                <Filter  type="chapters" />
+                <Filter type="chapters" />
               </div>
 
               {content?.manga.numEpisodes === 0 && (
-              <h2 className="text-2xl font-medium">Capitulos</h2> 
-            )}
+                <h2 className="text-2xl font-medium">Capitulos</h2>
+              )}
 
-            {content?.manga.numEpisodes === 0 ? (
-              <div className="flex flex-col items-center gap-5">
-                <FaRegSadCry className="text-dark" size={120} />
-                <p className="font-semibold text-xl">No hay Capitulos</p>
-              </div>
-            ) : <ChapterList  totalEpisodes={content?.manga.numEpisodes || 0} />}
-
-        
+              {content?.manga.numEpisodes === 0 ? (
+                <div className="flex flex-col items-center gap-5">
+                  <FaRegSadCry className="text-dark" size={120} />
+                  <p className="font-semibold text-xl">No hay Capitulos</p>
+                </div>
+              ) : (
+                <ChapterList totalEpisodes={content?.manga.numEpisodes || 0} />
+              )}
             </ActionsChapterFilterContext.Provider>
-           
-       
           </ViewChapterFilterContext.Provider>
-          
-
-          
         </div>
       </section>
 
@@ -157,7 +166,7 @@ const Content: NextPage<ContentResponseType | undefined> = (content) => {
             Recomendaciones
           </h2>
         </div>
-        
+
         <CarouselSwiper content={related} />
       </section>
     </>
