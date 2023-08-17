@@ -1,5 +1,7 @@
 import { Users } from "../../models/User/user.model.js";
 import { Mangas } from "../../models/Manga/manga.model.js";
+import { MangaFav } from "../../models/manga_fav/manga_fav.js";
+
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
@@ -90,7 +92,8 @@ export const addFavorite = async (req, res) => {
 
     let content;
     content = await Mangas.findByPk(idContent);
-    const manga = await userFound.addMangas(content);
+
+    const manga = await MangaFav.create({ UserId: idUser, MangaId: idContent });
 
     res.status(200).json(content);
   } catch (error) {
@@ -228,7 +231,10 @@ export const deleteFavorite = async (req, res) => {
     let content;
 
     content = await Mangas.findByPk(idContent);
-    const manga = await userFound.removeMangas(content);
+    const manga = MangaFav.destroy({
+      where: { UserId: idUser, MangaId: idContent },
+      force: true,
+    });
 
     res.status(200).json(content);
   } catch (error) {
